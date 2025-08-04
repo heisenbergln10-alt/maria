@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Authorising…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="font-family:sans-serif;padding:2rem">
+  <p>Finishing Spotify sign-in…</p>
+  <script type="module">
+    import { handleRedirectThenReturn } from './js/spotify-auth.js';
+    handleRedirectThenReturn();       // exchanges ?code=… for tokens, sends you back
+  </script>
+</body>
+</html>
