@@ -1095,12 +1095,93 @@
                                 <h4>Playlist</h4>
                                 <span class="track-count">10 tracks</span>
                             </div>
-                            <div class="playlist-items" id="playlist-items"></div>
+                            <div class="playlist-items" id="playlist-items">
+                                <div class="playlist-item active" data-spotify-uri="spotify:track:4uLU6hMCjMI75M1A2tKUQC">
+                                    <div class="playlist-number">1</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">إنت عمري</div>
+                                        <div class="playlist-track-artist">أم كلثوم</div>
+                                    </div>
+                                    <div class="playlist-track-duration">4:32</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:6rqhFgbbKwnb9MLmUQDhG6">
+                                    <div class="playlist-number">2</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">ألف ليلة وليلة</div>
+                                        <div class="playlist-track-artist">أم كلثوم</div>
+                                    </div>
+                                    <div class="playlist-track-duration">5:21</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:7ouMYWpwJ21bSSFvUpguAC">
+                                    <div class="playlist-number">3</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">الأطلال</div>
+                                        <div class="playlist-track-artist">أم كلثوم</div>
+                                    </div>
+                                    <div class="playlist-track-duration">6:15</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:3xKsf9qdS1CuMNiGAUdOg9">
+                                    <div class="playlist-number">4</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">قارئة الفنجان</div>
+                                        <div class="playlist-track-artist">عبد الحليم حافظ</div>
+                                    </div>
+                                    <div class="playlist-track-duration">4:45</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:5pKCCKXjdnGfGfJF9u6QQr">
+                                    <div class="playlist-number">5</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">زي الهوا</div>
+                                        <div class="playlist-track-artist">عبد الحليم حافظ</div>
+                                    </div>
+                                    <div class="playlist-track-duration">3:58</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:1YfnfJJqnwwb8pNZNp5kcU">
+                                    <div class="playlist-number">6</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">أهواك</div>
+                                        <div class="playlist-track-artist">عبد الحليم حافظ</div>
+                                    </div>
+                                    <div class="playlist-track-duration">4:12</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:2vxBcKfyMzjS7uFSZktqyW">
+                                    <div class="playlist-number">7</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">يا مسافر</div>
+                                        <div class="playlist-track-artist">محمد عبد الوهاب</div>
+                                    </div>
+                                    <div class="playlist-track-duration">5:03</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:4kLtxWOzQkEdvBFjNroWD8">
+                                    <div class="playlist-number">8</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">الربيع</div>
+                                        <div class="playlist-track-artist">فيروز</div>
+                                    </div>
+                                    <div class="playlist-track-duration">3:47</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:8BgQcQKJLzRz3pFnVKTKvR">
+                                    <div class="playlist-number">9</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">بعيد عنك</div>
+                                        <div class="playlist-track-artist">فريد الأطرش</div>
+                                    </div>
+                                    <div class="playlist-track-duration">4:28</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:9CwMpJFnYMkS8qGzDxjR4L">
+                                    <div class="playlist-number">10</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">حبيبي يسعد أوقاته</div>
+                                        <div class="playlist-track-artist">فايزة أحمد</div>
+                                    </div>
+                                    <div class="playlist-track-duration">3:35</div>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="audio-source-note">
                             <p class="mono">♪ Curated collection of timeless classics ♪</p>
-                            <p style="font-size: 0.75rem; opacity: 0.4; margin-top: 0.5rem;">Note: Spotify requires authentication. This is a beautiful mock player showcasing Egyptian classics.</p>
+                            <p style="font-size: 0.75rem; opacity: 0.4; margin-top: 0.5rem;">Note: Spotify Premium required for playback. Click play to authenticate.</p>
                         </div>
                     </div>
                 </div>
@@ -1192,7 +1273,6 @@
             initIntersectionObserver();
             initStarPuzzle();
             initEssayCards();
-            initMusicPlayer();
             initParadoxEngine();
             initPoetry();
             initFacts();
@@ -1290,7 +1370,7 @@
                         'The universe is approximately 13.8 billion years old',
                         'There are more stars in the universe than grains of sand on Earth',
                         'A day on Venus is longer than its year',
-                        'The human brain uses 20 % of the body’s energy',
+                        'The human brain uses 20 % of the body's energy',
                         'Octopuses have three hearts and blue blood'
                     ];
                     factText.textContent = fallback[Math.floor(Math.random() * fallback.length)];
@@ -1606,209 +1686,6 @@
             });
         }
 
-        function initMusicPlayer() {
-            const trackTitle = document.getElementById('track-title');
-            const trackArtist = document.getElementById('track-artist');
-            const trackYear = document.getElementById('track-year');
-            const playBtn = document.getElementById('play-pause');
-            const prevBtn = document.getElementById('prev-track');
-            const nextBtn = document.getElementById('next-track');
-            const playlistItems = document.getElementById('playlist-items');
-            const currentTimeEl = document.getElementById('current-time');
-            const totalTimeEl = document.getElementById('total-time');
-            const progressFill = document.querySelector('.progress-fill');
-            const progressHandle = document.querySelector('.progress-handle');
-            const vinyl = document.querySelector('.vinyl-record');
-            const toneArm = document.querySelector('.tone-arm');
-            const playIcon = document.querySelector('.play-icon');
-            const pauseIcon = document.querySelector('.pause-icon');
-            const waveBars = document.querySelectorAll('.wave-bar');
-            
-            const tracks = [
-                { title: "إنت عمري", artist: "أم كلثوم", year: "1964", duration: "4:32" },
-                { title: "ألف ليلة وليلة", artist: "أم كلثوم", year: "1969", duration: "5:21" },
-                { title: "الأطلال", artist: "أم كلثوم", year: "1966", duration: "6:15" },
-                { title: "قارئة الفنجان", artist: "عبد الحليم حافظ", year: "1976", duration: "4:45" },
-                { title: "زي الهوا", artist: "عبد الحليم حافظ", year: "1970", duration: "3:58" },
-                { title: "أهواك", artist: "عبد الحليم حافظ", year: "1957", duration: "4:12" },
-                { title: "يا مسافر", artist: "محمد عبد الوهاب", year: "1940", duration: "5:03" },
-                { title: "الربيع", artist: "فيروز", year: "1973", duration: "3:47" },
-                { title: "بعيد عنك", artist: "فريد الأطرش", year: "1965", duration: "4:28" },
-                { title: "حبيبي يسعد أوقاته", artist: "فايزة أحمد", year: "1960", duration: "3:35" }
-            ];
-            
-            let currentTrack = 0;
-            let isPlaying = false;
-            let progress = 0;
-            let progressInterval;
-            
-            function loadPlaylist() {
-                playlistItems.innerHTML = tracks.map((track, index) => `
-                    <div class="playlist-item ${index === currentTrack ? 'active' : ''}" data-index="${index}">
-                        <div class="playlist-number">${index + 1}</div>
-                        <div class="playlist-track-info">
-                            <div class="playlist-track-title">${track.title}</div>
-                            <div class="playlist-track-artist">${track.artist}</div>
-                        </div>
-                        <div class="playlist-track-duration">${track.duration}</div>
-                    </div>
-                `).join('');
-                
-                document.querySelectorAll('.playlist-item').forEach(item => {
-                    item.addEventListener('click', (e) => {
-                        currentTrack = parseInt(e.currentTarget.dataset.index);
-                        loadTrack();
-                        if (isPlaying) play();
-                    });
-                });
-            }
-            
-            function loadTrack() {
-                const track = tracks[currentTrack];
-                trackTitle.textContent = track.title;
-                trackArtist.textContent = track.artist;
-                trackYear.textContent = track.year;
-                totalTimeEl.textContent = track.duration;
-                
-                document.querySelectorAll('.playlist-item').forEach((item, index) => {
-                    item.classList.toggle('active', index === currentTrack);
-                });
-                
-                progress = 0;
-                updateProgress();
-            }
-            
-            function play() {
-                isPlaying = true;
-                playIcon.classList.add('hidden');
-                pauseIcon.classList.remove('hidden');
-                vinyl.classList.add('spinning');
-                toneArm.classList.add('playing');
-                
-                animateWaveform();
-                
-                if (progressInterval) clearInterval(progressInterval);
-                progressInterval = setInterval(() => {
-                    progress += 0.5;
-                    if (progress >= 100) {
-                        progress = 100;
-                        pause();
-                        nextTrack();
-                    }
-                    updateProgress();
-                }, 150);
-            }
-            
-            function pause() {
-                isPlaying = false;
-                playIcon.classList.remove('hidden');
-                pauseIcon.classList.add('hidden');
-                vinyl.classList.remove('spinning');
-                toneArm.classList.remove('playing');
-                
-                stopWaveform();
-                
-                if (progressInterval) {
-                    clearInterval(progressInterval);
-                    progressInterval = null;
-                }
-            }
-            
-            function updateProgress() {
-                progressFill.style.width = progress + '%';
-                progressHandle.style.left = progress + '%';
-                
-                const track = tracks[currentTrack];
-                const [minutes, seconds] = track.duration.split(':').map(Number);
-                const totalSeconds = minutes * 60 + seconds;
-                const currentSeconds = Math.floor((progress / 100) * totalSeconds);
-                const currentMinutes = Math.floor(currentSeconds / 60);
-                const currentSecs = currentSeconds % 60;
-                currentTimeEl.textContent = `${currentMinutes}:${currentSecs.toString().padStart(2, '0')}`;
-            }
-            
-            function animateWaveform() {
-                waveBars.forEach((bar, index) => {
-                    setTimeout(() => {
-                        bar.classList.add('active');
-                        bar.style.animationDelay = `${index * 0.05}s`;
-                    }, index * 50);
-                });
-            }
-            
-            function stopWaveform() {
-                waveBars.forEach(bar => {
-                    bar.classList.remove('active');
-                    bar.style.animationDelay = '0s';
-                });
-            }
-            
-            function nextTrack() {
-                currentTrack = (currentTrack + 1) % tracks.length;
-                loadTrack();
-                if (isPlaying) play();
-            }
-            
-            function prevTrack() {
-                currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-                loadTrack();
-                if (isPlaying) play();
-            }
-            
-            playBtn.addEventListener('click', () => {
-                if (isPlaying) {
-                    pause();
-                } else {
-                    play();
-                }
-            });
-            
-            prevBtn.addEventListener('click', prevTrack);
-            nextBtn.addEventListener('click', nextTrack);
-            
-            document.querySelector('.progress-bar').addEventListener('click', (e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                progress = (x / rect.width) * 100;
-                updateProgress();
-            });
-            
-            loadPlaylist();
-            loadTrack();
-        }
-
-        function initActivities() {
-            const btn = document.getElementById('get-activity');
-            const text = document.getElementById('activity-text');
-            
-            const activities = [
-                "Take three deep breaths and notice the quality of light around you",
-                "Write down five things you're grateful for in this moment",
-                "Step outside and observe the sky for five minutes",
-                "Call someone you haven't spoken to in a while",
-                "Create something with your hands - draw, write, or build",
-                "Take a walk without your phone",
-                "Listen to a piece of music with your eyes closed",
-                "Write a letter to your future self",
-                "Learn one new word in a language you don't speak",
-                "Sit in silence for ten minutes and observe your thoughts",
-                "Cook something you've never made before",
-                "Read a poem aloud",
-                "Watch the sunset or sunrise",
-                "Plant something and watch it grow",
-                "Dance to your favorite song"
-            ];
-            
-            btn.addEventListener('click', () => {
-                const activity = activities[Math.floor(Math.random() * activities.length)];
-                text.style.opacity = '0';
-                setTimeout(() => {
-                    text.textContent = activity;
-                    text.style.opacity = '1';
-                }, 300);
-            });
-        }
-
         function initParadoxEngine() {
             const generateBtn = document.getElementById('generate-paradox');
             const outputDiv = document.getElementById('paradox-output');
@@ -1954,5 +1831,7 @@
             }
         }
     </script>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script type="module" src="./js/player.js"></script>
 </body>
 </html>
