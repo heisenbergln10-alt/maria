@@ -1,9 +1,8 @@
-
 // js/spotify-auth.js
-// ---- PKCE + auto‑refresh helper for GitHub Pages ----
-// Client ID is baked in – NO secret needed.
+// ---- PKCE + auto‑refresh helper for GitHub Pages ----
+// Client ID is baked in – NO secret needed.
 
-const CLIENT_ID = 'ea7df116757b4016bb5dcf1d78fc6dcd';   //  ← your app’s ID
+const CLIENT_ID = 'ea7df116757b4016bb5dcf1d78fc6dcd';   //  ← your app's ID
 
 /*  If you know your Pages root (e.g. https://user.github.io/repo ),
     set it below.  Otherwise we derive it at runtime from the current
@@ -20,6 +19,8 @@ export const REDIRECT = REPO_ROOT + '/callback.html';
 
 const SCOPES = [
   'streaming',
+  'user-read-email',
+  'user-read-private',
   'user-read-playback-state',
   'user-modify-playback-state',
   'user-read-currently-playing'
@@ -28,7 +29,7 @@ const SCOPES = [
 // ---- localStorage keys
 const KEY = { tok:'sp_tok', ref:'sp_ref', exp:'sp_exp', ver:'sp_ver' };
 
-// Public helper – ensures we always hand back a *fresh* access token.
+// Public helper – ensures we always hand back a *fresh* access token.
 export async function getFreshToken () {
   // 5‑minute safety margin
   if (Date.now() < (+localStorage.getItem(KEY.exp)||0) - 5*60*1000) {
@@ -77,7 +78,7 @@ export async function handleRedirectThenReturn () {
 // ---- internals --------------------------------------------------------
 
 async function beginAuth () {
-  // PKCE – create verifier + challenge
+  // PKCE – create verifier + challenge
   const rand = crypto.getRandomValues(new Uint8Array(64));
   const verifier = btoa(String.fromCharCode(...rand))
     .replace(/[^a-zA-Z0-9]/g,'').slice(0,128);
