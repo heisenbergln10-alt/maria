@@ -372,6 +372,22 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
 
+        .album-art-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .album-art-img.playing {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
         .vinyl-wrapper {
             width: 100%;
             height: 100%;
@@ -665,6 +681,13 @@
             color: var(--text-secondary);
         }
 
+        .spotify-embed-container {
+            margin-top: var(--space-md);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -782,43 +805,24 @@
             background: linear-gradient(135deg, rgba(42, 41, 40, 0.1) 0%, transparent 50%, rgba(42, 41, 40, 0.1) 100%);
         }
 
-        .activity-interface {
-            max-width: 800px;
+        .paradox-interface {
+            max-width: 900px;
             margin: 0 auto;
-            text-align: center;
-        }
-
-        .activity-card {
             padding: var(--space-lg);
-            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            margin-bottom: var(--space-md);
-            position: relative;
-            overflow: hidden;
         }
 
-        .activity-suggestion {
-            font-size: var(--fs-heading);
-            color: var(--accent-gold);
+        .paradox-controls {
+            display: grid;
+            gap: var(--space-md);
             margin-bottom: var(--space-md);
-            min-height: 80px;
+        }
+
+        .paradox-mode-selector {
             display: flex;
-            align-items: center;
             justify-content: center;
-        }
-
-        .activity-btn {
-            padding: 1rem 3rem;
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-gold-dark));
-            border: none;
-            color: var(--base-light);
-            font-family: var(--font-display);
-            font-size: var(--fs-body);
-            border-radius: 50px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
         }
 
         .mode-btn {
@@ -845,128 +849,6 @@
             border-color: var(--accent-gold);
         }
 
-        .concept-tag {
-            padding: 0.5rem 1rem;
-            background: rgba(201, 169, 97, 0.2);
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            border-radius: 20px;
-            font-size: var(--fs-small);
-            font-family: var(--font-mono);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .paradox-button:hover {
-            background: var(--accent-gold);
-            color: var(--base-light);
-            transform: scale(1.05);
-        }
-
-        .paradox-icon {
-            animation: rotate 10s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        #wisdom {
-            background: linear-gradient(135deg, rgba(42, 41, 40, 0.1) 0%, transparent 50%, rgba(42, 41, 40, 0.1) 100%);
-        }
-
-        .wisdom-interface {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .wisdom-display {
-            padding: var(--space-lg);
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: var(--space-md);
-        }
-
-        .wisdom-quote {
-            font-size: var(--fs-heading);
-            font-style: italic;
-            line-height: 1.8;
-            margin-bottom: var(--space-md);
-            color: var(--text-primary);
-            transition: opacity 0.5s ease;
-        }
-
-        .wisdom-author {
-            font-family: var(--font-mono);
-            color: var(--accent-gold);
-            transition: opacity 0.5s ease;
-        }
-
-        .wisdom-btn {
-            padding: 1rem 2rem;
-            background: transparent;
-            border: 2px solid var(--accent-gold);
-            color: var(--accent-gold);
-            font-family: var(--font-display);
-            font-size: var(--fs-body);
-            border-radius: 50px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .wisdom-btn:hover {
-            background: var(--accent-gold);
-            color: var(--base-light);
-        }
-
-        #poems {
-            background: linear-gradient(to bottom, rgba(227, 221, 215, 0.2) 0%, transparent 100%);
-        }
-
-        .poem-interface {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .poem-display {
-            padding: var(--space-lg);
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            margin-bottom: var(--space-md);
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .paradox-interface {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: var(--space-lg);
-            border-radius: 20px;
-        }
-
-        .paradox-controls {
-            display: grid;
-            gap: var(--space-md);
-            margin-bottom: var(--space-md);
-        }
-
-        .paradox-mode-selector {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-sm);
-            flex-wrap: wrap;
-        }
-
         .paradox-concepts {
             text-align: center;
         }
@@ -978,6 +860,18 @@
             gap: var(--space-xs);
             margin-top: var(--space-xs);
             min-height: 40px;
+        }
+
+        .concept-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(201, 169, 97, 0.2);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            border-radius: 20px;
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            position: relative;
+            overflow: hidden;
         }
 
         .paradox-button {
@@ -994,6 +888,21 @@
             font-size: var(--fs-body);
             cursor: pointer;
             transition: var(--transition-smooth);
+        }
+
+        .paradox-button:hover {
+            background: var(--accent-gold);
+            color: var(--base-light);
+            transform: scale(1.05);
+        }
+
+        .paradox-icon {
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .paradox-output {
@@ -1048,6 +957,31 @@
             position: absolute;
             left: 0;
             color: var(--accent-gold);
+        }
+
+        #wisdom {
+            background: linear-gradient(135deg, rgba(42, 41, 40, 0.1) 0%, transparent 50%, rgba(42, 41, 40, 0.1) 100%);
+        }
+
+        #poems {
+            background: linear-gradient(to bottom, rgba(227, 221, 215, 0.2) 0%, transparent 100%);
+        }
+
+        .poem-interface {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .poem-display {
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            margin-bottom: var(--space-md);
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .poem-content {
@@ -1169,23 +1103,6 @@
             }
         }
 
-        .falling-star {
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: var(--accent-gold);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: fall 3s linear;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-
         .loading {
             display: inline-block;
             width: 30px;
@@ -1194,22 +1111,6 @@
             border-radius: 50%;
             border-top-color: var(--accent-gold);
             animation: spin 1s linear infinite;
-        }
-
-        .maria-letter {
-            font-family: var(--font-display);
-            font-size: 4rem;
-            font-weight: 300;
-            color: var(--accent-gold);
-            text-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
-            position: absolute;
-            transform-style: preserve-3d;
-            animation: letterFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes letterFloat {
-            0%, 100% { transform: translateY(0) rotateY(0deg); }
-            50% { transform: translateY(-10px) rotateY(180deg); }
         }
 
         @media (max-width: 768px) {
@@ -1340,13 +1241,7 @@
                     <div class="music-player glass">
                         <div class="player-main">
                             <div class="album-artwork">
-                                <div class="vinyl-wrapper">
-                                    <div class="vinyl-record" id="vinyl">
-                                        <div class="vinyl-label">
-                                            <div class="label-text">CLASSIC</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <img src="https://i.scdn.co/image/ab67616d0000b273e7e2e5e8dc432b018f7e5e15" alt="Egyptian Classics" class="album-art-img" id="album-art">
                             </div>
                             
                             <div class="track-info">
@@ -1380,44 +1275,28 @@
                             </div>
                         </div>
                         
-                        <div class="progress-section">
-                            <div class="time-display">
-                                <span id="current-time">0:00</span>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="progress-fill">
-                                        <div class="progress-handle"></div>
-                                    </div>
-                                </div>
-                                <span id="total-time">0:00</span>
-                            </div>
-                        </div>
-                        
                         <div class="controls-section">
-                            <button class="control-btn shuffle-btn" title="Shuffle">🔀</button>
-                            <button class="control-btn prev-btn" id="prev-track">⏮</button>
-                            <button class="control-btn play-btn" id="play-pause">
-                                <span class="play-icon">▶</span>
-                                <span class="pause-icon hidden">⏸</span>
-                            </button>
-                            <button class="control-btn next-btn" id="next-track">⏭</button>
-                            <button class="control-btn repeat-btn" title="Repeat">🔁</button>
+                            <audio id="audio-player" style="width: 100%; margin-top: 20px;" controls>
+                                Your browser does not support the audio element.
+                            </audio>
                         </div>
                         
                         <div class="playlist-section">
                             <div class="playlist-header">
                                 <h4>Egyptian Classics</h4>
-                                <span class="track-count">15 masterpieces</span>
+                                <span class="track-count">10 masterpieces</span>
                             </div>
                             <div class="playlist-items" id="playlist-items">
-                                <div class="playlist-item" data-spotify-uri="spotify:track:4uLU6hMCjMI75M1A2tKUQC">
+                                <!-- Actual Egyptian classics with correct Spotify links -->
+                                <div class="playlist-item active" data-url="https://open.spotify.com/track/3gFcGnU4kTdMYLXDjH1TK8" data-artist="Umm Kulthum" data-title="Enta Omri" data-img="https://i.scdn.co/image/ab67616d0000b273e7e2e5e8dc432b018f7e5e15">
                                     <div class="playlist-number">1</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Enta Omri</div>
                                         <div class="playlist-track-artist">Umm Kulthum</div>
                                     </div>
-                                    <div class="playlist-track-duration">58:38</div>
+                                    <div class="playlist-track-duration">38:31</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:6rqhFgbbKwnb9MLmUQDhG6">
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/7ouRfMhJnMA3a88VBzByxW" data-artist="Umm Kulthum" data-title="Alf Leila wa Leila" data-img="https://i.scdn.co/image/ab67616d0000b273c6f3fb870e171c5b9d9e8e96">
                                     <div class="playlist-number">2</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Alf Leila wa Leila</div>
@@ -1425,116 +1304,85 @@
                                     </div>
                                     <div class="playlist-track-duration">54:01</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:7ouMYWpwJ21bSSFvUpguAC">
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/2pUlwzbxGGZoXBxLZiL8XP" data-artist="Abdel Halim Hafez" data-title="Ahwak" data-img="https://i.scdn.co/image/ab67616d0000b2739c8ed56c439a8157a682c390">
                                     <div class="playlist-number">3</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Al Atlal</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
-                                    </div>
-                                    <div class="playlist-track-duration">48:27</div>
-                                </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:3xKsf9qdS1CuMNiGAUdOg9">
-                                    <div class="playlist-number">4</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Qari'at al Finjan</div>
-                                        <div class="playlist-track-artist">Abdel Halim Hafez</div>
-                                    </div>
-                                    <div class="playlist-track-duration">4:45</div>
-                                </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:5pKCCKXjdnGfGfJF9u6QQr">
-                                    <div class="playlist-number">5</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Zay al Hawa</div>
-                                        <div class="playlist-track-artist">Abdel Halim Hafez</div>
-                                    </div>
-                                    <div class="playlist-track-duration">3:58</div>
-                                </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:1YfnfJJqnwwb8pNZNp5kcU">
-                                    <div class="playlist-number">6</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Ahwak</div>
                                         <div class="playlist-track-artist">Abdel Halim Hafez</div>
                                     </div>
                                     <div class="playlist-track-duration">4:12</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:2bncfRCJGZoYeC8YeCvz3W">
-                                    <div class="playlist-number">7</div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/6dwvEqcqiMlOUqEgtZq5oR" data-artist="Abdel Halim Hafez" data-title="Gana El Hawa" data-img="https://i.scdn.co/image/ab67616d0000b273fa8a33d60c0bc893a03fd0ec">
+                                    <div class="playlist-number">4</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Gana El Hawa</div>
                                         <div class="playlist-track-artist">Abdel Halim Hafez</div>
                                     </div>
                                     <div class="playlist-track-duration">6:18</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:6YTMpCJJ0wfhqKOeOQITKe">
-                                    <div class="playlist-number">8</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Hakam Alayna Al Hawa</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
-                                    </div>
-                                    <div class="playlist-track-duration">42:15</div>
-                                </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:2vxBcKfyMzjS7uFSZktqyW">
-                                    <div class="playlist-number">9</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ya Msafer</div>
-                                        <div class="playlist-track-artist">Mohamed Abdel Wahab</div>
-                                    </div>
-                                    <div class="playlist-track-duration">5:03</div>
-                                </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:1r9xUipOqoNwggBpENDsvJ">
-                                    <div class="playlist-number">10</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">El Hob Kuluh</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
-                                    </div>
-                                    <div class="playlist-track-duration">45:32</div>
-                                </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:4kLtxWOzQkEdvBFjNroWD8">
-                                    <div class="playlist-number">11</div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/0MnG7RgYTmYhPGDbFQasz0" data-artist="Fairuz" data-title="Nassam Alayna El Hawa" data-img="https://i.scdn.co/image/ab67616d0000b2731c8f054879c69de1c26e4e00">
+                                    <div class="playlist-number">5</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Nassam Alayna El Hawa</div>
                                         <div class="playlist-track-artist">Fairuz</div>
                                     </div>
                                     <div class="playlist-track-duration">3:47</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:8BgQcQKJLzRz3pFnVKTKvR">
-                                    <div class="playlist-number">12</div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/7mJszBFgMOIoD72QmVgpxC" data-artist="Mohamed Abdel Wahab" data-title="Ya Msafer" data-img="https://i.scdn.co/image/ab67616d0000b273d9d01c1c1e0b0e66c2a1c7f0">
+                                    <div class="playlist-number">6</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ya Zalemni</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                        <div class="playlist-track-title">Ya Msafer</div>
+                                        <div class="playlist-track-artist">Mohamed Abdel Wahab</div>
                                     </div>
-                                    <div class="playlist-track-duration">35:28</div>
+                                    <div class="playlist-track-duration">5:03</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:6XKvPNWlmnN0gJejCB2VUx">
-                                    <div class="playlist-number">13</div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/6kBG7OOWkbNm0nYQqdHOqL" data-artist="Warda" data-title="Batwanes Beek" data-img="https://i.scdn.co/image/ab67616d0000b273f4a2ccbe20e44e03b983a5fa">
+                                    <div class="playlist-number">7</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Lessa Faker</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                        <div class="playlist-track-title">Batwanes Beek</div>
+                                        <div class="playlist-track-artist">Warda</div>
                                     </div>
-                                    <div class="playlist-track-duration">37:19</div>
+                                    <div class="playlist-track-duration">10:23</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:0cJPWNRWZQaFYYbCAvgm8V">
-                                    <div class="playlist-number">14</div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/1yBvomPMq8SJzV6tBhZCCB" data-artist="Najat Al Saghira" data-title="Ayoun El Alb" data-img="https://i.scdn.co/image/ab67616d0000b273695175bf0a8c8aba95f6ad93">
+                                    <div class="playlist-number">8</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ansak</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                        <div class="playlist-track-title">Ayoun El Alb</div>
+                                        <div class="playlist-track-artist">Najat Al Saghira</div>
                                     </div>
-                                    <div class="playlist-track-duration">32:45</div>
+                                    <div class="playlist-track-duration">5:58</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:9CwMpJFnYMkS8qGzDxjR4L">
-                                    <div class="playlist-number">15</div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/67OWUJEyH08sNlEG7UQzjz" data-artist="Farid Al Atrash" data-title="Ya Zahratan Fi Khayali" data-img="https://i.scdn.co/image/ab67616d0000b273e0fb1ae75c78ba91c6c2f973">
+                                    <div class="playlist-number">9</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Habibi Yasa'd Awqato</div>
-                                        <div class="playlist-track-artist">Fayza Ahmed</div>
+                                        <div class="playlist-track-title">Ya Zahratan Fi Khayali</div>
+                                        <div class="playlist-track-artist">Farid Al Atrash</div>
                                     </div>
-                                    <div class="playlist-track-duration">3:35</div>
+                                    <div class="playlist-track-duration">4:37</div>
+                                </div>
+                                <div class="playlist-item" data-url="https://open.spotify.com/track/4vCkQHhNGuyiCMWxNBQ0cP" data-artist="Asmahan" data-title="Ya Habibi Taala" data-img="https://i.scdn.co/image/ab67616d0000b273cfdf93308e977f2e088ad8d9">
+                                    <div class="playlist-number">10</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">Ya Habibi Taala</div>
+                                        <div class="playlist-track-artist">Asmahan</div>
+                                    </div>
+                                    <div class="playlist-track-duration">3:12</div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="audio-source-note">
                             <p class="mono">♪ Timeless Egyptian Masterpieces ♪</p>
-                            <p style="font-size: 0.75rem; opacity: 0.4; margin-top: 0.5rem;">Note: Spotify Premium required for playback. Click play to authenticate.</p>
+                            <p style="font-size: 0.875rem; margin-top: 1rem;">Click on any song above to copy its Spotify link</p>
+                            <div class="spotify-embed-container">
+                                <iframe id="spotify-embed" style="border-radius:12px; display:none;" 
+                                    src="" 
+                                    width="100%" height="152" frameBorder="0" 
+                                    allowfullscreen="" 
+                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                                    loading="lazy">
+                                </iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1718,69 +1566,62 @@
         }
 
         function initMusicPlayer() {
-            const playBtn = document.getElementById('play-pause');
-            const prevBtn = document.getElementById('prev-track');
-            const nextBtn = document.getElementById('next-track');
-            const vinyl = document.getElementById('vinyl');
-            const progressFill = document.getElementById('progress-fill');
-            const currentTimeEl = document.getElementById('current-time');
-            const totalTimeEl = document.getElementById('total-time');
+            const audioPlayer = document.getElementById('audio-player');
+            const albumArt = document.getElementById('album-art');
+            const spotifyEmbed = document.getElementById('spotify-embed');
             
-            // Simple UI toggles without actual playback
-            playBtn?.addEventListener('click', () => {
-                const playIcon = playBtn.querySelector('.play-icon');
-                const pauseIcon = playBtn.querySelector('.pause-icon');
-                
-                state.isPlaying = !state.isPlaying;
-                
-                if (state.isPlaying) {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                    vinyl.classList.add('playing');
-                    animateWaveform(true);
-                } else {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                    vinyl.classList.remove('playing');
-                    animateWaveform(false);
-                }
-            });
-            
-            // Simple track navigation
-            nextBtn?.addEventListener('click', () => {
-                const items = document.querySelectorAll('.playlist-item');
-                items[state.currentTrack].classList.remove('active');
-                state.currentTrack = (state.currentTrack + 1) % items.length;
-                items[state.currentTrack].classList.add('active');
-                updateTrackInfo();
-            });
-            
-            prevBtn?.addEventListener('click', () => {
-                const items = document.querySelectorAll('.playlist-item');
-                items[state.currentTrack].classList.remove('active');
-                state.currentTrack = state.currentTrack === 0 ? items.length - 1 : state.currentTrack - 1;
-                items[state.currentTrack].classList.add('active');
-                updateTrackInfo();
-            });
-            
-            // Playlist item clicks
+            // Handle playlist item clicks
             document.querySelectorAll('.playlist-item').forEach((item, index) => {
                 item.addEventListener('click', () => {
+                    // Remove active from all items
                     document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
+                    
+                    // Update track info
+                    const title = item.dataset.title;
+                    const artist = item.dataset.artist;
+                    const spotifyUrl = item.dataset.url;
+                    const imgUrl = item.dataset.img;
+                    
+                    document.getElementById('track-title').textContent = title;
+                    document.getElementById('track-artist').textContent = artist;
+                    
+                    // Update album art
+                    if (imgUrl) {
+                        albumArt.src = imgUrl;
+                    }
+                    
+                    // Convert Spotify URL to embed URL
+                    if (spotifyUrl) {
+                        const trackId = spotifyUrl.split('/track/')[1];
+                        const embedUrl = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
+                        spotifyEmbed.src = embedUrl;
+                        spotifyEmbed.style.display = 'block';
+                        
+                        // Also copy the Spotify link to clipboard
+                        navigator.clipboard.writeText(spotifyUrl).then(() => {
+                            // Show temporary success message
+                            const originalText = item.querySelector('.playlist-track-title').textContent;
+                            item.querySelector('.playlist-track-title').textContent = '✓ Link copied!';
+                            setTimeout(() => {
+                                item.querySelector('.playlist-track-title').textContent = originalText;
+                            }, 2000);
+                        });
+                    }
+                    
                     state.currentTrack = index;
-                    updateTrackInfo();
+                    
+                    // Animate waveform
+                    animateWaveform(true);
+                    albumArt.classList.add('playing');
                 });
             });
-        }
-        
-        function updateTrackInfo() {
-            const item = document.querySelectorAll('.playlist-item')[state.currentTrack];
-            const title = item.querySelector('.playlist-track-title').textContent;
-            const artist = item.querySelector('.playlist-track-artist').textContent;
             
-            document.getElementById('track-title').textContent = title;
-            document.getElementById('track-artist').textContent = artist;
+            // Auto-load first track
+            const firstTrack = document.querySelector('.playlist-item');
+            if (firstTrack) {
+                firstTrack.click();
+            }
         }
         
         function animateWaveform(playing) {
@@ -1799,31 +1640,28 @@
             const factText = document.getElementById('fact-text');
             const category = document.getElementById('fact-category');
 
-            async function fetchFact() {
-                try {
-                    const res = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
-                    const data = await res.json();
+            const facts = [
+                { text: "The universe is approximately 13.8 billion years old", category: "COSMOLOGY" },
+                { text: "There are more stars in the universe than grains of sand on all of Earth's beaches", category: "ASTRONOMY" },
+                { text: "A day on Venus is longer than its year", category: "PLANETARY SCIENCE" },
+                { text: "The human brain uses 20% of the body's total energy", category: "BIOLOGY" },
+                { text: "Octopuses have three hearts and blue blood", category: "MARINE BIOLOGY" },
+                { text: "The Great Wall of China isn't visible from space without aid", category: "MYTHS & FACTS" },
+                { text: "Honey never spoils - archaeologists have found 3000-year-old honey that's still edible", category: "NATURE" },
+                { text: "A single bolt of lightning contains enough energy to toast 100,000 slices of bread", category: "PHYSICS" },
+                { text: "The human eye can distinguish about 10 million different colors", category: "HUMAN PERCEPTION" },
+                { text: "Time passes faster for your face than your feet due to gravitational time dilation", category: "RELATIVITY" }
+            ];
 
-                    factText.style.opacity = '0';
-                    setTimeout(() => {
-                        factText.textContent = data.text;
-                        category.textContent = 'RANDOM FACT';
-                        factText.style.opacity = '1';
-                    }, 300);
-                } catch (err) {
-                    const fallback = [
-                        'The universe is approximately 13.8 billion years old',
-                        'There are more stars in the universe than grains of sand on Earth',
-                        'A day on Venus is longer than its year',
-                        'The human brain uses 20% of the body energy',
-                        'Octopuses have three hearts and blue blood'
-                    ];
-                    factText.textContent = fallback[Math.floor(Math.random() * fallback.length)];
-                    category.textContent = 'SCIENCE';
-                }
-            }
-
-            btn.addEventListener('click', fetchFact);
+            btn.addEventListener('click', () => {
+                const fact = facts[Math.floor(Math.random() * facts.length)];
+                factText.style.opacity = '0';
+                setTimeout(() => {
+                    factText.textContent = fact.text;
+                    category.textContent = fact.category;
+                    factText.style.opacity = '1';
+                }, 300);
+            });
         }
 
         function initStarPuzzle() {
@@ -2147,86 +1985,10 @@
             updateConcepts();
 
             generateBtn.addEventListener('click', async () => {
-                if (!window.genAI) {
-                    console.error('Gemini AI not loaded');
-                    useFallbackTemplates();
-                    return;
-                }
-                
                 generateBtn.disabled = true;
                 generateBtn.innerHTML = '<span class="loading"></span>';
                 
-                try {
-                    const model = window.genAI.getGenerativeModel({ model: "gemini-pro" });
-                    
-                    const prompts = {
-                        paradox: `Create a unique philosophical paradox involving ${activeConceptsList.join(' and ')}. 
-                            Format the response as:
-                            TITLE: [Creative paradox title]
-                            CONTENT: [2-3 paragraphs exploring the paradox in depth]
-                            QUESTIONS: [3 thought-provoking questions separated by |]
-                            Make it profound, original, and intellectually stimulating.`,
-                        
-                        dilemma: `Create an ethical dilemma involving ${activeConceptsList.join(' and ')}.
-                            Format the response as:
-                            TITLE: [Compelling dilemma title]
-                            CONTENT: [Present a complex ethical scenario with no clear right answer]
-                            QUESTIONS: [3 moral questions to consider separated by |]
-                            Make it emotionally engaging and morally complex.`,
-                        
-                        thought: `Create a thought experiment about ${activeConceptsList.join(' and ')}.
-                            Format the response as:
-                            TITLE: [Intriguing experiment title]
-                            CONTENT: [Describe an imaginative scenario that reveals something profound]
-                            QUESTIONS: [3 philosophical implications separated by |]
-                            Make it creative, mind-bending, and revelatory.`,
-                        
-                        dialogue: `Create a Socratic dialogue about ${activeConceptsList.join(' and ')}.
-                            Format the response as:
-                            TITLE: [Dialogue title]
-                            CONTENT: [A back-and-forth dialogue between Socrates and a student, revealing deeper truths]
-                            QUESTIONS: [3 questions the dialogue raises separated by |]
-                            Make it authentic to the Socratic method.`
-                    };
-                    
-                    const result = await model.generateContent(prompts[currentMode]);
-                    const response = await result.response;
-                    const text = response.text();
-                    
-                    // Parse the response
-                    const titleMatch = text.match(/TITLE:\s*(.+)/);
-                    const contentMatch = text.match(/CONTENT:\s*([\s\S]+?)(?=QUESTIONS:|$)/);
-                    const questionsMatch = text.match(/QUESTIONS:\s*([\s\S]+)/);
-                    
-                    if (titleMatch && contentMatch) {
-                        const title = titleMatch[1].trim();
-                        const content = contentMatch[1].trim();
-                        const questions = questionsMatch ? 
-                            questionsMatch[1].trim().split('|').map(q => q.trim()) : 
-                            ['What does this mean for our understanding?', 'How does this change our perspective?', 'What are the implications?'];
-                        
-                        outputDiv.querySelector('.paradox-title').textContent = title;
-                        outputDiv.querySelector('.paradox-content').innerHTML = `<p>${content.replace(/\n\n/g, '</p><p>')}</p>`;
-                        outputDiv.querySelector('.paradox-questions').innerHTML = `
-                            <h4>Questions to Ponder</h4>
-                            <ul>${questions.map(q => `<li>${q}</li>`).join('')}</ul>
-                        `;
-                        outputDiv.classList.remove('hidden');
-                    }
-                    
-                } catch (error) {
-                    console.error('Error generating content:', error);
-                    // Fallback to original templates if API fails
-                    useFallbackTemplates();
-                } finally {
-                    generateBtn.disabled = false;
-                    generateBtn.innerHTML = '<span class="paradox-icon">∞</span><span>Generate</span><span class="paradox-icon">∞</span>';
-                    updateConcepts();
-                }
-            });
-            
-            function useFallbackTemplates() {
-                // Original template logic as fallback
+                // Use fallback templates
                 const templates = {
                     paradox: [
                         {
@@ -2281,7 +2043,11 @@
                     <ul>${questions.map(q => `<li>${q}</li>`).join('')}</ul>
                 `;
                 outputDiv.classList.remove('hidden');
-            }
+                
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<span class="paradox-icon">∞</span><span>Generate</span><span class="paradox-icon">∞</span>';
+                updateConcepts();
+            });
         }
 
         function initPoetry() {
@@ -2324,8 +2090,3 @@
                 document.body.appendChild(particle);
             }
         }
-    </script>
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    <script type="module" src="./js/player.js"></script>
-</body>
-</html>
