@@ -1572,50 +1572,28 @@
             
             // Handle playlist item clicks
             document.querySelectorAll('.playlist-item').forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    // Remove active from all items
-                    document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                    
-                    // Update track info
-                    const title = item.dataset.title;
-                    const artist = item.dataset.artist;
-                    const spotifyUrl = item.dataset.url;
-                    const imgUrl = item.dataset.img;
-                    
-                    document.getElementById('track-title').textContent = title;
-                    document.getElementById('track-artist').textContent = artist;
-                    
-                    // Update album art
-                    if (imgUrl) {
-                        albumArt.src = imgUrl;
-                    }
-                    
-                    // Convert Spotify URL to embed URL
-                    if (spotifyUrl) {
-                        const trackId = spotifyUrl.split('/track/')[1];
-                        const embedUrl = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
-                        spotifyEmbed.src = embedUrl;
-                        spotifyEmbed.style.display = 'block';
-                        
-                        // Also copy the Spotify link to clipboard
-                        navigator.clipboard.writeText(spotifyUrl).then(() => {
-                            // Show temporary success message
-                            const originalText = item.querySelector('.playlist-track-title').textContent;
-                            item.querySelector('.playlist-track-title').textContent = '✓ Link copied!';
-                            setTimeout(() => {
-                                item.querySelector('.playlist-track-title').textContent = originalText;
-                            }, 2000);
-                        });
-                    }
-                    
-                    state.currentTrack = index;
-                    
-                    // Animate waveform
-                    animateWaveform(true);
-                    albumArt.classList.add('playing');
-                });
+              item.addEventListener('click', () => {
+                // visual selection
+                document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            
+                // update text + artwork
+                document.getElementById('track-title').textContent  = item.dataset.title;
+                document.getElementById('track-artist').textContent = item.dataset.artist;
+                if (item.dataset.img) albumArt.src = item.dataset.img;
+            
+                // build and show Spotify embed – autoplay
+                const trackId   = item.dataset.url.split('/track/')[1].split('?')[0];
+                spotifyEmbed.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0&autoplay=1`;
+                spotifyEmbed.style.display = 'block';
+            
+                // housekeeping / animation
+                state.currentTrack = index;
+                animateWaveform(true);
+                albumArt.classList.add('playing');
+              });
             });
+
             
             // Auto-load first track
             const firstTrack = document.querySelector('.playlist-item');
