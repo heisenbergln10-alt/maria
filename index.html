@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maria — Celestial Symphony</title>
     <meta name="description" content="An immersive digital experience crafted for Maria">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -339,6 +340,334 @@
             border-radius: 10px;
             font-family: var(--font-mono);
             transition: var(--transition-smooth);
+        }
+
+        /* Music Player Styles */
+        .music-interface {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .music-player {
+            padding: var(--space-lg);
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(42, 41, 40, 0.2) 0%, rgba(201, 169, 97, 0.1) 100%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .player-main {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-md);
+            align-items: center;
+        }
+
+        .album-artwork {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .vinyl-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1a1a1a 30%, #0a0a0a 100%);
+        }
+
+        .vinyl-record {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 20%, transparent 20%),
+                radial-gradient(circle at center, transparent 20%, #0a0a0a 20%, #0a0a0a 40%, transparent 40%),
+                radial-gradient(circle at center, transparent 40%, #1a1a1a 40%, #1a1a1a 60%, transparent 60%),
+                radial-gradient(circle at center, transparent 60%, #0a0a0a 60%, #0a0a0a 80%, transparent 80%),
+                radial-gradient(circle at center, transparent 80%, #1a1a1a 80%, #1a1a1a 100%);
+            position: relative;
+            animation: spin 10s linear infinite paused;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .vinyl-record.playing {
+            animation-play-state: running;
+        }
+
+        .vinyl-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .label-text {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--base-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .track-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .now-playing {
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .track-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 300;
+            margin: 0;
+        }
+
+        .track-artist {
+            font-size: var(--fs-body);
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .track-year {
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .waveform-visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 40px;
+            margin-top: var(--space-sm);
+        }
+
+        .wave-bar {
+            flex: 1;
+            background: var(--accent-gold);
+            opacity: 0.6;
+            border-radius: 2px;
+            transition: height 0.3s ease;
+            animation: wave 1.5s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .wave-bar:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 100%; }
+        }
+
+        .progress-section {
+            margin-bottom: var(--space-md);
+        }
+
+        .time-display {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-handle {
+            position: absolute;
+            top: 50%;
+            right: -8px;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            cursor: grab;
+        }
+
+        .controls-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .control-btn {
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 1.2rem;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-gold);
+            color: var(--base-light);
+            transform: scale(1.1);
+        }
+
+        .play-btn {
+            width: 70px;
+            height: 70px;
+            font-size: 1.5rem;
+        }
+
+        .playlist-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: var(--space-md);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+        }
+
+        .playlist-header h4 {
+            font-family: var(--font-display);
+            font-size: var(--fs-body);
+            font-weight: 300;
+            margin: 0;
+        }
+
+        .track-count {
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+        }
+
+        .playlist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .playlist-item {
+            display: grid;
+            grid-template-columns: 30px 1fr auto;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .playlist-item:hover {
+            background: rgba(201, 169, 97, 0.1);
+        }
+
+        .playlist-item.active {
+            background: rgba(201, 169, 97, 0.2);
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        .playlist-number {
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .playlist-track-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            min-width: 0;
+        }
+
+        .playlist-track-title {
+            font-size: var(--fs-small);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-track-artist {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-track-duration {
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+        }
+
+        .audio-source-note {
+            text-align: center;
+            margin-top: var(--space-md);
+            color: var(--text-secondary);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         #chamber {
@@ -867,20 +1196,20 @@
             animation: spin 1s linear infinite;
         }
 
-        .vinyl-record::after {
-            content: '';
+        .maria-letter {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(201, 169, 97, 0.8);
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.2) 0%, transparent 30%);
-            border-radius: 50%;
-            opacity: 0.3;
+            transform-style: preserve-3d;
+            animation: letterFloat 4s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes letterFloat {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            50% { transform: translateY(-10px) rotateY(180deg); }
         }
 
         @media (max-width: 768px) {
@@ -1012,18 +1341,12 @@
                         <div class="player-main">
                             <div class="album-artwork">
                                 <div class="vinyl-wrapper">
-                                    <div class="vinyl-record">
+                                    <div class="vinyl-record" id="vinyl">
                                         <div class="vinyl-label">
                                             <div class="label-text">CLASSIC</div>
                                         </div>
                                     </div>
-                                    <div class="tone-arm">
-                                        <div class="arm-base"></div>
-                                        <div class="arm-line"></div>
-                                        <div class="arm-head"></div>
-                                    </div>
                                 </div>
-                                <div class="reflection"></div>
                             </div>
                             
                             <div class="track-info">
@@ -1032,7 +1355,7 @@
                                 <p class="track-artist" id="track-artist">Egyptian Classics</p>
                                 <div class="track-year" id="track-year">Timeless</div>
                                 
-                                <div class="waveform-visualizer">
+                                <div class="waveform-visualizer" id="waveform">
                                     <div class="wave-bar"></div>
                                     <div class="wave-bar"></div>
                                     <div class="wave-bar"></div>
@@ -1061,8 +1384,9 @@
                             <div class="time-display">
                                 <span id="current-time">0:00</span>
                                 <div class="progress-bar">
-                                    <div class="progress-fill"></div>
-                                    <div class="progress-handle"></div>
+                                    <div class="progress-fill" id="progress-fill">
+                                        <div class="progress-handle"></div>
+                                    </div>
                                 </div>
                                 <span id="total-time">0:00</span>
                             </div>
@@ -1081,8 +1405,8 @@
                         
                         <div class="playlist-section">
                             <div class="playlist-header">
-                                <h4>Playlist</h4>
-                                <span class="track-count">10 tracks</span>
+                                <h4>Egyptian Classics</h4>
+                                <span class="track-count">15 masterpieces</span>
                             </div>
                             <div class="playlist-items" id="playlist-items">
                                 <div class="playlist-item" data-spotify-uri="spotify:track:4uLU6hMCjMI75M1A2tKUQC">
@@ -1091,7 +1415,7 @@
                                         <div class="playlist-track-title">Enta Omri</div>
                                         <div class="playlist-track-artist">Umm Kulthum</div>
                                     </div>
-                                    <div class="playlist-track-duration">4:32</div>
+                                    <div class="playlist-track-duration">58:38</div>
                                 </div>
                                 <div class="playlist-item" data-spotify-uri="spotify:track:6rqhFgbbKwnb9MLmUQDhG6">
                                     <div class="playlist-number">2</div>
@@ -1099,7 +1423,7 @@
                                         <div class="playlist-track-title">Alf Leila wa Leila</div>
                                         <div class="playlist-track-artist">Umm Kulthum</div>
                                     </div>
-                                    <div class="playlist-track-duration">5:21</div>
+                                    <div class="playlist-track-duration">54:01</div>
                                 </div>
                                 <div class="playlist-item" data-spotify-uri="spotify:track:7ouMYWpwJ21bSSFvUpguAC">
                                     <div class="playlist-number">3</div>
@@ -1107,7 +1431,7 @@
                                         <div class="playlist-track-title">Al Atlal</div>
                                         <div class="playlist-track-artist">Umm Kulthum</div>
                                     </div>
-                                    <div class="playlist-track-duration">6:15</div>
+                                    <div class="playlist-track-duration">48:27</div>
                                 </div>
                                 <div class="playlist-item" data-spotify-uri="spotify:track:3xKsf9qdS1CuMNiGAUdOg9">
                                     <div class="playlist-number">4</div>
@@ -1133,32 +1457,72 @@
                                     </div>
                                     <div class="playlist-track-duration">4:12</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:2vxBcKfyMzjS7uFSZktqyW">
+                                <div class="playlist-item" data-spotify-uri="spotify:track:2bncfRCJGZoYeC8YeCvz3W">
                                     <div class="playlist-number">7</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ya Musafer</div>
+                                        <div class="playlist-track-title">Gana El Hawa</div>
+                                        <div class="playlist-track-artist">Abdel Halim Hafez</div>
+                                    </div>
+                                    <div class="playlist-track-duration">6:18</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:6YTMpCJJ0wfhqKOeOQITKe">
+                                    <div class="playlist-number">8</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">Hakam Alayna Al Hawa</div>
+                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                    </div>
+                                    <div class="playlist-track-duration">42:15</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:2vxBcKfyMzjS7uFSZktqyW">
+                                    <div class="playlist-number">9</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">Ya Msafer</div>
                                         <div class="playlist-track-artist">Mohamed Abdel Wahab</div>
                                     </div>
                                     <div class="playlist-track-duration">5:03</div>
                                 </div>
-                                <div class="playlist-item" data-spotify-uri="spotify:track:4kLtxWOzQkEdvBFjNroWD8">
-                                    <div class="playlist-number">8</div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:1r9xUipOqoNwggBpENDsvJ">
+                                    <div class="playlist-number">10</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Al Rabee</div>
+                                        <div class="playlist-track-title">El Hob Kuluh</div>
+                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                    </div>
+                                    <div class="playlist-track-duration">45:32</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:4kLtxWOzQkEdvBFjNroWD8">
+                                    <div class="playlist-number">11</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">Nassam Alayna El Hawa</div>
                                         <div class="playlist-track-artist">Fairuz</div>
                                     </div>
                                     <div class="playlist-track-duration">3:47</div>
                                 </div>
                                 <div class="playlist-item" data-spotify-uri="spotify:track:8BgQcQKJLzRz3pFnVKTKvR">
-                                    <div class="playlist-number">9</div>
+                                    <div class="playlist-number">12</div>
                                     <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ba'id Anak</div>
-                                        <div class="playlist-track-artist">Farid al-Atrash</div>
+                                        <div class="playlist-track-title">Ya Zalemni</div>
+                                        <div class="playlist-track-artist">Umm Kulthum</div>
                                     </div>
-                                    <div class="playlist-track-duration">4:28</div>
+                                    <div class="playlist-track-duration">35:28</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:6XKvPNWlmnN0gJejCB2VUx">
+                                    <div class="playlist-number">13</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">Lessa Faker</div>
+                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                    </div>
+                                    <div class="playlist-track-duration">37:19</div>
+                                </div>
+                                <div class="playlist-item" data-spotify-uri="spotify:track:0cJPWNRWZQaFYYbCAvgm8V">
+                                    <div class="playlist-number">14</div>
+                                    <div class="playlist-track-info">
+                                        <div class="playlist-track-title">Ansak</div>
+                                        <div class="playlist-track-artist">Umm Kulthum</div>
+                                    </div>
+                                    <div class="playlist-track-duration">32:45</div>
                                 </div>
                                 <div class="playlist-item" data-spotify-uri="spotify:track:9CwMpJFnYMkS8qGzDxjR4L">
-                                    <div class="playlist-number">10</div>
+                                    <div class="playlist-number">15</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Habibi Yasa'd Awqato</div>
                                         <div class="playlist-track-artist">Fayza Ahmed</div>
@@ -1169,7 +1533,7 @@
                         </div>
                         
                         <div class="audio-source-note">
-                            <p class="mono">♪ Curated collection of timeless classics ♪</p>
+                            <p class="mono">♪ Timeless Egyptian Masterpieces ♪</p>
                             <p style="font-size: 0.75rem; opacity: 0.4; margin-top: 0.5rem;">Note: Spotify Premium required for playback. Click play to authenticate.</p>
                         </div>
                     </div>
@@ -1248,12 +1612,26 @@
         </div>
     </footer>
 
+    <script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+    </script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        const genAI = new GoogleGenerativeAI('AIzaSyAqXYggfgLt5_dL6wLEkNZUnGXr5QHBch4');
+        window.genAI = genAI;
+    </script>
     <script>
         const state = {
             mouseX: 0,
             mouseY: 0,
             connections: [],
-            solved: false
+            solved: false,
+            currentTrack: 0,
+            isPlaying: false
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1266,6 +1644,7 @@
             initPoetry();
             initFacts();
             initFloatingParticles();
+            initMusicPlayer();
         });
 
         function initCustomCursor() {
@@ -1338,6 +1717,83 @@
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         }
 
+        function initMusicPlayer() {
+            const playBtn = document.getElementById('play-pause');
+            const prevBtn = document.getElementById('prev-track');
+            const nextBtn = document.getElementById('next-track');
+            const vinyl = document.getElementById('vinyl');
+            const progressFill = document.getElementById('progress-fill');
+            const currentTimeEl = document.getElementById('current-time');
+            const totalTimeEl = document.getElementById('total-time');
+            
+            // Simple UI toggles without actual playback
+            playBtn?.addEventListener('click', () => {
+                const playIcon = playBtn.querySelector('.play-icon');
+                const pauseIcon = playBtn.querySelector('.pause-icon');
+                
+                state.isPlaying = !state.isPlaying;
+                
+                if (state.isPlaying) {
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                    vinyl.classList.add('playing');
+                    animateWaveform(true);
+                } else {
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                    vinyl.classList.remove('playing');
+                    animateWaveform(false);
+                }
+            });
+            
+            // Simple track navigation
+            nextBtn?.addEventListener('click', () => {
+                const items = document.querySelectorAll('.playlist-item');
+                items[state.currentTrack].classList.remove('active');
+                state.currentTrack = (state.currentTrack + 1) % items.length;
+                items[state.currentTrack].classList.add('active');
+                updateTrackInfo();
+            });
+            
+            prevBtn?.addEventListener('click', () => {
+                const items = document.querySelectorAll('.playlist-item');
+                items[state.currentTrack].classList.remove('active');
+                state.currentTrack = state.currentTrack === 0 ? items.length - 1 : state.currentTrack - 1;
+                items[state.currentTrack].classList.add('active');
+                updateTrackInfo();
+            });
+            
+            // Playlist item clicks
+            document.querySelectorAll('.playlist-item').forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    state.currentTrack = index;
+                    updateTrackInfo();
+                });
+            });
+        }
+        
+        function updateTrackInfo() {
+            const item = document.querySelectorAll('.playlist-item')[state.currentTrack];
+            const title = item.querySelector('.playlist-track-title').textContent;
+            const artist = item.querySelector('.playlist-track-artist').textContent;
+            
+            document.getElementById('track-title').textContent = title;
+            document.getElementById('track-artist').textContent = artist;
+        }
+        
+        function animateWaveform(playing) {
+            const bars = document.querySelectorAll('.wave-bar');
+            bars.forEach(bar => {
+                if (playing) {
+                    bar.style.animationPlayState = 'running';
+                } else {
+                    bar.style.animationPlayState = 'paused';
+                }
+            });
+        }
+
         function initFacts() {
             const btn = document.getElementById('get-fact');
             const factText = document.getElementById('fact-text');
@@ -1390,14 +1846,6 @@
                 { id: 8, x: 0.4, y: 0.1, label: "Love", connections: [7, 9] },
                 { id: 9, x: 0.6, y: 0.9, label: "Suffering", connections: [8, 10] },
                 { id: 10, x: 0.5, y: 0.3, label: "Transcendence", connections: [9] }
-            ];
-            
-            const mariaPositions = [
-                {x: 0.1, y: 0.7}, {x: 0.1, y: 0.3}, {x: 0.15, y: 0.5}, {x: 0.2, y: 0.3}, {x: 0.2, y: 0.7},
-                {x: 0.3, y: 0.7}, {x: 0.35, y: 0.3}, {x: 0.35, y: 0.5}, {x: 0.4, y: 0.7},
-                {x: 0.5, y: 0.7}, {x: 0.5, y: 0.3}, {x: 0.55, y: 0.4}, {x: 0.55, y: 0.7},
-                {x: 0.65, y: 0.3}, {x: 0.65, y: 0.7},
-                {x: 0.75, y: 0.7}, {x: 0.8, y: 0.3}, {x: 0.8, y: 0.5}, {x: 0.85, y: 0.7}
             ];
 
             function resize() {
@@ -1559,70 +2007,74 @@
                 state.solved = true;
                 info.innerHTML = '<p>✨ The stars align to spell MARIA! ✨</p>';
                 
-                let progress = 0;
-                function animateToMaria() {
+                setTimeout(() => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     
+                    // Create golden background
                     const gradient = ctx.createRadialGradient(
                         canvas.width / 2, canvas.height / 2, 0,
                         canvas.width / 2, canvas.height / 2, canvas.width / 2
                     );
-                    gradient.addColorStop(0, 'rgba(201, 169, 97, 0.1)');
-                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+                    gradient.addColorStop(0, 'rgba(201, 169, 97, 0.3)');
+                    gradient.addColorStop(1, 'rgba(0, 0, 0, 0.8)');
                     ctx.fillStyle = gradient;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
-                    progress += 0.02;
+                    // Draw MARIA in large, clear letters
+                    const letters = ['M', 'A', 'R', 'I', 'A'];
+                    const spacing = canvas.width / 6;
                     
-                    philosophicalConcepts.forEach((concept, i) => {
-                        const startPos = getConceptPosition(concept);
-                        let endPos = startPos;
+                    ctx.font = 'bold 120px Bodoni Moda';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    
+                    letters.forEach((letter, i) => {
+                        const x = spacing * (i + 1);
+                        const y = canvas.height / 2;
                         
-                        if (i < mariaPositions.length) {
-                            endPos = {
-                                x: mariaPositions[i].x * canvas.width,
-                                y: mariaPositions[i].y * canvas.height
-                            };
+                        // Create glowing effect
+                        ctx.shadowBlur = 30;
+                        ctx.shadowColor = 'rgba(201, 169, 97, 1)';
+                        
+                        // Multiple passes for stronger glow
+                        for (let j = 0; j < 3; j++) {
+                            ctx.fillStyle = 'rgba(201, 169, 97, 0.3)';
+                            ctx.fillText(letter, x, y);
                         }
                         
-                        const currentX = startPos.x + (endPos.x - startPos.x) * Math.min(progress, 1);
-                        const currentY = startPos.y + (endPos.y - startPos.y) * Math.min(progress, 1);
+                        // Final letter
+                        ctx.shadowBlur = 10;
+                        ctx.fillStyle = '#c9a961';
+                        ctx.fillText(letter, x, y);
                         
-                        ctx.beginPath();
-                        ctx.arc(currentX, currentY, 10 + Math.sin(Date.now() / 500) * 2, 0, Math.PI * 2);
-                        ctx.fillStyle = 'rgba(201, 169, 97, 1)';
-                        ctx.shadowBlur = 20;
-                        ctx.shadowColor = 'rgba(201, 169, 97, 0.8)';
-                        ctx.fill();
+                        // Add sparkles around letters
+                        for (let s = 0; s < 5; s++) {
+                            const angle = (Math.PI * 2 / 5) * s;
+                            const dist = 60;
+                            const sx = x + Math.cos(angle) * dist;
+                            const sy = y + Math.sin(angle) * dist;
+                            
+                            ctx.beginPath();
+                            ctx.arc(sx, sy, 3 + Math.random() * 2, 0, Math.PI * 2);
+                            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                            ctx.fill();
+                        }
                     });
                     
-                    if (progress >= 1) {
-                        ctx.shadowBlur = 0;
-                        const mariaConnections = [
-                            [0,1],[1,2],[2,3],[3,4],
-                            [5,6],[6,7],[7,8],
-                            [9,10],[10,11],[11,12],
-                            [13,14],
-                            [15,16],[16,17],[17,18]
-                        ];
-                        
-                        mariaConnections.forEach(([a, b]) => {
-                            if (a < mariaPositions.length && b < mariaPositions.length) {
-                                ctx.beginPath();
-                                ctx.moveTo(mariaPositions[a].x * canvas.width, mariaPositions[a].y * canvas.height);
-                                ctx.lineTo(mariaPositions[b].x * canvas.width, mariaPositions[b].y * canvas.height);
-                                ctx.strokeStyle = `rgba(201, 169, 97, ${0.8 + Math.sin(Date.now() / 300) * 0.2})`;
-                                ctx.lineWidth = 3;
-                                ctx.stroke();
-                            }
-                        });
+                    // Add decorative stars
+                    for (let i = 0; i < 50; i++) {
+                        ctx.beginPath();
+                        ctx.arc(
+                            Math.random() * canvas.width,
+                            Math.random() * canvas.height,
+                            Math.random() * 2,
+                            0,
+                            Math.PI * 2
+                        );
+                        ctx.fillStyle = `rgba(201, 169, 97, ${Math.random() * 0.5})`;
+                        ctx.fill();
                     }
-                    
-                    if (progress < 1.5) {
-                        requestAnimationFrame(animateToMaria);
-                    }
-                }
-                animateToMaria();
+                }, 1000);
             }
 
             window.addEventListener('resize', resize);
@@ -1637,12 +2089,12 @@
             const modalBody = document.querySelector('.modal-body');
 
             const essays = {
-                'On Consciousness': '<p>Consciousness is the greatest mystery of existence...</p>',
-                'The Nature of Time': '<p>Time is not a river but an ocean...</p>',
-                'Beauty\'s Whisper': '<p>Beauty speaks in a language beyond words...</p>',
-                'The Gift of Suffering': '<p>In our darkest moments, we find our truest light...</p>',
-                'Love as Verb': '<p>Love is not a feeling but an action...</p>',
-                'Dancing with Death': '<p>To truly live, we must befriend our mortality...</p>'
+                'On Consciousness': '<p>Consciousness is the greatest mystery of existence. It is the mirror that reflects not just the world, but the very act of reflection itself. When we become aware of our awareness, we enter an infinite regress—a hall of mirrors where each reflection contains another observer observing the observation.</p><p>What does it mean to be conscious? Is it merely the firing of neurons, or is there something irreducible about the subjective experience of being? The hard problem of consciousness remains: how does matter give rise to mind?</p>',
+                'The Nature of Time': '<p>Time flows not as a river, but as an ocean—vast, deep, and full of currents we barely perceive. We experience it linearly, moment by moment, yet physics tells us all moments exist simultaneously in the block universe.</p><p>Perhaps our perception of time passing is the greatest illusion, a necessary fiction that allows consciousness to navigate an otherwise incomprehensible reality. The present moment is all we ever have, yet it is infinitely elusive.</p>',
+                'Beauty\'s Whisper': '<p>In the fleeting moment of aesthetic arrest, we touch something eternal, something that was always there but hidden from ordinary sight. Beauty is not in the object nor in the eye of the beholder, but in the sacred space between.</p><p>When we encounter true beauty, time stops. The chattering mind falls silent. We are reminded of what we knew before we learned to speak, before we learned to think—that we are part of something infinitely precious.</p>',
+                'The Gift of Suffering': '<p>Pain carves the vessel in which joy is held. Without darkness, light has no meaning. Without death, life loses its preciousness. This is the paradox at the heart of existence: our greatest gifts come wrapped in our greatest challenges.</p><p>Suffering breaks us open, shatters our illusions, forces us to confront what we would rather avoid. Yet in that breaking, we often find our deepest strength, our most authentic self, our capacity for compassion.</p>',
+                'Love as Verb': '<p>Love is not found but forged, not felt but enacted, a daily choice to see the sacred in another. It is not the fairy tale ending but the beginning of the real work—the work of truly seeing and being seen.</p><p>To love is to accept the full catastrophe of another human being, to say yes not just to their light but to their shadow. It is to choose connection over correctness, presence over perfection.</p>',
+                'Dancing with Death': '<p>Mortality is the dark backdrop against which life\'s colors shine most brilliantly. Death is not the opposite of life but its most intimate companion, walking beside us always, whispering: "Not yet, but someday. So live, truly live, while you can."</p><p>When we befriend our mortality, we discover an unexpected freedom. The trivial falls away. What matters becomes clear. We learn to hold life lightly, to love fiercely, to forgive quickly.</p>'
             };
 
             cards.forEach(card => {
@@ -1660,12 +2112,12 @@
             });
         }
 
-        function initParadoxEngine() {
+        async function initParadoxEngine() {
             const generateBtn = document.getElementById('generate-paradox');
             const outputDiv = document.getElementById('paradox-output');
             const conceptsList = document.getElementById('paradox-concepts-list');
             
-            const concepts = ['Love', 'Time', 'Freedom', 'Truth', 'Beauty', 'Death', 'Consciousness', 'Reality', 'Dreams', 'Memory'];
+            const concepts = ['Love', 'Time', 'Freedom', 'Truth', 'Beauty', 'Death', 'Consciousness', 'Reality', 'Dreams', 'Memory', 'Identity', 'Infinity', 'Knowledge', 'Existence', 'Perception'];
             let currentMode = 'paradox';
             let activeConceptsList = [];
 
@@ -1694,45 +2146,119 @@
             }
             updateConcepts();
 
-            const paradoxTemplates = {
-                paradox: [
-                    {
-                        title: "The Paradox of {0} and {1}",
-                        content: "If {0} requires {1} to exist, and {1} requires {0} to be meaningful, then neither can be the foundation. Yet we experience both daily. This suggests that our understanding of causality itself may be flawed when applied to fundamental aspects of existence.\n\nPerhaps {0} and {1} are not separate entities but different manifestations of something deeper, something our language cannot capture.",
-                        questions: ["Can circular dependencies exist in reality?", "Is this a limitation of language or logic?", "What would it mean for something to be self-causing?"]
-                    },
-                    {
-                        title: "The {0} Paradox",
-                        content: "The more we pursue {0}, the further it seems to recede. Yet when we abandon the pursuit, {0} often arrives unbidden. This suggests that {0} exists in a state of quantum superposition - both present and absent until the moment of observation collapses it into one state or the other.",
-                        questions: ["Is desire the enemy of attainment?", "Can we want without wanting?", "Does {0} exist independently of our perception?"]
+            generateBtn.addEventListener('click', async () => {
+                if (!window.genAI) {
+                    console.error('Gemini AI not loaded');
+                    useFallbackTemplates();
+                    return;
+                }
+                
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '<span class="loading"></span>';
+                
+                try {
+                    const model = window.genAI.getGenerativeModel({ model: "gemini-pro" });
+                    
+                    const prompts = {
+                        paradox: `Create a unique philosophical paradox involving ${activeConceptsList.join(' and ')}. 
+                            Format the response as:
+                            TITLE: [Creative paradox title]
+                            CONTENT: [2-3 paragraphs exploring the paradox in depth]
+                            QUESTIONS: [3 thought-provoking questions separated by |]
+                            Make it profound, original, and intellectually stimulating.`,
+                        
+                        dilemma: `Create an ethical dilemma involving ${activeConceptsList.join(' and ')}.
+                            Format the response as:
+                            TITLE: [Compelling dilemma title]
+                            CONTENT: [Present a complex ethical scenario with no clear right answer]
+                            QUESTIONS: [3 moral questions to consider separated by |]
+                            Make it emotionally engaging and morally complex.`,
+                        
+                        thought: `Create a thought experiment about ${activeConceptsList.join(' and ')}.
+                            Format the response as:
+                            TITLE: [Intriguing experiment title]
+                            CONTENT: [Describe an imaginative scenario that reveals something profound]
+                            QUESTIONS: [3 philosophical implications separated by |]
+                            Make it creative, mind-bending, and revelatory.`,
+                        
+                        dialogue: `Create a Socratic dialogue about ${activeConceptsList.join(' and ')}.
+                            Format the response as:
+                            TITLE: [Dialogue title]
+                            CONTENT: [A back-and-forth dialogue between Socrates and a student, revealing deeper truths]
+                            QUESTIONS: [3 questions the dialogue raises separated by |]
+                            Make it authentic to the Socratic method.`
+                    };
+                    
+                    const result = await model.generateContent(prompts[currentMode]);
+                    const response = await result.response;
+                    const text = response.text();
+                    
+                    // Parse the response
+                    const titleMatch = text.match(/TITLE:\s*(.+)/);
+                    const contentMatch = text.match(/CONTENT:\s*([\s\S]+?)(?=QUESTIONS:|$)/);
+                    const questionsMatch = text.match(/QUESTIONS:\s*([\s\S]+)/);
+                    
+                    if (titleMatch && contentMatch) {
+                        const title = titleMatch[1].trim();
+                        const content = contentMatch[1].trim();
+                        const questions = questionsMatch ? 
+                            questionsMatch[1].trim().split('|').map(q => q.trim()) : 
+                            ['What does this mean for our understanding?', 'How does this change our perspective?', 'What are the implications?'];
+                        
+                        outputDiv.querySelector('.paradox-title').textContent = title;
+                        outputDiv.querySelector('.paradox-content').innerHTML = `<p>${content.replace(/\n\n/g, '</p><p>')}</p>`;
+                        outputDiv.querySelector('.paradox-questions').innerHTML = `
+                            <h4>Questions to Ponder</h4>
+                            <ul>${questions.map(q => `<li>${q}</li>`).join('')}</ul>
+                        `;
+                        outputDiv.classList.remove('hidden');
                     }
-                ],
-                dilemma: [
-                    {
+                    
+                } catch (error) {
+                    console.error('Error generating content:', error);
+                    // Fallback to original templates if API fails
+                    useFallbackTemplates();
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = '<span class="paradox-icon">∞</span><span>Generate</span><span class="paradox-icon">∞</span>';
+                    updateConcepts();
+                }
+            });
+            
+            function useFallbackTemplates() {
+                // Original template logic as fallback
+                const templates = {
+                    paradox: [
+                        {
+                            title: "The Paradox of {0} and {1}",
+                            content: "If {0} requires {1} to exist, and {1} requires {0} to be meaningful, then neither can be the foundation. Yet we experience both daily. This suggests that our understanding of causality itself may be flawed when applied to fundamental aspects of existence.\n\nPerhaps {0} and {1} are not separate entities but different manifestations of something deeper, something our language cannot capture.",
+                            questions: ["Can circular dependencies exist in reality?", "Is this a limitation of language or logic?", "What would it mean for something to be self-causing?"]
+                        },
+                        {
+                            title: "The {0} Paradox",
+                            content: "The more we pursue {0}, the further it seems to recede. Yet when we abandon the pursuit, {0} often arrives unbidden. This suggests that {0} exists in a state of quantum superposition - both present and absent until the moment of observation collapses it into one state or the other.",
+                            questions: ["Is desire the enemy of attainment?", "Can we want without wanting?", "Does {0} exist independently of our perception?"]
+                        }
+                    ],
+                    dilemma: [{
                         title: "The Dilemma of Choosing Between {0} and {1}",
                         content: "When forced to choose between {0} and {1}, we face an impossible decision. To choose {0} means sacrificing {1}, yet {0} without {1} becomes meaningless. This reveals the interconnected nature of values we often treat as separate.\n\nThe dilemma deepens when we realize that the very act of choosing may destroy both.",
                         questions: ["Is it possible to have one without the other?", "What hidden assumptions make this feel like a dilemma?", "Could refusing to choose be a choice itself?"]
-                    }
-                ],
-                thought: [
-                    {
+                    }],
+                    thought: [{
                         title: "The {0} Machine",
                         content: "Imagine a device that could create perfect {0} but at the cost of genuine {1}. Would using such a device enhance human experience or diminish it? This thought experiment reveals our conflicting intuitions about authenticity and perfection.\n\nIf the experience is indistinguishable from 'real' {0}, does the origin matter?",
                         questions: ["What makes something 'genuine' versus 'artificial'?", "Would perfect simulation be distinguishable from reality?", "Is the process or the outcome more important?"]
-                    }
-                ],
-                dialogue: [
-                    {
+                    }],
+                    dialogue: [{
                         title: "Socrates and the Nature of {0}",
                         content: "Socrates: 'Tell me, friend, what is {0}?'\nStudent: 'It is obviously connected to {1}.'\nSocrates: 'But can {1} exist without {0}?'\nStudent: 'I... I'm not certain anymore.'\nSocrates: 'Then perhaps we don't understand either as well as we thought.'\nStudent: 'But surely we experience {0} every day!'\nSocrates: 'Do we experience {0}, or do we experience our idea of {0}?'",
                         questions: ["What assumptions did the student make?", "How does questioning reveal ignorance?", "Can we ever truly know {0}?"]
-                    }
-                ]
-            };
-
-            generateBtn.addEventListener('click', () => {
-                const templates = paradoxTemplates[currentMode];
-                const template = templates[Math.floor(Math.random() * templates.length)];
+                    }]
+                };
+                
+                const templateList = templates[currentMode];
+                const template = templateList[Math.floor(Math.random() * templateList.length)];
                 
                 let title = template.title;
                 let content = template.content;
@@ -1744,10 +2270,8 @@
                 content = content.replace(/\{1\}/g, activeConceptsList[1] || activeConceptsList[0]);
                 
                 const questions = template.questions.map(q => {
-                    let question = q;
-                    question = question.replace(/\{0\}/g, activeConceptsList[0]);
-                    question = question.replace(/\{1\}/g, activeConceptsList[1] || activeConceptsList[0]);
-                    return question;
+                    return q.replace(/\{0\}/g, activeConceptsList[0])
+                            .replace(/\{1\}/g, activeConceptsList[1] || activeConceptsList[0]);
                 });
                 
                 outputDiv.querySelector('.paradox-title').textContent = title;
@@ -1757,9 +2281,7 @@
                     <ul>${questions.map(q => `<li>${q}</li>`).join('')}</ul>
                 `;
                 outputDiv.classList.remove('hidden');
-                
-                updateConcepts();
-            });
+            }
         }
 
         function initPoetry() {
