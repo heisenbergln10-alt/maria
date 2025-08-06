@@ -355,233 +355,33 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .player-main {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: var(--space-lg);
+        .spotify-main-player {
             margin-bottom: var(--space-md);
-            align-items: center;
-        }
-
-        .album-artwork {
-            width: 300px;
-            height: 300px;
-            position: relative;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .album-art-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .album-art-img.playing {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        .vinyl-wrapper {
-            width: 100%;
-            height: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, #1a1a1a 30%, #0a0a0a 100%);
+            min-height: 352px;
         }
 
-        .vinyl-record {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: 
-                radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 20%, transparent 20%),
-                radial-gradient(circle at center, transparent 20%, #0a0a0a 20%, #0a0a0a 40%, transparent 40%),
-                radial-gradient(circle at center, transparent 40%, #1a1a1a 40%, #1a1a1a 60%, transparent 60%),
-                radial-gradient(circle at center, transparent 60%, #0a0a0a 60%, #0a0a0a 80%, transparent 80%),
-                radial-gradient(circle at center, transparent 80%, #1a1a1a 80%, #1a1a1a 100%);
-            position: relative;
-            animation: spin 10s linear infinite paused;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        /* NEW: Style for the Spotify embed container */
+        #embed-iframe {
+            width: 100%;
+            height: 352px;
+            border-radius: 12px;
         }
 
-        .vinyl-record.playing {
-            animation-play-state: running;
-        }
-
-        .vinyl-label {
+        /* NEW: Loading animation */
+        .spotify-main-player.loading::after {
+            content: '♪ Loading track...';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .label-text {
             font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--base-light);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .track-info {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-
-        .now-playing {
-            font-family: var(--font-mono);
-            font-size: var(--fs-small);
             color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
-
-        .track-title {
-            font-family: var(--font-display);
-            font-size: var(--fs-heading);
-            font-weight: 300;
-            margin: 0;
-        }
-
-        .track-artist {
-            font-size: var(--fs-body);
-            color: var(--text-secondary);
-            margin: 0;
-        }
-
-        .track-year {
-            font-family: var(--font-mono);
             font-size: var(--fs-small);
-            color: var(--text-secondary);
-            opacity: 0.7;
-        }
-
-        .waveform-visualizer {
-            display: flex;
-            align-items: flex-end;
-            gap: 3px;
-            height: 40px;
-            margin-top: var(--space-sm);
-        }
-
-        .wave-bar {
-            flex: 1;
-            background: var(--accent-gold);
-            opacity: 0.6;
-            border-radius: 2px;
-            transition: height 0.3s ease;
-            animation: wave 1.5s ease-in-out infinite;
-        }
-
-        .wave-bar:nth-child(odd) {
-            animation-delay: 0.1s;
-        }
-
-        .wave-bar:nth-child(even) {
-            animation-delay: 0.2s;
-        }
-
-        @keyframes wave {
-            0%, 100% { height: 10px; }
-            50% { height: 100%; }
-        }
-
-        .progress-section {
-            margin-bottom: var(--space-md);
-        }
-
-        .time-display {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-family: var(--font-mono);
-            font-size: var(--fs-small);
-            color: var(--text-secondary);
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            position: relative;
-        }
-
-        .progress-handle {
-            position: absolute;
-            top: 50%;
-            right: -8px;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            background: var(--accent-gold);
-            border-radius: 50%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            cursor: grab;
-        }
-
-        .controls-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-lg);
-        }
-
-        .control-btn {
-            background: transparent;
-            border: 2px solid var(--accent-gold);
-            color: var(--accent-gold);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-size: 1.2rem;
-        }
-
-        .control-btn:hover {
-            background: var(--accent-gold);
-            color: var(--base-light);
-            transform: scale(1.1);
-        }
-
-        .play-btn {
-            width: 70px;
-            height: 70px;
-            font-size: 1.5rem;
+            animation: pulse 1s ease-in-out infinite;
         }
 
         .playlist-section {
@@ -632,11 +432,18 @@
 
         .playlist-item:hover {
             background: rgba(201, 169, 97, 0.1);
+            transform: translateX(5px);
         }
 
         .playlist-item.active {
             background: rgba(201, 169, 97, 0.2);
             border-left: 3px solid var(--accent-gold);
+        }
+
+        /* NEW: Playing animation */
+        .playlist-item.playing .playlist-number {
+            color: var(--accent-gold);
+            font-weight: bold;
         }
 
         .playlist-number {
@@ -681,16 +488,26 @@
             color: var(--text-secondary);
         }
 
-        .spotify-embed-container {
-            margin-top: var(--space-md);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        /* NEW: Info for non-premium users */
+        .spotify-notice {
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            padding: var(--space-sm);
+            margin-top: var(--space-sm);
+            font-size: var(--fs-small);
+            text-align: center;
+            color: var(--accent-gold);
         }
 
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         #chamber {
@@ -1122,35 +939,22 @@
                 grid-template-columns: 1fr;
             }
 
-            .player-main {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .album-artwork {
-                margin: 0 auto;
-            }
-
-            .track-info {
-                align-items: center;
-            }
-
-            .waveform-visualizer {
-                justify-content: center;
-                max-width: 300px;
-                margin: var(--space-md) auto;
-            }
-
-            .controls-section {
-                gap: var(--space-sm);
-            }
-
-            .control-btn {
-                padding: 0.3rem;
+            #embed-iframe {
+                height: 250px !important;
             }
 
             .playlist-section {
-                max-height: 200px;
+                max-height: 300px;
+            }
+
+            .playlist-item {
+                grid-template-columns: 25px 1fr auto;
+                padding: var(--space-xs);
+                font-size: 0.9rem;
+            }
+
+            .playlist-track-duration {
+                display: none;
             }
         }
     </style>
@@ -1239,56 +1043,22 @@
                 
                 <div class="music-interface">
                     <div class="music-player glass">
-                        <div class="player-main">
-                            <div class="album-artwork">
-                                <img src="https://i.scdn.co/image/ab67616d0000b273e7e2e5e8dc432b018f7e5e15" alt="Egyptian Classics" class="album-art-img" id="album-art">
-                            </div>
-                            
-                            <div class="track-info">
-                                <div class="now-playing">NOW PLAYING</div>
-                                <h3 class="track-title" id="track-title">Click Play to Start</h3>
-                                <p class="track-artist" id="track-artist">Egyptian Classics</p>
-                                <div class="track-year" id="track-year">Timeless</div>
-                                
-                                <div class="waveform-visualizer" id="waveform">
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                    <div class="wave-bar"></div>
-                                </div>
-                            </div>
+                        <div class="spotify-main-player">
+                            <!-- NEW: Conteneur pour le lecteur Spotify dynamique -->
+                            <div id="embed-iframe"></div>
                         </div>
                         
-                        <div class="controls-section">
-                            <audio id="audio-player" style="width: 100%; margin-top: 20px;" controls>
-                                Your browser does not support the audio element.
-                            </audio>
-                        </div>
-                        
-                        <div class="playlist-section">
+                        <div class="playlist-section" style="margin-top: var(--space-md);">
                             <div class="playlist-header">
-                                <h4>Egyptian Classics</h4>
+                                <h4>Egyptian Classics Collection</h4>
                                 <span class="track-count">10 masterpieces</span>
                             </div>
                             <div class="playlist-items" id="playlist-items">
-                                <!-- Actual Egyptian classics with correct Spotify links -->
-                                <div class="playlist-item active" data-url="https://open.spotify.com/track/3gFcGnU4kTdMYLXDjH1TK8" data-artist="Umm Kulthum" data-title="Enta Omri" data-img="https://i.scdn.co/image/ab67616d0000b273e7e2e5e8dc432b018f7e5e15">
+                                <!-- MODIFIED: Ajout des attributs data-id, data-title, data-artist -->
+                                <div class="playlist-item active" 
+                                     data-id="3gFcGnU4kTdMYLXDjH1TK8"
+                                     data-title="Enta Omri"
+                                     data-artist="Umm Kulthum">
                                     <div class="playlist-number">1</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Enta Omri</div>
@@ -1296,7 +1066,10 @@
                                     </div>
                                     <div class="playlist-track-duration">38:31</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/7ouRfMhJnMA3a88VBzByxW" data-artist="Umm Kulthum" data-title="Alf Leila wa Leila" data-img="https://i.scdn.co/image/ab67616d0000b273c6f3fb870e171c5b9d9e8e96">
+                                <div class="playlist-item" 
+                                     data-id="7ouRfMhJnMA3a88VBzByxW"
+                                     data-title="Alf Leila wa Leila"
+                                     data-artist="Umm Kulthum">
                                     <div class="playlist-number">2</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Alf Leila wa Leila</div>
@@ -1304,7 +1077,10 @@
                                     </div>
                                     <div class="playlist-track-duration">54:01</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/73bzFhkyCVb4rf65BzwMmt?si=fb32bd23a0ea4080" data-artist="Abdel Halim Hafez" data-title="Ahwak" data-img="https://i.scdn.co/image/ab67616d0000b2739c8ed56c439a8157a682c390">
+                                <div class="playlist-item" 
+                                     data-id="73bzFhkyCVb4rf65BzwMmt"
+                                     data-title="Ahwak"
+                                     data-artist="Abdel Halim Hafez">
                                     <div class="playlist-number">3</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Ahwak</div>
@@ -1312,7 +1088,10 @@
                                     </div>
                                     <div class="playlist-track-duration">4:12</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/6dwvEqcqiMlOUqEgtZq5oR" data-artist="Abdel Halim Hafez" data-title="Gana El Hawa" data-img="https://i.scdn.co/image/ab67616d0000b273fa8a33d60c0bc893a03fd0ec">
+                                <div class="playlist-item" 
+                                     data-id="6dwvEqcqiMlOUqEgtZq5oR"
+                                     data-title="Gana El Hawa"
+                                     data-artist="Abdel Halim Hafez">
                                     <div class="playlist-number">4</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Gana El Hawa</div>
@@ -1320,7 +1099,10 @@
                                     </div>
                                     <div class="playlist-track-duration">6:18</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/0MnG7RgYTmYhPGDbFQasz0" data-artist="Fairuz" data-title="Nassam Alayna El Hawa" data-img="https://i.scdn.co/image/ab67616d0000b2731c8f054879c69de1c26e4e00">
+                                <div class="playlist-item" 
+                                     data-id="0MnG7RgYTmYhPGDbFQasz0"
+                                     data-title="Nassam Alayna El Hawa"
+                                     data-artist="Fairuz">
                                     <div class="playlist-number">5</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Nassam Alayna El Hawa</div>
@@ -1328,7 +1110,10 @@
                                     </div>
                                     <div class="playlist-track-duration">3:47</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/7mJszBFgMOIoD72QmVgpxC" data-artist="Mohamed Abdel Wahab" data-title="Ya Msafer" data-img="https://i.scdn.co/image/ab67616d0000b273d9d01c1c1e0b0e66c2a1c7f0">
+                                <div class="playlist-item" 
+                                     data-id="7mJszBFgMOIoD72QmVgpxC"
+                                     data-title="Ya Msafer"
+                                     data-artist="Mohamed Abdel Wahab">
                                     <div class="playlist-number">6</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Ya Msafer</div>
@@ -1336,7 +1121,10 @@
                                     </div>
                                     <div class="playlist-track-duration">5:03</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/6kBG7OOWkbNm0nYQqdHOqL" data-artist="Warda" data-title="Batwanes Beek" data-img="https://i.scdn.co/image/ab67616d0000b273f4a2ccbe20e44e03b983a5fa">
+                                <div class="playlist-item" 
+                                     data-id="6kBG7OOWkbNm0nYQqdHOqL"
+                                     data-title="Batwanes Beek"
+                                     data-artist="Warda">
                                     <div class="playlist-number">7</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Batwanes Beek</div>
@@ -1344,7 +1132,10 @@
                                     </div>
                                     <div class="playlist-track-duration">10:23</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/1yBvomPMq8SJzV6tBhZCCB" data-artist="Najat Al Saghira" data-title="Ayoun El Alb" data-img="https://i.scdn.co/image/ab67616d0000b273695175bf0a8c8aba95f6ad93">
+                                <div class="playlist-item" 
+                                     data-id="1yBvomPMq8SJzV6tBhZCCB"
+                                     data-title="Ayoun El Alb"
+                                     data-artist="Najat Al Saghira">
                                     <div class="playlist-number">8</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Ayoun El Alb</div>
@@ -1352,7 +1143,10 @@
                                     </div>
                                     <div class="playlist-track-duration">5:58</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/67OWUJEyH08sNlEG7UQzjz" data-artist="Farid Al Atrash" data-title="Ya Zahratan Fi Khayali" data-img="https://i.scdn.co/image/ab67616d0000b273e0fb1ae75c78ba91c6c2f973">
+                                <div class="playlist-item" 
+                                     data-id="67OWUJEyH08sNlEG7UQzjz"
+                                     data-title="Ya Zahratan Fi Khayali"
+                                     data-artist="Farid Al Atrash">
                                     <div class="playlist-number">9</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Ya Zahratan Fi Khayali</div>
@@ -1360,7 +1154,10 @@
                                     </div>
                                     <div class="playlist-track-duration">4:37</div>
                                 </div>
-                                <div class="playlist-item" data-url="https://open.spotify.com/track/4vCkQHhNGuyiCMWxNBQ0cP" data-artist="Asmahan" data-title="Ya Habibi Taala" data-img="https://i.scdn.co/image/ab67616d0000b273cfdf93308e977f2e088ad8d9">
+                                <div class="playlist-item" 
+                                     data-id="4vCkQHhNGuyiCMWxNBQ0cP"
+                                     data-title="Ya Habibi Taala"
+                                     data-artist="Asmahan">
                                     <div class="playlist-number">10</div>
                                     <div class="playlist-track-info">
                                         <div class="playlist-track-title">Ya Habibi Taala</div>
@@ -1373,15 +1170,11 @@
                         
                         <div class="audio-source-note">
                             <p class="mono">♪ Timeless Egyptian Masterpieces ♪</p>
-                            <p style="font-size: 0.875rem; margin-top: 1rem;">Click on any song above to copy its Spotify link</p>
-                            <div class="spotify-embed-container">
-                                <iframe id="spotify-embed" style="border-radius:12px; display:none;" 
-                                    src="" 
-                                    width="100%" height="152" frameBorder="0" 
-                                    allowfullscreen="" 
-                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                                    loading="lazy">
-                                </iframe>
+                            <p style="font-size: 0.875rem; margin-top: 1rem; color: var(--text-secondary);">Click any song in the playlist to play</p>
+                            <!-- NEW: Message pour les utilisateurs non-premium -->
+                            <div class="spotify-notice">
+                                <p>🎵 Spotify Premium account recommended for full playback</p>
+                                <p style="font-size: 0.75rem; margin-top: 0.5rem;">Free accounts: 30-second preview only</p>
                             </div>
                         </div>
                     </div>
@@ -1460,6 +1253,9 @@
         </div>
     </footer>
 
+    <!-- NEW: Chargement de l'API Spotify iFrame -->
+    <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
     <script type="importmap">
     {
       "imports": {
@@ -1492,8 +1288,79 @@
             initPoetry();
             initFacts();
             initFloatingParticles();
-            initMusicPlayer();
+            // REMOVED: initMusicPlayer() sera appelé après le chargement de l'API Spotify
         });
+
+        // NEW: --- 1. Quand l'API est prête, on crée le lecteur ----
+        let player;
+        let currentURI = null;
+        
+        window.onSpotifyIframeApiReady = (IFrameAPI) => {
+            const element = document.getElementById('embed-iframe');
+            // Piste initiale (facultatif)
+            currentURI = 'spotify:track:3gFcGnU4kTdMYLXDjH1TK8';
+            
+            IFrameAPI.createController(element, { 
+                uri: currentURI,
+                width: '100%',
+                height: '352'
+            }, (ctrl) => {
+                player = ctrl;
+                
+                // NEW: --- 2. Gestion du clic sur chaque item de la playlist ---
+                document.querySelectorAll('.playlist-item').forEach((item) => {
+                    item.addEventListener('click', () => {
+                        const uri = 'spotify:track:' + item.dataset.id;
+                        if (uri === currentURI && state.isPlaying) return; // évite de relancer la même piste
+                        
+                        currentURI = uri;
+                        
+                        // Mise à jour visuelle de la sélection
+                        document.querySelectorAll('.playlist-item').forEach(i => {
+                            i.classList.remove('active');
+                            i.classList.remove('playing');
+                        });
+                        item.classList.add('active');
+                        item.classList.add('playing');
+                        
+                        // Ajout de l'animation de chargement
+                        const playerContainer = document.querySelector('.spotify-main-player');
+                        playerContainer.classList.add('loading');
+                        
+                        // Charge et lance la piste
+                        player.loadUri(uri); // charge la nouvelle piste
+                        player.play(); // lance immédiatement
+                        
+                        // Màj de l'UI : titre, artiste (si besoin - optionnel car le player Spotify affiche déjà ces infos)
+                        // document.getElementById('track-title').textContent = item.dataset.title;
+                        // document.getElementById('track-artist').textContent = item.dataset.artist;
+                        
+                        state.isPlaying = true;
+                        state.currentTrack = Array.from(document.querySelectorAll('.playlist-item')).indexOf(item);
+                        
+                        // Retirer l'animation de chargement après un court délai
+                        setTimeout(() => {
+                            playerContainer.classList.remove('loading');
+                        }, 500);
+                        
+                        // Scroll vers le player
+                        playerContainer.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'center' 
+                        });
+                    });
+                });
+                
+                // NEW: Optionnel - Gestion des erreurs de lecture
+                player.addListener('playback_update', e => {
+                    state.isPlaying = !e.data.isPaused;
+                });
+                
+                player.addListener('ready', () => {
+                    console.log('Spotify player ready');
+                });
+            });
+        };
 
         function initCustomCursor() {
             const cursor = document.querySelector('.cursor');
@@ -1563,54 +1430,6 @@
             }, { threshold: 0.1 });
 
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        }
-
-        function initMusicPlayer() {
-            const audioPlayer = document.getElementById('audio-player');
-            const albumArt = document.getElementById('album-art');
-            const spotifyEmbed = document.getElementById('spotify-embed');
-            
-            // Handle playlist item clicks
-            document.querySelectorAll('.playlist-item').forEach((item, index) => {
-              item.addEventListener('click', () => {
-                // visual selection
-                document.querySelectorAll('.playlist-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-            
-                // update text + artwork
-                document.getElementById('track-title').textContent  = item.dataset.title;
-                document.getElementById('track-artist').textContent = item.dataset.artist;
-                if (item.dataset.img) albumArt.src = item.dataset.img;
-            
-                // build and show Spotify embed – autoplay
-                const trackId   = item.dataset.url.split('/track/')[1].split('?')[0];
-                spotifyEmbed.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0&autoplay=1`;
-                spotifyEmbed.style.display = 'block';
-            
-                // housekeeping / animation
-                state.currentTrack = index;
-                animateWaveform(true);
-                albumArt.classList.add('playing');
-              });
-            });
-
-            
-            // Auto-load first track
-            const firstTrack = document.querySelector('.playlist-item');
-            if (firstTrack) {
-                firstTrack.click();
-            }
-        }
-        
-        function animateWaveform(playing) {
-            const bars = document.querySelectorAll('.wave-bar');
-            bars.forEach(bar => {
-                if (playing) {
-                    bar.style.animationPlayState = 'running';
-                } else {
-                    bar.style.animationPlayState = 'paused';
-                }
-            });
         }
 
         function initFacts() {
@@ -2068,8 +1887,6 @@
                 document.body.appendChild(particle);
             }
         }
-        </script>
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    <script type="module" src="./js/player.js"></script>
+    </script>
 </body>
 </html>
