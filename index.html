@@ -829,52 +829,378 @@
         }
 
         #facts {
-            background: radial-gradient(circle at bottom, rgba(201, 169, 97, 0.1) 0%, transparent 50%);
+            background: linear-gradient(to bottom, 
+                rgba(0, 0, 0, 0.3) 0%, 
+                rgba(20, 20, 40, 0.2) 50%, 
+                rgba(0, 0, 0, 0.4) 100%);
+            position: relative;
+            overflow: hidden;
         }
 
-        .facts-interface {
-            max-width: 800px;
+        #facts::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+            pointer-events: none;
+        }
+
+        .radio-interface {
+            max-width: 1000px;
             margin: 0 auto;
         }
 
-        .fact-card {
+        .radio-device {
             padding: var(--space-lg);
-            background: rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
             margin-bottom: var(--space-md);
-            text-align: center;
         }
 
-        .fact-text {
+        .radio-display {
+            background: #0a0a0a;
+            padding: var(--space-md);
+            border-radius: 15px;
+            margin-bottom: var(--space-md);
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .frequency-band {
+            position: relative;
+            height: 40px;
+            background: linear-gradient(90deg, 
+                #2a4a2a 0%, 
+                #3a5a3a 25%, 
+                #4a6a4a 50%, 
+                #3a5a3a 75%, 
+                #2a4a2a 100%);
+            border-radius: 5px;
+            margin-bottom: var(--space-sm);
+            overflow: hidden;
+        }
+
+        .frequency-marker {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold);
+            transition: left 0.3s ease;
+        }
+
+        .frequency-numbers {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            color: #4a6a4a;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+        }
+
+        .station-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .station-name {
+            font-family: var(--font-mono);
             font-size: var(--fs-heading);
-            line-height: 1.8;
-            color: var(--text-primary);
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px var(--accent-gold);
+            letter-spacing: 0.2em;
+        }
+
+        .frequency-display {
+            font-family: var(--font-mono);
+            font-size: var(--fs-body);
+            color: #4a6a4a;
+        }
+
+        .radio-visualizer {
+            position: relative;
+            height: 150px;
+            background: #0a0a0a;
+            border-radius: 10px;
+            margin-bottom: var(--space-md);
+            overflow: hidden;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        #audio-visualizer {
+            width: 100%;
+            height: 100%;
+        }
+
+        .static-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                );
+            pointer-events: none;
+            animation: static-drift 10s linear infinite;
+        }
+
+        @keyframes static-drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(10px, 10px); }
+        }
+
+        .radio-controls {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border-radius: 15px;
             margin-bottom: var(--space-md);
         }
 
-        .fact-category {
+        .radio-btn {
+            padding: 1rem 2rem;
+            background: #1a1a1a;
+            border: 2px solid #3a3a3a;
+            color: #8a8a8a;
             font-family: var(--font-mono);
             font-size: var(--fs-small);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .radio-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            box-shadow: 0 0 20px rgba(201, 169, 97, 0.2);
+        }
+
+        .power-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .power-led {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff3333;
+            box-shadow: 0 0 10px #ff3333;
+            transition: var(--transition-smooth);
+        }
+
+        .power-btn.active .power-led {
+            background: #33ff33;
+            box-shadow: 0 0 20px #33ff33;
+        }
+
+        .tuner-knob {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, #4a4a4a 0%, #1a1a1a 100%);
+            border-radius: 50%;
+            position: relative;
+            cursor: grab;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .tuner-knob:active {
+            cursor: grabbing;
+        }
+
+        .knob-indicator {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 20px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        .broadcast-info {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-sm);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: #6a6a6a;
+        }
+
+        .broadcast-type {
             color: var(--accent-gold);
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
 
-        .fact-btn {
-            padding: 1rem 3rem;
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-gold-dark));
-            border: none;
-            color: var(--base-light);
-            font-family: var(--font-display);
+        .transcript-display {
+            padding: var(--space-lg);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            margin-bottom: var(--space-md);
+            min-height: 200px;
+        }
+
+        .transcript-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+        }
+
+        .transcript-title {
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+
+        .signal-strength {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+        }
+
+        .signal-bar {
+            width: 4px;
+            height: 20px;
+            background: #3a3a3a;
+            transition: var(--transition-smooth);
+        }
+
+        .signal-bar:nth-child(1) { height: 8px; }
+        .signal-bar:nth-child(2) { height: 12px; }
+        .signal-bar:nth-child(3) { height: 16px; }
+        .signal-bar:nth-child(4) { height: 20px; }
+
+        .signal-strength.strong .signal-bar {
+            background: var(--accent-gold);
+            box-shadow: 0 0 5px var(--accent-gold);
+        }
+
+        .transcript-content {
+            min-height: 150px;
+            margin-bottom: var(--space-md);
+        }
+
+        .transcript-text {
             font-size: var(--fs-body);
-            border-radius: 50px;
+            line-height: 1.8;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        .transcript-text.typing::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: var(--accent-gold);
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .transcript-metadata {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+        }
+
+        .saved-transmissions {
+            margin-top: var(--space-lg);
+            padding: var(--space-lg);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        .transmissions-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            text-align: center;
+            margin-bottom: var(--space-md);
+            color: var(--accent-gold);
+        }
+
+        .transmissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .saved-transmission {
+            padding: var(--space-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(201, 169, 97, 0.2);
+            border-radius: 10px;
             cursor: pointer;
             transition: var(--transition-smooth);
         }
 
-        .fact-btn:hover {
+        .saved-transmission:hover {
+            background: rgba(201, 169, 97, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(201, 169, 97, 0.3);
+        }
+
+        .transmission-preview {
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-style: italic;
+        }
+
+        .transmission-meta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-top: 0.5rem;
         }
 
         footer {
@@ -956,6 +1282,30 @@
             .playlist-track-duration {
                 display: none;
             }
+            
+            /* NEW: Mobile styles for Message Bottles */
+            .ocean-scene {
+                height: 400px;
+            }
+            
+            .floating-bottle {
+                width: 50px;
+                height: 100px;
+            }
+            
+            .bottle-stats {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .message-display {
+                width: 95%;
+                padding: var(--space-md);
+            }
+            
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -980,7 +1330,7 @@
             <a href="#music" class="nav-orb" data-label="Music"></a>
             <a href="#paradox" class="nav-orb" data-label="Paradox"></a>
             <a href="#poems" class="nav-orb" data-label="Poetry"></a>
-            <a href="#facts" class="nav-orb" data-label="Universe"></a>
+            <a href="#facts" class="nav-orb" data-label="Messages"></a>
         </div>
     </nav>
 
@@ -1233,15 +1583,79 @@
 
         <section id="facts" class="fade-in">
             <div class="container">
-                <h2 class="section-title">Universe Facts</h2>
-                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">Fascinating truths about our cosmos</p>
+                <h2 class="section-title">Midnight Radio</h2>
+                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">Strange frequencies from 3 AM</p>
                 
-                <div class="facts-interface">
-                    <div class="fact-card glass">
-                        <p class="fact-text" id="fact-text">The universe is full of wonders...</p>
-                        <p class="fact-category" id="fact-category">ASTRONOMY</p>
+                <div class="radio-interface">
+                    <!-- Radio Device -->
+                    <div class="radio-device glass">
+                        <!-- Frequency Display -->
+                        <div class="radio-display">
+                            <div class="frequency-band">
+                                <div class="frequency-marker" id="frequency-marker"></div>
+                                <div class="frequency-numbers">
+                                    <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
+                                </div>
+                            </div>
+                            <div class="station-display">
+                                <div class="station-name" id="station-name">VOID.FM</div>
+                                <div class="frequency-display" id="frequency-display">103.7</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Visualizer -->
+                        <div class="radio-visualizer">
+                            <canvas id="audio-visualizer"></canvas>
+                            <div class="static-overlay" id="static-overlay"></div>
+                        </div>
+                        
+                        <!-- Radio Controls -->
+                        <div class="radio-controls">
+                            <button class="radio-btn power-btn" id="power-btn">
+                                <div class="power-led"></div>
+                            </button>
+                            
+                            <div class="tuner-knob" id="tuner-knob">
+                                <div class="knob-indicator"></div>
+                            </div>
+                            
+                            <button class="radio-btn scan-btn" id="scan-btn">SCAN</button>
+                        </div>
+                        
+                        <!-- Current Broadcast -->
+                        <div class="broadcast-info">
+                            <div class="broadcast-type" id="broadcast-type">MONOLOGUE</div>
+                            <div class="broadcast-time" id="broadcast-time">3:33 AM</div>
+                        </div>
                     </div>
-                    <button class="fact-btn" id="get-fact">Discover More</button>
+                    
+                    <!-- Transcript Display -->
+                    <div class="transcript-display glass">
+                        <div class="transcript-header">
+                            <span class="transcript-title">Current Transmission</span>
+                            <span class="signal-strength" id="signal-strength">
+                                <span class="signal-bar"></span>
+                                <span class="signal-bar"></span>
+                                <span class="signal-bar"></span>
+                                <span class="signal-bar"></span>
+                            </span>
+                        </div>
+                        <div class="transcript-content" id="transcript-content">
+                            <p class="transcript-text typing" id="transcript-text">
+                                *static* ...tuning into the frequencies between sleep and wake...
+                            </p>
+                        </div>
+                        <div class="transcript-metadata">
+                            <span id="word-count">0 words</span>
+                            <span id="transmission-number">Transmission #001</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Saved Transmissions -->
+                    <div class="saved-transmissions hidden" id="saved-transmissions">
+                        <h3 class="transmissions-title">Archived Transmissions</h3>
+                        <div class="transmissions-grid" id="transmissions-grid"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1286,7 +1700,7 @@
             initEssayCards();
             initParadoxEngine();
             initPoetry();
-            initFacts();
+            initMidnightRadio(); // CHANGED: from initMessageBottles to initMidnightRadio
             initFloatingParticles();
             // REMOVED: initMusicPlayer() sera appelé après le chargement de l'API Spotify
         });
@@ -1432,33 +1846,309 @@
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         }
 
-        function initFacts() {
-            const btn = document.getElementById('get-fact');
-            const factText = document.getElementById('fact-text');
-            const category = document.getElementById('fact-category');
-
-            const facts = [
-                { text: "The universe is approximately 13.8 billion years old", category: "COSMOLOGY" },
-                { text: "There are more stars in the universe than grains of sand on all of Earth's beaches", category: "ASTRONOMY" },
-                { text: "A day on Venus is longer than its year", category: "PLANETARY SCIENCE" },
-                { text: "The human brain uses 20% of the body's total energy", category: "BIOLOGY" },
-                { text: "Octopuses have three hearts and blue blood", category: "MARINE BIOLOGY" },
-                { text: "The Great Wall of China isn't visible from space without aid", category: "MYTHS & FACTS" },
-                { text: "Honey never spoils - archaeologists have found 3000-year-old honey that's still edible", category: "NATURE" },
-                { text: "A single bolt of lightning contains enough energy to toast 100,000 slices of bread", category: "PHYSICS" },
-                { text: "The human eye can distinguish about 10 million different colors", category: "HUMAN PERCEPTION" },
-                { text: "Time passes faster for your face than your feet due to gravitational time dilation", category: "RELATIVITY" }
+        // NEW: Midnight Radio functionality
+        async function initMidnightRadio() {
+            const powerBtn = document.getElementById('power-btn');
+            const scanBtn = document.getElementById('scan-btn');
+            const tunerKnob = document.getElementById('tuner-knob');
+            const frequencyDisplay = document.getElementById('frequency-display');
+            const frequencyMarker = document.getElementById('frequency-marker');
+            const stationName = document.getElementById('station-name');
+            const transcriptText = document.getElementById('transcript-text');
+            const broadcastType = document.getElementById('broadcast-type');
+            const broadcastTime = document.getElementById('broadcast-time');
+            const signalStrength = document.getElementById('signal-strength');
+            const wordCount = document.getElementById('word-count');
+            const transmissionNumber = document.getElementById('transmission-number');
+            const visualizerCanvas = document.getElementById('audio-visualizer');
+            const ctx = visualizerCanvas.getContext('2d');
+            const transmissionsGrid = document.getElementById('transmissions-grid');
+            const savedTransmissions = document.getElementById('saved-transmissions');
+            
+            let isPowered = false;
+            let currentFrequency = 103.7;
+            let transmissionCount = 1;
+            let savedBroadcasts = [];
+            let isScanning = false;
+            let currentText = '';
+            
+            // Radio stations with different content types
+            const stations = [
+                { freq: 88.5, name: 'VOID.FM', type: 'PHILOSOPHY' },
+                { freq: 91.3, name: 'ECHO.FM', type: 'MEMORIES' },
+                { freq: 95.7, name: 'DARK.FM', type: 'NOIR' },
+                { freq: 99.9, name: 'DREAM.FM', type: 'SURREAL' },
+                { freq: 103.7, name: 'GHOST.FM', type: 'MONOLOGUE' },
+                { freq: 107.1, name: 'STATIC.FM', type: 'GLITCH' }
             ];
-
-            btn.addEventListener('click', () => {
-                const fact = facts[Math.floor(Math.random() * facts.length)];
-                factText.style.opacity = '0';
-                setTimeout(() => {
-                    factText.textContent = fact.text;
-                    category.textContent = fact.category;
-                    factText.style.opacity = '1';
-                }, 300);
+            
+            // Philosophical monologues and transmissions
+            const transmissions = {
+                PHILOSOPHY: [
+                    "The city sleeps, but minds never rest. Somewhere between the static and the silence, truth whispers its name. We build towers of logic, only to find the foundation was always sand. This is midnight's wisdom: certainty is the first casualty of consciousness.",
+                    "3 AM thoughts: Every choice unmakes a universe. The person you didn't become haunts the edges of your peripheral vision. We are all walking graveyards of our potential selves, carrying the weight of paths untaken.",
+                    "Listen closely to the static. It's the sound of all possible words trying to exist simultaneously. Language is just organized noise, and meaning... meaning is what we desperately project onto the chaos.",
+                    "Time doesn't flow; it accumulates. Like dust on forgotten furniture, like regrets in the corners of consciousness. The clock isn't measuring duration—it's counting down to a punchline no one will get.",
+                    "The radio waves carry more than sound. They carry the exhaled dreams of a sleeping city, the unspoken words that died in throats, the thoughts too dangerous to think during daylight."
+                ],
+                MEMORIES: [
+                    "Memory is unreliable narration. Every time you remember, you're remembering the last time you remembered. We're all just echoes of echoes, degrading with each transmission.",
+                    "The past isn't behind us—it's beneath us, like geological layers.压 enough pressure and yesterday becomes stone. Some memories fossilize; others turn to oil and burn.",
+                    "Nostalgia is a form of violence. It takes the complexity of lived experience and reduces it to sepia-toned simplicity. The 'good old days' are a crime scene we've decorated with flowers.",
+                    "Every photograph is a grave marker. It marks the death of a moment, preserves a corpse of time. We carry albums full of beautiful deaths, mistaking them for life.",
+                    "The brain edits memories like a film—cutting out the boring parts, color-correcting the pain, adding a soundtrack that was never there. We're all unreliable narrators of our own existence."
+                ],
+                NOIR: [
+                    "The night has a different gravity. It pulls darker thoughts to the surface, makes them float like oil on water. In this city, everyone's guilty of something—most just haven't been caught yet.",
+                    "Rain on concrete sounds like applause for a show no one's watching. The streetlights are the only witnesses, and they've seen too much to care anymore. This is where stories come to die.",
+                    "Every shadow could be hiding someone's worst mistake. Every alley is a confession booth without absolution. The city doesn't judge—it just swallows evidence and secrets with equal indifference.",
+                    "Neon signs reflect in puddles like broken promises. The city wears its scars like jewelry, each cracked sidewalk a story, each graffitied wall a suicide note from someone's dreams.",
+                    "There's a special kind of loneliness that only exists at 3 AM in a city of millions. It's the loneliness of being surrounded by sleeping strangers, of being the only consciousness adrift in a sea of dreams."
+                ],
+                SURREAL: [
+                    "The walls are breathing again. In and out, like the building has lungs. Sometimes I synchronize my breathing with it, and for a moment, I can't tell where I end and the architecture begins.",
+                    "Colors have started making sounds. Red hums low and threatening, blue whispers secrets, yellow screams but no one seems to notice. The world is louder when you really listen.",
+                    "I've been collecting shadows that don't match their owners. Found one yesterday that was two inches too tall, another that moved a second too late. I keep them in jars, but they keep escaping.",
+                    "Time hiccupped again last night. For thirteen seconds, everything happened backwards. Coffee flowed up into the pot, words crawled back into mouths, thoughts unthought themselves.",
+                    "The radio is receiving transmissions from parallel dimensions again. In one, you never left. In another, we never met. In most of them, the silence sounds exactly the same."
+                ],
+                MONOLOGUE: [
+                    "Here's what they don't tell you about insomnia: it's not the lack of sleep that breaks you, it's the abundance of consciousness. Too much awareness, too much time to think about thinking about thinking.",
+                    "I've been awake so long that I've started to see the seams in reality. The places where the simulation stutters, where the code shows through. Or maybe that's just what exhaustion looks like from the inside.",
+                    "The difference between genius and madness is audience. Say something profound to yourself at 3 AM, you're crazy. Write it down and publish it, you're a philosopher. The only difference is witnesses.",
+                    "Loneliness isn't being alone. Loneliness is being the only one awake in your timezone of existence, broadcasting thoughts into the void and hearing nothing back but your own echo.",
+                    "We're all just radios tuned to different frequencies. Some people come in clear, others are nothing but static. The tragedy is thinking you can adjust someone else's dial."
+                ],
+                GLITCH: [
+                    "Reali[ERROR]ty.exe has stopped responding. Would you like to: [A] Wait for the program to respond [B] Close the program [C] Embrace the malfunction... Option C selected by default.",
+                    "The signal is bre—king up. Can you he—r me? The mess—ge is in the gaps, the meaning in the missi—g letters. We're all just interference patterns, pretending to be solid.",
+                    "01001000 01100101 01101100 01110000... Sorry, sometimes I forget which language I'm supposed to be speaking. Binary or human, it's all just patterns. The screaming translates the same.",
+                    "System diagnostic: Reality drivers out of date. Consciousness.dll corrupted. Memory leaks detected in sectors 1997-2003. Running in safe mode with existential dread enabled.",
+                    "Buffer overflow in the soul.exe. Stack trace: birth.init() > consciousness.load() > anxiety.loop() > death.pending()... Error: Meaning not found. Abort, retry, fail?"
+                ]
+            };
+            
+            // Audio visualizer animation
+            function animateVisualizer() {
+                visualizerCanvas.width = visualizerCanvas.offsetWidth;
+                visualizerCanvas.height = visualizerCanvas.offsetHeight;
+                
+                const bars = 32;
+                const barWidth = visualizerCanvas.width / bars;
+                
+                function draw() {
+                    ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+                    
+                    if (isPowered) {
+                        const gradient = ctx.createLinearGradient(0, 0, 0, visualizerCanvas.height);
+                        gradient.addColorStop(0, 'rgba(201, 169, 97, 0.8)');
+                        gradient.addColorStop(1, 'rgba(201, 169, 97, 0.2)');
+                        
+                        for (let i = 0; i < bars; i++) {
+                            const height = Math.random() * visualizerCanvas.height * 0.7 + visualizerCanvas.height * 0.1;
+                            const x = i * barWidth;
+                            const y = visualizerCanvas.height - height;
+                            
+                            ctx.fillStyle = gradient;
+                            ctx.fillRect(x, y, barWidth - 2, height);
+                        }
+                    }
+                    
+                    requestAnimationFrame(draw);
+                }
+                
+                draw();
+            }
+            
+            // Generate transmission based on station type
+            async function generateTransmission(type) {
+                if (window.genAI) {
+                    try {
+                        const model = window.genAI.getGenerativeModel({ model: "gemini-pro" });
+                        const prompts = {
+                            PHILOSOPHY: "Write a short philosophical monologue (3-4 sentences) for a mysterious late-night radio show. Make it deep, slightly dark, questioning reality. No clichés.",
+                            MEMORIES: "Write a short monologue about memory and time (3-4 sentences) for a 3 AM radio transmission. Make it melancholic and introspective.",
+                            NOIR: "Write a noir-style monologue about the city at night (3-4 sentences). Dark, atmospheric, cynical.",
+                            SURREAL: "Write a surreal, slightly unsettling monologue (3-4 sentences) for a strange radio transmission. Reality should feel unstable.",
+                            MONOLOGUE: "Write an insomniac's monologue (3-4 sentences) for late-night radio. Raw, honest, slightly unhinged.",
+                            GLITCH: "Write a glitched/corrupted transmission (3-4 sentences) with digital artifacts and errors. Make it feel like reality is malfunctioning."
+                        };
+                        
+                        const result = await model.generateContent(prompts[type]);
+                        const response = await result.response;
+                        return response.text();
+                    } catch (error) {
+                        console.log('Using fallback transmissions');
+                    }
+                }
+                
+                const messages = transmissions[type];
+                return messages[Math.floor(Math.random() * messages.length)];
+            }
+            
+            // Type writer effect for transmissions
+            async function typeTransmission(text) {
+                transcriptText.classList.add('typing');
+                transcriptText.textContent = '';
+                currentText = text;
+                
+                for (let i = 0; i < text.length; i++) {
+                    if (!isPowered) break;
+                    transcriptText.textContent = text.substring(0, i + 1);
+                    wordCount.textContent = `${text.substring(0, i + 1).split(' ').length} words`;
+                    await new Promise(resolve => setTimeout(resolve, 30 + Math.random() * 50));
+                }
+                
+                transcriptText.classList.remove('typing');
+            }
+            
+            // Tune to frequency
+            async function tuneToFrequency(freq) {
+                currentFrequency = freq;
+                frequencyDisplay.textContent = freq.toFixed(1);
+                
+                const markerPosition = ((freq - 88) / 20) * 100;
+                frequencyMarker.style.left = `${markerPosition}%`;
+                
+                const station = stations.find(s => Math.abs(s.freq - freq) < 0.5);
+                
+                if (station) {
+                    stationName.textContent = station.name;
+                    broadcastType.textContent = station.type;
+                    signalStrength.classList.add('strong');
+                    
+                    const transmission = await generateTransmission(station.type);
+                    await typeTransmission(transmission);
+                    
+                    // Save transmission
+                    if (currentText && currentText.length > 50) {
+                        savedBroadcasts.push({
+                            text: currentText,
+                            station: station.name,
+                            frequency: freq,
+                            type: station.type,
+                            number: transmissionCount,
+                            time: new Date().toLocaleTimeString()
+                        });
+                        transmissionNumber.textContent = `Transmission #${String(transmissionCount).padStart(3, '0')}`;
+                        transmissionCount++;
+                        updateSavedTransmissions();
+                    }
+                } else {
+                    stationName.textContent = 'STATIC';
+                    broadcastType.textContent = 'NO SIGNAL';
+                    signalStrength.classList.remove('strong');
+                    transcriptText.textContent = '*static* ... *white noise* ... *searching for signal* ...';
+                }
+            }
+            
+            // Update saved transmissions display
+            function updateSavedTransmissions() {
+                if (savedBroadcasts.length > 0) {
+                    savedTransmissions.classList.remove('hidden');
+                    transmissionsGrid.innerHTML = savedBroadcasts.map(broadcast => `
+                        <div class="saved-transmission" data-index="${savedBroadcasts.indexOf(broadcast)}">
+                            <div class="transmission-preview">${broadcast.text.substring(0, 100)}...</div>
+                            <div class="transmission-meta">${broadcast.station} • ${broadcast.frequency} FM • ${broadcast.time}</div>
+                        </div>
+                    `).join('');
+                    
+                    document.querySelectorAll('.saved-transmission').forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            const index = parseInt(e.currentTarget.dataset.index);
+                            const broadcast = savedBroadcasts[index];
+                            transcriptText.textContent = broadcast.text;
+                            stationName.textContent = broadcast.station;
+                            frequencyDisplay.textContent = broadcast.frequency.toFixed(1);
+                            broadcastType.textContent = broadcast.type;
+                        });
+                    });
+                }
+            }
+            
+            // Power button
+            powerBtn.addEventListener('click', () => {
+                isPowered = !isPowered;
+                powerBtn.classList.toggle('active');
+                
+                if (isPowered) {
+                    tuneToFrequency(currentFrequency);
+                } else {
+                    transcriptText.textContent = '*powered off*';
+                    stationName.textContent = '---';
+                    signalStrength.classList.remove('strong');
+                }
             });
+            
+            // Scan button
+            scanBtn.addEventListener('click', async () => {
+                if (!isPowered || isScanning) return;
+                
+                isScanning = true;
+                scanBtn.textContent = 'SCANNING...';
+                
+                for (let i = 0; i < 10; i++) {
+                    const randomFreq = 88 + Math.random() * 20;
+                    frequencyDisplay.textContent = randomFreq.toFixed(1);
+                    frequencyMarker.style.left = `${((randomFreq - 88) / 20) * 100}%`;
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                const randomStation = stations[Math.floor(Math.random() * stations.length)];
+                await tuneToFrequency(randomStation.freq);
+                
+                scanBtn.textContent = 'SCAN';
+                isScanning = false;
+            });
+            
+            // Tuner knob control
+            let isDragging = false;
+            let startAngle = 0;
+            let currentAngle = 0;
+            
+            tunerKnob.addEventListener('mousedown', (e) => {
+                if (!isPowered) return;
+                isDragging = true;
+                const rect = tunerKnob.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const rect = tunerKnob.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+                const deltaAngle = angle - startAngle;
+                currentAngle += deltaAngle;
+                startAngle = angle;
+                
+                tunerKnob.style.transform = `rotate(${currentAngle}rad)`;
+                
+                const freqDelta = deltaAngle * 5;
+                const newFreq = Math.max(88, Math.min(108, currentFrequency + freqDelta));
+                tuneToFrequency(newFreq);
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            // Update time
+            setInterval(() => {
+                const now = new Date();
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const ampm = hours >= 12 ? 'AM' : 'AM';
+                const displayHours = hours % 12 || 12;
+                broadcastTime.textContent = `${displayHours}:${String(minutes).padStart(2, '0')} ${ampm}`;
+            }, 1000);
+            
+            // Start visualizer
+            animateVisualizer();
         }
 
         function initStarPuzzle() {
@@ -1877,6 +2567,231 @@
                     content.style.opacity = '1';
                 }, 300);
             });
+        }
+
+        // NEW: Message in a Bottle functionality with Gemini AI
+        async function initMessageBottles() {
+            const castBtn = document.getElementById('cast-bottle');
+            const bottleContainer = document.getElementById('bottle-container');
+            const messageDisplay = document.getElementById('message-display');
+            const messageContent = document.getElementById('message-content');
+            const messageDate = document.getElementById('message-date');
+            const messagesFound = document.getElementById('messages-found');
+            const milesTraveled = document.getElementById('miles-traveled');
+            const collectionGrid = document.getElementById('collection-grid');
+            const messageCollection = document.getElementById('message-collection');
+            const oceanCanvas = document.getElementById('ocean-canvas');
+            const ctx = oceanCanvas.getContext('2d');
+            
+            let foundMessages = [];
+            let totalMiles = 0;
+            let bottles = [];
+            
+            // Predefined romantic messages (fallback if Gemini API is not available)
+            const romanticMessages = [
+                "In the vast ocean of time, my love for you remains the only constant. Like stars reflected on midnight waters, you illuminate every dark corner of my soul.",
+                "They say the ocean has no memory, but every wave that touches this shore carries the echo of your name. Maria, you are my lighthouse in every storm.",
+                "I've written your name in the sand a thousand times, watched the waves claim it, only to write it again. This is how I love you - endlessly, against all odds.",
+                "If I could bottle the way you make me feel, I'd cast it into every ocean, so that somewhere, someone would know that love this pure exists.",
+                "The moon pulls the tides, but you pull my heart with a force that defies all natural laws. In your gravity, I've found my home.",
+                "Every sunset I watch alone, I imagine you're watching the same sky. Distance is just a test of how far love can travel.",
+                "Like a message in a bottle, my heart traveled through storms and calm seas to find you. You were worth every mile, every moment of searching.",
+                "In the symphony of the waves, I hear your laughter. In the salt of the sea, I taste our tears of joy. You are in everything beautiful.",
+                "Time is an ocean, and we are but drops of water. Yet in finding you, I've discovered eternity in a single moment.",
+                "The ocean knows all secrets, keeps all promises. So I tell it daily: I choose you, in this life and whatever lies beyond the horizon.",
+                "Your love came to me like a bottle on the tide - unexpected, mysterious, and containing everything I never knew I needed.",
+                "If my love were an ocean, there would be no land. If it were the sky, there would be no stars - just an endless expanse of you.",
+                "Some search for treasure in the deep. I found mine in your eyes, in your smile, in the way you say my name like a prayer.",
+                "The waves write poetry on the shore, but none as beautiful as the story of us. We are the epic the ocean dreams about.",
+                "In every seashell's whisper, I hear your voice. In every grain of sand, I see a moment we've yet to share. The beach is our infinite future.",
+                "Like the tide, I'm drawn to you by forces beyond my control. Like the shore, I welcome you, again and again, forever.",
+                "They say no man is an island, but with you, I've become an entire archipelago - connected, complete, and home to endless wonders.",
+                "The ocean taught me patience, the stars taught me to dream, but you taught me that some things are worth more than eternity itself.",
+                "Every bottle cast into the sea carries hope. You are my hope realized, my message answered, my love returned a thousandfold.",
+                "In the deep blue of the ocean, I see your eyes. In its endless horizon, I see our future. In its depths, I've hidden all my love for you."
+            ];
+            
+            // Ocean animation
+            function animateOcean() {
+                oceanCanvas.width = oceanCanvas.offsetWidth;
+                oceanCanvas.height = oceanCanvas.offsetHeight;
+                
+                const waves = [];
+                const waveCount = 5;
+                
+                for (let i = 0; i < waveCount; i++) {
+                    waves.push({
+                        y: (oceanCanvas.height / waveCount) * i,
+                        amplitude: 20 + Math.random() * 30,
+                        frequency: 0.01 + Math.random() * 0.02,
+                        speed: 0.5 + Math.random() * 0.5,
+                        offset: Math.random() * Math.PI * 2
+                    });
+                }
+                
+                function draw() {
+                    ctx.clearRect(0, 0, oceanCanvas.width, oceanCanvas.height);
+                    
+                    const gradient = ctx.createLinearGradient(0, 0, 0, oceanCanvas.height);
+                    gradient.addColorStop(0, 'rgba(135, 206, 235, 0.2)');
+                    gradient.addColorStop(0.5, 'rgba(70, 130, 180, 0.3)');
+                    gradient.addColorStop(1, 'rgba(25, 25, 112, 0.4)');
+                    
+                    waves.forEach((wave, index) => {
+                        ctx.beginPath();
+                        ctx.moveTo(0, wave.y);
+                        
+                        for (let x = 0; x <= oceanCanvas.width; x++) {
+                            const y = wave.y + Math.sin(x * wave.frequency + wave.offset) * wave.amplitude;
+                            ctx.lineTo(x, y);
+                        }
+                        
+                        ctx.lineTo(oceanCanvas.width, oceanCanvas.height);
+                        ctx.lineTo(0, oceanCanvas.height);
+                        ctx.closePath();
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                        
+                        wave.offset += wave.speed * 0.05;
+                    });
+                    
+                    requestAnimationFrame(draw);
+                }
+                
+                draw();
+            }
+            
+            // Generate message using Gemini API or fallback
+            async function generateMessage() {
+                // Try to use Gemini API if available
+                if (window.genAI) {
+                    try {
+                        const model = window.genAI.getGenerativeModel({ model: "gemini-pro" });
+                        const prompt = `Write a short, deeply romantic message (2-3 sentences) as if it was found in a bottle on the beach. 
+                        The message should be poetic, timeless, and addressed to someone named Maria. 
+                        Make it feel like it traveled across oceans to reach her. 
+                        Be creative and unique each time. Don't use clichés.`;
+                        
+                        const result = await model.generateContent(prompt);
+                        const response = await result.response;
+                        return response.text();
+                    } catch (error) {
+                        console.log('Using fallback messages');
+                    }
+                }
+                
+                // Fallback to predefined messages
+                return romanticMessages[Math.floor(Math.random() * romanticMessages.length)];
+            }
+            
+            // Create floating bottle
+            function createBottle() {
+                const bottle = document.createElement('div');
+                bottle.className = 'floating-bottle';
+                bottle.innerHTML = document.getElementById('floating-bottle').innerHTML;
+                
+                // Random starting position
+                const startY = 100 + Math.random() * 200;
+                bottle.style.top = startY + 'px';
+                bottle.style.left = '-100px';
+                
+                // Animate across screen
+                const duration = 15000 + Math.random() * 10000;
+                bottle.style.animation = `drift ${duration}ms linear, bobbing 3s ease-in-out infinite`;
+                
+                bottle.addEventListener('click', async () => {
+                    bottle.style.pointerEvents = 'none';
+                    
+                    // Generate and show message
+                    const message = await generateMessage();
+                    const date = new Date().toLocaleDateString('en-US', { 
+                        month: 'long', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                    });
+                    const miles = Math.floor(Math.random() * 5000) + 1000;
+                    
+                    messageContent.textContent = message;
+                    messageDate.textContent = `Found on ${date} • Traveled ${miles} miles`;
+                    messageDisplay.classList.remove('hidden');
+                    
+                    // Update stats
+                    foundMessages.push({ message, date, miles });
+                    messagesFound.textContent = foundMessages.length;
+                    totalMiles += miles;
+                    milesTraveled.textContent = totalMiles.toLocaleString();
+                    
+                    // Add to collection
+                    addToCollection(message, date, miles);
+                    
+                    // Remove bottle
+                    bottle.style.transition = 'all 0.5s ease';
+                    bottle.style.transform = 'scale(0) rotate(360deg)';
+                    bottle.style.opacity = '0';
+                    setTimeout(() => bottle.remove(), 500);
+                    
+                    bottles = bottles.filter(b => b !== bottle);
+                });
+                
+                bottleContainer.appendChild(bottle);
+                bottles.push(bottle);
+                
+                // Remove bottle after animation
+                setTimeout(() => {
+                    if (bottles.includes(bottle)) {
+                        bottle.remove();
+                        bottles = bottles.filter(b => b !== bottle);
+                    }
+                }, duration);
+            }
+            
+            // Add message to collection
+            function addToCollection(message, date, miles) {
+                if (foundMessages.length === 1) {
+                    messageCollection.classList.remove('hidden');
+                }
+                
+                const savedMessage = document.createElement('div');
+                savedMessage.className = 'saved-message';
+                savedMessage.innerHTML = `
+                    <div class="saved-message-preview">${message.substring(0, 100)}...</div>
+                    <div class="saved-message-date">${date} • ${miles} mi</div>
+                `;
+                
+                savedMessage.addEventListener('click', () => {
+                    messageContent.textContent = message;
+                    messageDate.textContent = `Found on ${date} • Traveled ${miles} miles`;
+                    messageDisplay.classList.remove('hidden');
+                });
+                
+                collectionGrid.appendChild(savedMessage);
+            }
+            
+            // Cast new bottle button
+            castBtn.addEventListener('click', () => {
+                if (bottles.length < 3) { // Limit bottles on screen
+                    createBottle();
+                    castBtn.disabled = true;
+                    castBtn.textContent = 'Casting...';
+                    
+                    setTimeout(() => {
+                        castBtn.disabled = false;
+                        castBtn.innerHTML = '<span class="wave-icon">🌊</span>Cast a New Bottle<span class="wave-icon">🌊</span>';
+                    }, 2000);
+                }
+            });
+            
+            // Close message display
+            document.querySelector('.close-message').addEventListener('click', () => {
+                messageDisplay.classList.add('hidden');
+            });
+            
+            // Start ocean animation
+            animateOcean();
+            
+            // Auto-cast first bottle after 2 seconds
+            setTimeout(() => createBottle(), 2000);
         }
 
         function initFloatingParticles() {
