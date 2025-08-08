@@ -1717,23 +1717,213 @@
         function initEnhancedParadox() {
             const generateBtn = document.getElementById('generate-paradox');
             const outputDiv = document.getElementById('paradox-output');
+            const titleEl = outputDiv.querySelector('.paradox-title');
+            const contentEl = outputDiv.querySelector('.paradox-content');
+        
             const complexitySlider = document.getElementById('complexity-slider');
             const abstractionSlider = document.getElementById('abstraction-slider');
             const complexityValue = document.getElementById('complexity-value');
             const abstractionValue = document.getElementById('abstraction-value');
-            
+        
             let currentMode = 'paradox';
-            
+        
+            // 1) Put your Gemini API key here
+            const GEMINI_API_KEY = "YOUR_KEY_HERE";
+        
+            // 2) Map sliders to sampler config
+            function mapComplexityToConfig(c, a) {
+                const temperature = Math.min(1, 0.2 + (c + a) * 0.08);
+                const maxOutputTokens = 400 + (c * 120);
+                const topP = Math.min(0.98, 0.9 + (a * 0.02));
+                return { temperature, topP, maxOutputTokens };
+            }
+        
+            // 3) Precise JSON-only prompt
+            function buildPrompt(mode, c, a) {
+                return `
+        You are ParadoxEngine, a concise, elegant philosophical content generator for a website.
+        Produce a single piece according to the selected MODE, COMPLEXITY, and ABSTRACTION.
+        
+        MODE (exactly one of):
+        - "paradox": present a classic or original paradox with 2–3 crisp tensions.
+        - "dilemma": an ethical scenario with competing values and no trivial resolution.
+        - "thought": a thought experiment that alters one premise of reality.
+        - "dialogue": a short Socratic dialogue (8–12 lines, alternating "A:" / "B:").
+        
+        COMPLEXITY (1–5):
+        - 1 = simple, intuitive; 5 = layered, multi-perspective, with a counterpoint.
+        
+        ABSTRACTION (1–5):
+        - 1 = concrete examples; 5 = highly abstract and conceptual.
+        
+        STYLE:
+        - 1–2 sentence title (striking, no clickbait).
+        - Body: ~150–230 words (for "dialogue", 8–12 terse exchanges).
+        - Tone: lucid, precise, graceful; no clichés; no fluff.
+        - Avoid moralizing; present tensions clearly.
+        - No external references or markdown.
+        
+        THOUGHT QUESTIONS:
+        Return 3–5 short, open-ended questions that provoke reflection.
+        
+        OUTPUT FORMAT (IMPORTANT):
+        Return ONLY valid JSON (no extra text, no markdown fences). Use this schema:
+        {
+          "title": "string",
+          "body": "string",
+          "questions": ["string", "string", ...]
+        }
+        
+        INPUT:
+        MODE="${mode}"
+        COMPLEXITY=${c}
+        ABSTRACTION=${a}
+        `;
+            }
+        
+            // 4) JSON extractor (in case the model adds stray text)
+            function extractJson(text) {
+                try { return JSON.parse(text); } catch {}
+                const m = text.match(/\{[\s\S]*\}$/);
+                if (m) { try { return JSON.parse(m[0]); } catch {} }
+                return null;
+            }
+        
+            // 5) Call Gemini
+            async function generateWithGemini(mode, c, a) {
+                const { temperature, topP, maxOutputTokens } = mapComplexityToConfig(c, a);
+                const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+                const prompt = buildPrompt(mode, c, a);
+        
+                const body = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }],
+                    generationConfig: { temperature, topP, maxOutputTokens }
+                };
+        
+                const res = await fetch(endpoint, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
+        
+                if (!res.ok) throw new Error("Gemini HTTP " + res.status);
+        
+                const data = await res.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                const json = extractJson(text);
+                if (!json || !json.title || !json.body || !Array.isArray(json.questions)) {
+                    throw new Error("Invalid JSON shape from Gemini.");
+                }
+                return json;
+            }
+        
+            // 6) Local fallback: shown if API fails
+            const fallback = {
+                paradox: [
+                    {
+                        title: "The Mirror That Remembers",
+                        body: "A ship sails for a century; each plank is replaced. In a museum, artisans assemble the discarded planks. Which is Theseus’s ship? If identity lives in continuity, the sea-worn vessel wins. If identity lives in matter, the museum claims it. And if identity needs both, perhaps there was never a single ship—only overlapping histories we mistake for a thing.",
+                        questions: [
+                            "Where does identity ‘live’: function, matter, or memory?",
+                            "If you forget a past self, are you less you?",
+                            "What exactly is preserved when names persist?"
+                        ]
+                    }
+                ],
+                dilemma: [
+                    {
+                        title: "The Switch and the Bridge",
+                        body: "A runaway train will kill five unless you pull a switch, diverting it toward one. Same numbers, but a second case asks you to push a man to stop it. If consequences alone decide, both acts align. If intentions and roles matter, the symmetry breaks—ethics lives where math and meaning quarrel.",
+                        questions: [
+                            "Do outcomes outweigh how those outcomes are produced?",
+                            "Is omission morally different from action?",
+                            "What role do norms about ‘using’ people play?"
+                        ]
+                    }
+                ],
+                thought: [
+                    {
+                        title: "Maria’s Room",
+                        body: "Maria knows every physical fact about color but has never seen it. When she sees a red rose, does she learn something new? If yes, physics wasn’t complete; if no, experience seems redundant. Maybe we confuse describing a phenomenon from the outside with inhabiting it from within.",
+                        questions: [
+                            "Can a fact be knowable only by having it?",
+                            "Is ‘what it’s like’ a distinct kind of information?",
+                            "Does explanation require experience?"
+                        ]
+                    }
+                ],
+                dialogue: [
+                    {
+                        title: "On Freedom",
+                        body: [
+                            "A: I act freely when I get what I want.",
+                            "B: Can you choose what you want to want?",
+                            "A: I choose among my desires.",
+                            "B: Chosen by what—another desire?",
+                            "A: By me.",
+                            "B: And what shapes that ‘me’?",
+                            "A: History, habits, luck—",
+                            "B: Then freedom is layered: choosing, and choosing the chooser.",
+                            "A: Or owning the causes that own me.",
+                            "B: A freedom that admits its chains."
+                        ].join("\n"),
+                        questions: [
+                            "When do you feel most free—why?",
+                            "Is authorship over desires required for freedom?",
+                            "What would increasing freedom actually change?"
+                        ]
+                    }
+                ]
+            };
+        
+            function pickFallback(mode) {
+                const arr = fallback[mode] || fallback.paradox;
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+        
+            // 7) Render helper
+            function renderResult(result) {
+                titleEl.textContent = result.title;
+                contentEl.textContent = result.body;
+        
+                // Remove any previous questions block
+                const old = outputDiv.querySelector('.paradox-questions');
+                if (old) old.remove();
+        
+                // Add reflective questions under the content
+                const qWrap = document.createElement('div');
+                qWrap.className = 'paradox-questions';
+                qWrap.innerHTML = `
+                    <hr style="border:0;border-top:1px solid rgba(201,169,97,0.3);margin:1rem 0 .75rem;">
+                    <div style="font-family: var(--font-display); font-size: var(--fs-small); color: var(--accent-gold); margin-bottom: .5rem;">
+                        Questions to ponder
+                    </div>
+                `;
+                const ul = document.createElement('ul');
+                ul.style.listStyle = "disc";
+                ul.style.margin = "0 0 0 1.25rem";
+                ul.style.padding = "0";
+                (result.questions || []).forEach(q => {
+                    const li = document.createElement('li');
+                    li.style.margin = ".35rem 0";
+                    li.textContent = q;
+                    ul.appendChild(li);
+                });
+                qWrap.appendChild(ul);
+                outputDiv.appendChild(qWrap);
+        
+                outputDiv.classList.remove('hidden');
+            }
+        
+            // 8) Wire up UI
             complexitySlider.addEventListener('input', (e) => {
                 state.complexity = parseInt(e.target.value);
                 complexityValue.textContent = state.complexity;
             });
-            
             abstractionSlider.addEventListener('input', (e) => {
                 state.abstraction = parseInt(e.target.value);
                 abstractionValue.textContent = state.abstraction;
             });
-            
             document.querySelectorAll('.mode-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -1741,74 +1931,26 @@
                     currentMode = e.target.dataset.mode;
                 });
             });
-            
-            const content = {
-                paradox: [
-                    "The Ship of Theseus: If every part is replaced, is it still the same ship? What makes identity persist through change?",
-                    "The Grandfather Paradox: If you travel back and prevent your birth, how could you have traveled back?",
-                    "Zeno's Paradox: To reach any point, you must first travel half the distance, then half of that, ad infinitum. How is motion possible?",
-                    "The Liar's Paradox: 'This statement is false.' If true, it's false. If false, it's true.",
-                    "The Omnipotence Paradox: Can an omnipotent being create a stone too heavy for itself to lift?",
-                    "The Paradox of Choice: More options lead to less satisfaction. Freedom becomes paralysis.",
-                    "The Tolerance Paradox: A tolerant society must be intolerant of intolerance to remain tolerant.",
-                    "The Simulation Paradox: If simulated beings can create simulations, which level of reality are we?",
-                    "The Information Paradox: Black holes destroy information, but quantum mechanics says information cannot be destroyed.",
-                    "The Bootstrap Paradox: An object or information exists without ever being created."
-                ],
-                dilemma: [
-                    "The Trolley Problem: Pull the lever to save five but kill one? Action vs. inaction in moral weight.",
-                    "The Violinist: You wake connected to a famous violinist who needs your kidneys for 9 months. Must you stay?",
-                    "The Experience Machine: Would you plug into a machine that gives perfect happiness but isn't 'real'?",
-                    "The Veil of Ignorance: Design society not knowing your position in it. What justice emerges?",
-                    "The Drowning Child: You'd save a drowning child. Why not donate to save distant children?",
-                    "The Prisoner's Dilemma: Cooperate or defect? Individual rationality vs. collective benefit.",
-                    "The Repugnant Conclusion: Is a world with many people barely worth living better than fewer flourishing?",
-                    "The Non-Identity Problem: Can we harm future people if our actions determine which people exist?",
-                    "The Mere Addition Paradox: Adding lives worth living seems good, but leads to the Repugnant Conclusion.",
-                    "The Problem of Dirty Hands: Must good leaders sometimes do evil for the greater good?"
-                ],
-                thought: [
-                    "Mary's Room: A scientist knows everything about color but has never seen it. Does she learn something new upon seeing red?",
-                    "The Chinese Room: A person follows rules to respond in Chinese without understanding. Is this intelligence?",
-                    "Philosophical Zombies: Could beings exist that act conscious but have no inner experience?",
-                    "The Swampman: Lightning creates your exact duplicate. Is it you? Does it have your memories?",
-                    "Brain in a Vat: If you were a brain in a vat, could you know it? How do you know you're not?",
-                    "Quantum Suicide: In many-worlds, you always survive in some branch. Are you immortal from your perspective?",
-                    "Roko's Basilisk: Should you fear a future AI that punishes those who didn't help create it?",
-                    "The Sleeping Beauty Problem: Awakened once or twice based on a coin flip. What's the probability of heads?",
-                    "Newcomb's Paradox: A predictor puts money in boxes based on predicting your choice. One box or two?",
-                    "The Doomsday Argument: Your birth rank suggests humanity's future is likely short. Is this valid?"
-                ],
-                dialogue: [
-                    "Socrates: 'What is justice?' / Student: 'Giving each their due.' / S: 'Due according to what measure?'",
-                    "Philosopher: 'Define knowledge.' / Student: 'Justified true belief.' / P: 'What if justification is lucky?'",
-                    "Teacher: 'Are you the same person as yesterday?' / Student: 'Yes.' / T: 'But every cell changes. What persists?'",
-                    "Sage: 'Is reality material or mental?' / Pupil: 'Material.' / S: 'Then how does matter create experience?'",
-                    "Master: 'What exists?' / Disciple: 'What we perceive.' / M: 'Do numbers exist? Justice? Possibilities?'",
-                    "Oracle: 'Are you free?' / Seeker: 'I choose my actions.' / O: 'But can you choose your desires?'",
-                    "Philosopher: 'What is consciousness?' / Student: 'Awareness.' / P: 'Are you aware when dreamlessly sleeping?'",
-                    "Teacher: 'What is truth?' / Pupil: 'What corresponds to reality.' / T: 'How do you access reality beyond perception?'",
-                    "Sage: 'Why is there something rather than nothing?' / Student: 'There must be.' / S: 'Why must there be?'",
-                    "Master: 'Can you prove you're not dreaming?' / Disciple: 'I'm awake.' / M: 'Don't you think that in dreams too?'"
-                ]
-            };
-            
-            generateBtn.addEventListener('click', () => {
-                const complexity = state.complexity;
-                const abstraction = state.abstraction;
-                const modeContent = content[currentMode];
-                
-                // Select based on complexity and abstraction
-                const index = Math.min(Math.floor((complexity + abstraction) / 2), modeContent.length - 1);
-                const selected = modeContent[index];
-                
-                outputDiv.querySelector('.paradox-title').textContent = 
-                    `${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} (C:${complexity} A:${abstraction})`;
-                outputDiv.querySelector('.paradox-content').textContent = selected;
+        
+            // 9) Generate
+            generateBtn.addEventListener('click', async () => {
+                const c = state.complexity || 3;
+                const a = state.abstraction || 3;
+        
+                // spinner
                 outputDiv.classList.remove('hidden');
+                titleEl.textContent = `${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} (C:${c} A:${a})`;
+                contentEl.innerHTML = `<div class="loading" aria-label="loading"></div>`;
+        
+                try {
+                    const json = await generateWithGemini(currentMode, c, a);
+                    renderResult(json);
+                } catch (err) {
+                    const fb = pickFallback(currentMode);
+                    renderResult(fb);
+                }
             });
         }
-
         // Arabic Poetry Generator
         function initArabicPoetry() {
             const btn = document.getElementById('generate-poem');
