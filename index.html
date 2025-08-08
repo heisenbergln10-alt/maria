@@ -1783,39 +1783,84 @@
         
             // 4) JSON extractor (in case the model adds stray text)
             function extractJson(text) {
-                try { return JSON.parse(text); } catch {}
-                const m = text.match(/\{[\s\S]*\}$/);
-                if (m) { try { return JSON.parse(m[0]); } catch {} }
-                return null;
-            }
-        
-            // 5) Call Gemini
-            async function generateWithGemini(mode, c, a) {
-                const { temperature, topP, maxOutputTokens } = mapComplexityToConfig(c, a);
-                const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
-                const prompt = buildPrompt(mode, c, a);
-        
-                const body = {
-                    contents: [{ role: "user", parts: [{ text: prompt }] }],
-                    generationConfig: { temperature, topP, maxOutputTokens }
-                };
-        
-                const res = await fetch(endpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body)
-                });
-        
-                if (!res.ok) throw new Error("Gemini HTTP " + res.status);
-        
-                const data = await res.json();
-                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                const json = extractJson(text);
-                if (!json || !json.title || !json.body || !Array.isArray(json.questions)) {
-                    throw new Error("Invalid JSON shape from Gemini.");
+                  // 1) direct
+                  try { return JSON.parse(text); } catch {}
+                  // 2) ```json ... ``` or ```
+                  const fence = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+                  if (fence) { try { return JSON.parse(fence[1]); } catch {} }
+                  // 3) largest {...}
+                  const a = text.indexOf("{"), b = text.lastIndexOf("}");
+                  if (a !== -1 && b !== -1 && b > a) {
+                    try { return JSON.parse(text.slice(a, b + 1)); } catch {}
+                  }
+                  return null;
                 }
-                return json;
-            }
+                
+                async function generateWithGemini(mode, c, a) {
+                  const { temperature, topP, maxOutputTokens } = mapComplexityToConfig(c, a);
+                
+                  // Use v1 + stable model name
+                  const endpoint =
+                    "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" +
+                    encodeURIComponent(GEMINI_API_KEY);
+                
+                  const prompt = buildPrompt(mode, c, a);
+                
+                  const body = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }],
+                    generationConfig: { temperature, topP, maxOutputTokens },
+                    // Make safety a bit less trigger-happy for philosophical content
+                    safetySettings: [
+                      { category: "HARM_CATEGORY_HARASSMENT",        threshold: "BLOCK_ONLY_HIGH" },
+                      { category: "HARM_CATEGORY_HATE_SPEECH",       threshold: "BLOCK_ONLY_HIGH" },
+                      { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+                      { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
+                    ]
+                  };
+                
+                  let res;
+                  try {
+                    res = await fetch(endpoint, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(body)
+                    });
+                  } catch (e) {
+                    console.error("[Gemini] Network error:", e);
+                    throw e;
+                  }
+                
+                  if (!res.ok) {
+                    let errBody;
+                    try { errBody = await res.json(); } catch {}
+                    console.error("[Gemini] HTTP", res.status, errBody || await res.text());
+                    throw new Error("Gemini HTTP " + res.status);
+                  }
+                
+                  const data = await res.json();
+                  const cand = data?.candidates?.[0];
+                  if (!cand) {
+                    console.error("[Gemini] No candidates:", data);
+                    throw new Error("No candidates");
+                  }
+                  if (cand.finishReason && cand.finishReason !== "STOP") {
+                    console.warn("[Gemini] Finish reason:", cand.finishReason, data?.promptFeedback);
+                    throw new Error("FinishReason=" + cand.finishReason);
+                  }
+                
+                  // Some responses come split across multiple parts
+                  const text = (cand.content?.parts || [])
+                    .map(p => (p.text ?? ""))
+                    .join("\n");
+                
+                  const json = extractJson(text);
+                  if (!json || !json.title || !json.body || !Array.isArray(json.questions)) {
+                    console.error("[Gemini] Invalid/Non-JSON response:", text);
+                    throw new Error("Invalid JSON shape from Gemini");
+                  }
+                  return json;
+                }
+
         
             // 6) Local fallback: shown if API fails
             const fallback = {
@@ -1945,9 +1990,10 @@
                 try {
                     const json = await generateWithGemini(currentMode, c, a);
                     renderResult(json);
-                } catch (err) {
-                    const fb = pickFallback(currentMode);
-                    renderResult(fb);
+                    } catch (err) {
+                  console.warn("[Paradox fallback] Reason:", err);
+                  const fb = pickFallback(currentMode);
+                  renderResult(fb);
                 }
             });
         }
