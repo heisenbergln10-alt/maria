@@ -1396,7 +1396,35 @@
                 </div>
             </div>
         </section>
-
+        <section id="double-crux" class="fade-in">
+          <div class="container">
+            <h2 class="section-title">Double-Crux Studio</h2>
+            <p class="mono" style="text-align:center;max-width:900px;margin:0 auto var(--space-sm);">
+              Paste a claim. We’ll build the strongest case <em>for</em> it, the strongest <em>against</em>,
+              surface what would genuinely change a mind (the “cruxes”), and list concrete ways to test it.
+              No prophecies. Just disciplined reasoning.
+            </p>
+        
+            <div class="glass" style="padding:var(--space-md);border-radius:20px;">
+              <textarea id="dc-input" rows="4" placeholder="Example: “Open-source AGI is safer than closed-source.”"
+                style="width:100%;padding:1rem;border-radius:12px;border:1px solid rgba(201,169,97,.25);background:rgba(0,0,0,.15);color:var(--text-primary);"></textarea>
+        
+              <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin: .75rem 0 0;">
+                <label class="mono">Rigor <input id="dc-rigor" type="range" min="1" max="5" value="3" style="vertical-align:middle;margin-left:.5rem"></label>
+                <label class="mono">Abstraction <input id="dc-abstr" type="range" min="1" max="5" value="3" style="vertical-align:middle;margin-left:.5rem"></label>
+                <label class="mono" style="display:flex;align-items:center;gap:.5rem;">
+                  <input id="dc-formal" type="checkbox"> Formal tone
+                </label>
+                <button id="dc-run" class="paradox-button" style="margin-left:auto;">Deconstruct</button>
+              </div>
+        
+              <div id="dc-output" class="paradox-output hidden">
+                <div class="paradox-title" id="dc-tldr"></div>
+                <div id="dc-cards"></div>
+              </div>
+            </div>
+          </div>
+        </section>
         <section id="facts" class="fade-in">
             <div class="container">
                 <h2 class="section-title">Midnight Radio</h2>
@@ -1477,6 +1505,8 @@
             initArabicPoetry();
             initDarkRadio();
             initFloatingParticles();
+            initDoubleCruxStudio();
+
         });
 
         // Spotify Player
@@ -2414,6 +2444,247 @@
                 document.body.appendChild(particle);
             }
         }
+
+        function initDoubleCruxStudio() {
+          const el = {
+            input:  document.getElementById('dc-input'),
+            rigor:  document.getElementById('dc-rigor'),
+            abstr:  document.getElementById('dc-abstr'),
+            formal: document.getElementById('dc-formal'),
+            run:    document.getElementById('dc-run'),
+            out:    document.getElementById('dc-output'),
+            tldr:   document.getElementById('dc-tldr'),
+            cards:  document.getElementById('dc-cards'),
+          };
+        
+          // === Config (put your keys — you said that’s fine) ===
+          const OPENAI_API_KEY   = "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";
+          const OPENAI_MODEL     = "gpt-4o"; // or "gpt-4o"
+          const GEMINI_API_KEY   = "AIzaSyAqXYggfgLt5_dL6wLEkNZUnGXr5QHBch4"; // fallback if OpenAI fails
+        
+          // === Lightweight anti-repeat memory ===
+          const DC_MEM = { key: "dc_history_v1", max: 40, sim: 0.30, attempts: 3 };
+          const STOP = new Set(["the","and","for","that","with","this","from","your","you","are","but","not","all","was","have","has","to","of","in","on","at","by","as","is","it","be","or","if","an","a","we","i"]);
+        
+          function memLoad() { try { return JSON.parse(localStorage.getItem(DC_MEM.key) || "[]"); } catch { return []; } }
+          function memSave(item) {
+            let h = memLoad();
+            h.unshift({ claim: item.claim, tldr: item.tldr, ts: Date.now() });
+            if (h.length > DC_MEM.max) h = h.slice(0, DC_MEM.max);
+            localStorage.setItem(DC_MEM.key, JSON.stringify(h));
+          }
+          function tok(s){ return (s||"").toLowerCase().replace(/[^a-z0-9\u0600-\u06FF\s]/g," ").split(/\s+/).filter(w=>w && w.length>2 && !STOP.has(w)); }
+          function jac(a,b){ const A=new Set(a),B=new Set(b); let i=0; for(const x of A) if(B.has(x)) i++; const u=A.size+B.size-i; return u? i/u : 0; }
+        
+          // === Prompt builder (strict JSON) ===
+          function buildPrompt({claim, rigor, abstr, formal}) {
+            const rec = memLoad().slice(0, 6).map(x => x.tldr).join(" | ") || "—";
+            const tone = formal ? "formal, quasi-academic" : "plain, precise";
+            return `
+        You are DoubleCrux. Deconstruct the user's CLAIM rigorously.
+        
+        Return ONLY valid JSON (no markdown, no prose pre/post). Schema:
+        {
+          "steelman": ["..."],
+          "strongest_objections": ["..."],
+          "cruxes": ["..."],
+          "decisive_evidence": ["..."],
+          "failure_modes": ["..."],
+          "tldr": "..."
+        }
+        
+        Constraints:
+        - RIGOR: ${rigor}/5 (1=light intuition, 5=tight, quasi-formal).
+        - ABSTRACTION: ${abstr}/5 (1=concrete examples, 5=conceptual).
+        - Tone: ${tone}. Neutral; do not predict the future; no moralizing; ≤16 words per bullet.
+        - Each crux should be a potential mind-changer if resolved; evidence are concrete tests/measurements.
+        - Avoid clichés and repeated phrasing from RECENT_TLDRS: ${rec}
+        
+        CLAIM: "${claim}"
+        `.trim();
+          }
+        
+          // === OpenAI primary (Responses via chat.completions w/ JSON) ===
+          async function callOpenAI(prompt) {
+            const res = await fetch("https://api.openai.com/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer " + OPENAI_API_KEY,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                model: OPENAI_MODEL,
+                response_format: { type: "json_object" },
+                temperature: 0.7,
+                top_p: 0.95,
+                max_tokens: 700,
+                messages: [
+                  { role: "system", content: "You are DoubleCrux, a disciplined reasoning engine returning strict JSON." },
+                  { role: "user",   content: prompt }
+                ]
+              })
+            });
+            if (!res.ok) throw new Error("OpenAI HTTP " + res.status);
+            const data = await res.json();
+            const text = data?.choices?.[0]?.message?.content || "";
+            return parseJsonStrict(text);
+          }
+        
+          // === Gemini fallback ===
+          async function callGemini(prompt) {
+            const endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+            const body = {
+              contents: [{ role: "user", parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.8, topP: 0.95, maxOutputTokens: 650, responseMimeType: "application/json" },
+              safetySettings: [
+                { category: "HARM_CATEGORY_HARASSMENT",        threshold: "BLOCK_ONLY_HIGH" },
+                { category: "HARM_CATEGORY_HATE_SPEECH",       threshold: "BLOCK_ONLY_HIGH" },
+                { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+                { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
+              ]
+            };
+            const res = await fetch(endpoint, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) });
+            if (!res.ok) throw new Error("Gemini HTTP " + res.status);
+            const data = await res.json();
+            const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("\n");
+            return parseJsonLoose(text);
+          }
+        
+          // === Parsers ===
+          function parseJsonStrict(s){ return JSON.parse(s); }
+          function parseJsonLoose(s){
+            try { return JSON.parse(s); } catch {}
+            const fence = s.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+            if (fence) { try { return JSON.parse(fence[1]); } catch {} }
+            const a = s.indexOf("{"), b = s.lastIndexOf("}");
+            if (a!==-1 && b!==-1 && b>a) { try { return JSON.parse(s.slice(a,b+1)); } catch {} }
+            throw new Error("Invalid JSON");
+          }
+        
+          // === Local fallback (short, clean) ===
+          const FALLBACKS = [
+            {
+              tldr: "Openness can aid safety, but increases capability diffusion risks.",
+              steelman: [
+                "Peer review exposes flaws sooner",
+                "Wider scrutiny reduces single-point failure",
+                "Transparency builds trust and adoption"
+              ],
+              strongest_objections: [
+                "Capability leakage to bad actors",
+                "Racing dynamics worsen with easy replication",
+                "Misuse externalities aren’t borne by publishers"
+              ],
+              cruxes: [
+                "Does openness demonstrably accelerate misuse vs. defense?",
+                "Can governance internalize externalities of release?"
+              ],
+              decisive_evidence: [
+                "Misuse incident rates pre/post open releases",
+                "Benchmark deltas for red-team vs. threat actors"
+              ],
+              failure_modes: [
+                "Equating transparency with responsibility",
+                "Ignoring incentives and deployment context"
+              ]
+            },
+            {
+              tldr: "Privacy erosion is not destiny; it’s an incentive and standards problem.",
+              steelman: [
+                "Network effects reward data hoarding",
+                "Users trade privacy for convenience",
+                "Enforcement is costly and slow"
+              ],
+              strongest_objections: [
+                "Market demand for privacy tech is rising",
+                "Regulatory fines change incentives",
+                "Privacy-preserving ML is improving"
+              ],
+              cruxes: [
+                "Do fines exceed data-extraction profits?",
+                "Can UX match convenience without tracking?"
+              ],
+              decisive_evidence: [
+                "Profit impact of major fines",
+                "Adoption of PP-ML with equivalent UX"
+              ],
+              failure_modes: [
+                "Treating ‘privacy’ as binary",
+                "Underestimating product friction"
+              ]
+            }
+          ];
+        
+          function pickFallback() {
+            return JSON.parse(JSON.stringify(FALLBACKS[Math.floor(Math.random()*FALLBACKS.length)]));
+          }
+        
+          // === Similarity guard on TL;DR ===
+          function tooSimilar(tldr){
+            const hist = memLoad().slice(0, 10);
+            const cand = tok(tldr);
+            return hist.some(h => jac(cand, tok(h.tldr)) >= DC_MEM.sim);
+          }
+        
+          // === Render ===
+          function render(result, claim){
+            el.tldr.textContent = result.tldr || "Deconstruction";
+            const mk = (title, items) => `
+              <div class="glass" style="padding:1rem;border-radius:14px;margin:.75rem 0;">
+                <div class="mono" style="color:var(--accent-gold);margin-bottom:.25rem">${title}</div>
+                <ul style="margin:.25rem 0 0 1rem;line-height:1.8;">${
+                  (items||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join("")
+                }</ul>
+              </div>`;
+            el.cards.innerHTML =
+              mk("Steelman", result.steelman) +
+              mk("Strongest objections", result.strongest_objections) +
+              mk("Cruxes (mind-changers)", result.cruxes) +
+              mk("Decisive evidence (tests)", result.decisive_evidence) +
+              mk("Failure modes", result.failure_modes);
+        
+            el.out.classList.remove('hidden');
+            memSave({ claim, tldr: result.tldr || claim.slice(0,60) });
+          }
+        
+          function escapeHtml(s){ return (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m])); }
+        
+          // === Wire up button ===
+          el.run.addEventListener('click', async () => {
+            const claim = (el.input.value || "").trim();
+            if (!claim) {
+              el.out.classList.remove('hidden');
+              el.tldr.textContent = "Give me a claim to dissect.";
+              el.cards.innerHTML = "";
+              return;
+            }
+            el.out.classList.remove('hidden');
+            el.tldr.textContent = "Deconstructing…";
+            el.cards.innerHTML = `<div class="loading" aria-label="loading"></div>`;
+        
+            let result = null, lastErr = null;
+            const config = { claim, rigor: +el.rigor.value || 3, abstr: +el.abstr.value || 3, formal: !!el.formal.checked };
+        
+            for (let attempt=1; attempt<=DC_MEM.attempts; attempt++) {
+              const prompt = buildPrompt(config);
+              try {
+                // Prefer OpenAI; fallback to Gemini; then local
+                const cand = await callOpenAI(prompt).catch(async e => { lastErr=e; return await callGemini(prompt); });
+                if (!cand || !cand.tldr) throw new Error("Bad JSON");
+                if (!tooSimilar(cand.tldr)) { result = cand; break; }
+                console.info(`[Double-Crux] Similar phrasing (attempt ${attempt}) → re-roll`);
+              } catch (e) {
+                lastErr = e;
+                break; // don’t hammer if APIs are failing
+              }
+            }
+            if (!result) result = pickFallback();
+            // Attach claim for memory
+            result.claim = claim;
+            render(result, claim);
+          });
+        }
+
     </script>
 </body>
 </html>
