@@ -1857,7 +1857,8 @@
             const frequencyMarker = document.getElementById('frequency-marker');
             const visualizerCanvas = document.getElementById('audio-visualizer');
             const ctx = visualizerCanvas.getContext('2d');
-            
+            let typeTimeout = null;
+            let typeSession = 0;
             const stations = [
                 { freq: 88.5, name: 'VOID.FM', type: 'Existential' },
                 { freq: 90.3, name: 'ABYSS.FM', type: 'Nihilistic' },
@@ -1947,40 +1948,53 @@
             }
             
             function tuneToFrequency(freq) {
-                state.currentFrequency = freq;
-                frequencyDisplay.textContent = freq.toFixed(1);
-                
-                const markerPosition = ((freq - 88) / 20) * 100;
-                frequencyMarker.style.left = `${markerPosition}%`;
-                
-                const station = stations.find(s => Math.abs(s.freq - freq) < 0.5);
-                
-                if (station && state.isPowered) {
-                    stationName.textContent = station.name;
-                    state.currentStation = station;
-                    
-                    const messages = broadcasts[station.type];
-                    const message = messages[Math.floor(Math.random() * messages.length)];
-                    typeMessage(message);
-                } else if (state.isPowered) {
-                    stationName.textContent = 'STATIC';
-                    state.currentStation = null;
-                    transcriptText.textContent = '*static* ...searching for signal in the darkness...';
+              state.currentFrequency = freq;
+              frequencyDisplay.textContent = freq.toFixed(1);
+              frequencyMarker.style.left = `${((freq - 88) / 20) * 100}%`;
+            
+              const station = stations.find(s => Math.abs(s.freq - freq) < 0.5);
+            
+              if (station && state.isPowered) {
+                if (!state.currentStation || state.currentStation.name !== station.name) {
+                  stationName.textContent = station.name;
+                  state.currentStation = station;
+            
+                  const messages = broadcasts[station.type];
+                  const message = messages[Math.floor(Math.random() * messages.length)];
+                  typeMessage(message);
                 }
+              } else if (state.isPowered) {
+                stationName.textContent = 'STATIC';
+                state.currentStation = null;
+                transcriptText.textContent = '*static* .searching for signal in the darkness.';
+              }
             }
+
             
             function typeMessage(text) {
-                transcriptText.textContent = '';
-                let i = 0;
-                const type = () => {
-                    if (i < text.length && state.isPowered) {
-                        transcriptText.textContent += text[i];
-                        i++;
-                        setTimeout(type, 30 + Math.random() * 50);
-                    }
-                };
-                type();
+              typeSession++;                    // new session id
+              const mySession = typeSession;
+            
+              if (typeTimeout) {                // cancel any previous tick
+                clearTimeout(typeTimeout);
+                typeTimeout = null;
+              }
+            
+              transcriptText.textContent = '';
+              let i = 0;
+            
+              const tick = () => {
+                // abort if a new session started or radio got powered off
+                if (mySession !== typeSession || !state.isPowered) return;
+            
+                if (i < text.length) {
+                  transcriptText.textContent += text[i++];
+                  typeTimeout = setTimeout(tick, 30 + Math.random() * 50);
+                }
+              };
+              tick();
             }
+
             
             // Visualizer
             function animateVisualizer() {
