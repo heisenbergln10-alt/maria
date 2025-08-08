@@ -1712,6 +1712,91 @@
                 if (e.target === modal) modal.classList.remove('active');
             });
         }
+        // ==== Diversity controls ====
+        const DIVERSITY = {
+          storageKey: "pe_history_v1",
+          maxHistory: 60,
+          similarThreshold: 0.32,   // 0..1 (higher = more tolerant to similarity)
+          maxAttempts: 3            // how many re-rolls before giving up
+        };
+        
+        const STOPWORDS = new Set([
+          "the","and","for","that","with","this","from","your","you","are","but","not","all","was","have","has",
+          "she","his","her","its","our","their","who","what","when","where","why","how","into","over","under",
+          "to","of","in","on","at","by","as","is","it","be","or","if","an","a","we","i"
+        ]);
+        
+        // Things we’re bored of seeing every other click
+        const BANNED_KEYWORDS = [
+          "theseus", "trolley", "brain in a vat", "liar paradox", "sorites",
+          "newcomb", "zeno", "grandfather paradox", "sleeping beauty"
+        ];
+        
+        const THEME_BUCKETS = [
+          { name: "Identity",    seeds: ["continuity vs matter", "role-based identity", "narrative self vs memory loss"]},
+          { name: "Time",        seeds: ["presentism vs eternalism", "time loops and consent", "prediction changing the future"]},
+          { name: "Knowledge",   seeds: ["Gettier-style luck", "private language", "explanation vs experience"]},
+          { name: "Ethics",      seeds: ["dirty-hands governance", "supererogation", "role morality vs impartiality"]},
+          { name: "Agency",      seeds: ["precommitment & identity", "akrasia (weakness of will)", "self-editing desires"]},
+          { name: "Logic",       seeds: ["reference without liar", "vagueness without heaps", "self-reference in laws"]},
+          { name: "AI",          seeds: ["value lock-in", "reward hacking", "alignment tax vs innovation"]}
+        ];
+        
+        function loadHistory() {
+          try { return JSON.parse(localStorage.getItem(DIVERSITY.storageKey) || "[]"); }
+          catch { return []; }
+        }
+        
+        function saveToHistory(item) {
+          let hist = loadHistory();
+          hist.unshift({ title: item.title, body: item.body, ts: Date.now() });
+          if (hist.length > DIVERSITY.maxHistory) hist = hist.slice(0, DIVERSITY.maxHistory);
+          localStorage.setItem(DIVERSITY.storageKey, JSON.stringify(hist));
+        }
+        
+        function tokenize(s) {
+          return (s || "")
+            .toLowerCase()
+            .replace(/[^a-zA-Z\u0600-\u06FF0-9\s]/g, " ")
+            .split(/\s+/)
+            .filter(w => w && w.length > 2 && !STOPWORDS.has(w));
+        }
+        
+        function jaccard(tokensA, tokensB) {
+          const A = new Set(tokensA), B = new Set(tokensB);
+          let inter = 0;
+          for (const x of A) if (B.has(x)) inter++;
+          const union = A.size + B.size - inter;
+          return union ? inter / union : 0;
+        }
+        
+        function isTooSimilar(candidate, history) {
+          const text = (candidate.title + " " + candidate.body);
+          const candTok = tokenize(text);
+          const bannedHit = BANNED_KEYWORDS.some(k => text.toLowerCase().includes(k));
+          if (bannedHit) return true;
+        
+          // Compare against the last 12 pieces
+          const recent = history.slice(0, 12);
+          for (const h of recent) {
+            const sim = jaccard(candTok, tokenize(h.title + " " + h.body));
+            if (sim >= DIVERSITY.similarThreshold) return true;
+          }
+          return false;
+        }
+        
+        function pickTheme() {
+          return THEME_BUCKETS[Math.floor(Math.random() * THEME_BUCKETS.length)];
+        }
+        
+        function pickSeedPair(theme) {
+          const list = theme.seeds || [];
+          if (list.length <= 1) return list;
+          const i = Math.floor(Math.random() * list.length);
+          let j = Math.floor(Math.random() * list.length);
+          if (j === i) j = (j + 1) % list.length;
+          return [list[i], list[j]];
+        }
 
         // Enhanced Paradox with Separate Complexity and Abstraction
         function initEnhancedParadox() {
@@ -1740,46 +1825,61 @@
         
             // 3) Precise JSON-only prompt
             function buildPrompt(mode, c, a) {
-                return `
-        You are ParadoxEngine, a concise, elegant philosophical content generator for a website.
-        Produce a single piece according to the selected MODE, COMPLEXITY, and ABSTRACTION.
-        
-        MODE (exactly one of):
-        - "paradox": present a classic or original paradox with 2–3 crisp tensions.
-        - "dilemma": an ethical scenario with competing values and no trivial resolution.
-        - "thought": a thought experiment that alters one premise of reality.
-        - "dialogue": a short Socratic dialogue (8–12 lines, alternating "A:" / "B:").
-        
-        COMPLEXITY (1–5):
-        - 1 = simple, intuitive; 5 = layered, multi-perspective, with a counterpoint.
-        
-        ABSTRACTION (1–5):
-        - 1 = concrete examples; 5 = highly abstract and conceptual.
-        
-        STYLE:
-        - 1–2 sentence title (striking, no clickbait).
-        - Body: ~150–230 words (for "dialogue", 8–12 terse exchanges).
-        - Tone: lucid, precise, graceful; no clichés; no fluff.
-        - Avoid moralizing; present tensions clearly.
-        - No external references or markdown.
-        
-        THOUGHT QUESTIONS:
-        Return 3–5 short, open-ended questions that provoke reflection.
-        
-        OUTPUT FORMAT (IMPORTANT):
-        Return ONLY valid JSON (no extra text, no markdown fences). Use this schema:
-        {
-          "title": "string",
-          "body": "string",
-          "questions": ["string", "string", ...]
-        }
-        
-        INPUT:
-        MODE="${mode}"
-        COMPLEXITY=${c}
-        ABSTRACTION=${a}
-        `;
+              const hist = loadHistory();
+              const recentTitles = hist.slice(0, 8).map(h => h.title).join(" | ") || "—";
+              const theme = pickTheme();
+              const seeds = pickSeedPair(theme);
+            
+              return `
+            You are ParadoxEngine, a concise, elegant philosophical content generator for a website.
+            Produce a single piece according to MODE, COMPLEXITY, and ABSTRACTION, emphasizing novelty.
+            
+            MODE (exactly one of):
+            - "paradox": present a classic or original paradox with 2–3 crisp tensions.
+            - "dilemma": an ethical scenario with competing values and no trivial resolution.
+            - "thought": a thought experiment that alters one premise of reality.
+            - "dialogue": a short Socratic dialogue (8–12 lines, alternating "A:" / "B:").
+            
+            COMPLEXITY (1–5):
+            - 1 = simple, intuitive; 5 = layered, multi-perspective, includes a counterpoint.
+            
+            ABSTRACTION (1–5):
+            - 1 = concrete examples; 5 = highly abstract, conceptual.
+            
+            STYLE:
+            - 1–2 sentence title (striking, no clickbait).
+            - Body: ~150–230 words (for "dialogue", 8–12 terse exchanges).
+            - Tone: lucid, precise, graceful; no clichés; no fluff.
+            - Avoid moralizing; present tensions clearly.
+            - No external references or markdown.
+            
+            NOVELTY CONSTRAINTS:
+            - Do NOT repeat or paraphrase RECENT_TITLES.
+            - Avoid well-worn clichés unless radically reframed: ${BANNED_KEYWORDS.join(", ")}.
+            - Aim for the THEME and SEEDS subtly woven in (do not name them as labels).
+            
+            THEME: ${theme.name}
+            SEEDS: ${seeds.join(", ") || "—"}
+            RECENT_TITLES: ${recentTitles}
+            
+            THOUGHT QUESTIONS:
+            Return 3–5 short, open-ended questions that provoke reflection.
+            
+            OUTPUT FORMAT (STRICT):
+            Return ONLY valid JSON (no extra text, no markdown fences). Use this schema:
+            {
+              "title": "string",
+              "body": "string",
+              "questions": ["string", "string", ...]
             }
+            
+            INPUT:
+            MODE="${mode}"
+            COMPLEXITY=${c}
+            ABSTRACTION=${a}
+            `.trim();
+            }
+
         
             // 4) JSON extractor (in case the model adds stray text)
             function extractJson(text) {
@@ -1979,23 +2079,42 @@
         
             // 9) Generate
             generateBtn.addEventListener('click', async () => {
-                const c = state.complexity || 3;
-                const a = state.abstraction || 3;
-        
-                // spinner
-                outputDiv.classList.remove('hidden');
-                titleEl.textContent = `${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} (C:${c} A:${a})`;
-                contentEl.innerHTML = `<div class="loading" aria-label="loading"></div>`;
-        
+              const c = state.complexity || 3;
+              const a = state.abstraction || 3;
+            
+              outputDiv.classList.remove('hidden');
+              titleEl.textContent = `${currentMode.charAt(0).toUpperCase() + currentMode.slice(1)} (C:${c} A:${a})`;
+              contentEl.innerHTML = `<div class="loading" aria-label="loading"></div>`;
+            
+              let result = null;
+              let lastErr = null;
+            
+              for (let attempt = 1; attempt <= DIVERSITY.maxAttempts; attempt++) {
                 try {
-                    const json = await generateWithGemini(currentMode, c, a);
-                    renderResult(json);
-                    } catch (err) {
-                  console.warn("[Paradox fallback] Reason:", err);
-                  const fb = pickFallback(currentMode);
-                  renderResult(fb);
+                  const json = await generateWithGemini(currentMode, c, a);
+                  if (!isTooSimilar(json, loadHistory())) {
+                    result = json;
+                    break;
+                  } else {
+                    console.info(`[ParadoxEngine] Similar to history (attempt ${attempt}) → re-rolling`);
+                  }
+                } catch (err) {
+                  lastErr = err;
+                  console.warn("[ParadoxEngine] API error:", err);
+                  break; // API failing → don’t hammer it
                 }
+              }
+            
+              if (!result) {
+                const fb = pickFallback(currentMode);
+                result = fb;
+              }
+            
+              renderResult(result);
+              // Save even if it came from fallback, so the fallback variety also rotates
+              saveToHistory(result);
             });
+
         }
         // Arabic Poetry Generator
         function initArabicPoetry() {
