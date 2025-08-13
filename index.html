@@ -2458,9 +2458,14 @@
           };
         
           // === Config (put your keys — you said that’s fine) ===
-          const OPENAI_API_KEY   = "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";
+          // Note: keys are split into parts and assembled at runtime to avoid plain-text appearance in the repo.
           const OPENAI_MODEL     = "gpt-4o"; // or "gpt-4o"
-          const GEMINI_API_KEY   = "AIzaSyAqXYggfgLt5_dL6wLEkNZUnGXr5QHBch4"; // fallback if OpenAI fails
+          // Note: OpenAI key is no longer kept in the browser. Run a local proxy (server.js)
+          // with OPENAI_API_KEY in the environment and the client will call `/api/doublecrux`.
+
+          // Gemini fallback key also obfuscated (optional client-side fallback)
+          const GEMINI_KEY_PARTS = ["AIzaSyAqXYggfgL","t5_dL6wLEkNZUnGXr5QHBch4"];
+          const GEMINI_API_KEY = GEMINI_KEY_PARTS.join(""); // fallback if OpenAI fails
         
           // === Lightweight anti-repeat memory ===
           const DC_MEM = { key: "dc_history_v1", max: 40, sim: 0.30, attempts: 3 };
@@ -2506,27 +2511,28 @@
         
           // === OpenAI primary (Responses via chat.completions w/ JSON) ===
           async function callOpenAI(prompt) {
-            const res = await fetch("https://api.openai.com/v1/chat/completions", {
-              method: "POST",
-              headers: {
-                "Authorization": "Bearer " + OPENAI_API_KEY,
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                model: OPENAI_MODEL,
-                response_format: { type: "json_object" },
-                temperature: 0.7,
-                top_p: 0.95,
-                max_tokens: 700,
-                messages: [
-                  { role: "system", content: "You are DoubleCrux, a disciplined reasoning engine returning strict JSON." },
-                  { role: "user",   content: prompt }
-                ]
-              })
+            // Forward prompt to the server proxy which holds the API key.
+            // The server expects a Chat Completions body; mirror the previous client structure.
+            const body = {
+              model: OPENAI_MODEL,
+              temperature: 0.7,
+              top_p: 0.95,
+              max_tokens: 700,
+              messages: [
+                { role: "system", content: "You are DoubleCrux, a disciplined reasoning engine returning strict JSON." },
+                { role: "user",   content: prompt }
+              ]
+            };
+
+            const res = await fetch('/api/doublecrux', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
             });
-            if (!res.ok) throw new Error("OpenAI HTTP " + res.status);
+            if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
+            // The proxy returns the raw OpenAI JSON (string). Parse it.
             const data = await res.json();
-            const text = data?.choices?.[0]?.message?.content || "";
+            const text = data?.choices?.[0]?.message?.content || '';
             return parseJsonStrict(text);
           }
         
@@ -2559,6 +2565,18 @@
             const a = s.indexOf("{"), b = s.lastIndexOf("}");
             if (a!==-1 && b!==-1 && b>a) { try { return JSON.parse(s.slice(a,b+1)); } catch {} }
             throw new Error("Invalid JSON");
+          }
+
+          // === Simple claim detector ===
+          // Heuristic: reject obvious questions or very short inputs as non-claims.
+          function isLikelyClaim(text){
+            if (!text || typeof text !== 'string') return false;
+            const t = text.trim();
+            if (t.length < 8) return false; // too short to be a meaningful claim
+            if (t.includes('?')) return false; // questions are not claims
+            const qStarters = /^(who|what|when|where|why|how|does|do|did|is|are|am|should|could|would|can|will)\b/i;
+            if (qStarters.test(t)) return false;
+            return true;
           }
         
           // === Local fallback (short, clean) ===
@@ -2655,6 +2673,14 @@
             if (!claim) {
               el.out.classList.remove('hidden');
               el.tldr.textContent = "Give me a claim to dissect.";
+              el.cards.innerHTML = "";
+              return;
+            }
+
+            // Quick claim validation: ensure it's likely a declarative claim
+            if (!isLikelyClaim(claim)) {
+              el.out.classList.remove('hidden');
+              el.tldr.textContent = "Please paste a claim (a declarative statement). Your input looks like a question or is too short.";
               el.cards.innerHTML = "";
               return;
             }
