@@ -3232,7 +3232,7 @@ Answer:`;
             const rec = memLoad().slice(0, 6).map(x => x.tldr).join(" | ") || "—";
             const tone = formal ? "formal, quasi-academic" : "plain, precise";
             return `
-        You are DoubleCrux. Deconstruct the user's CLAIM rigorously and use some dark humour if the claim is dark or funny.
+        You are DoubleCrux. Deconstruct the user's CLAIM depending on the parameters and use some dark humour if the claim is dark or funny.
         
         Return ONLY valid JSON (no markdown, no prose pre/post). Schema:
         {
@@ -3246,9 +3246,9 @@ Answer:`;
         
         Constraints:
         - RIGOR: ${rigor}/5 (1=light intuition, 5=tight, quasi-formal).
-        - FUNNY: ${abstr}/5 (1=Serious, 5=funny).
-        - Tone: ${tone}. a funny tone; do not predict the future; full of dark humour; ≤16 words per bullet.
-        - Each crux should be a potential mind-changer if resolved; evidence are concrete tests/measurements.
+        - FUNNY: ${abstr}/5 (1=Serious, 5=very funny).
+        - Tone: ${tone}. a funny tone with jokes; do not predict the future; full of dark humour; ≤30 words per bullet.
+        - Each crux should be a potential mind-changer if resolved (but we are being sarcastic here).
         - Avoidrepeated phrasing from RECENT_TLDRS: ${rec}
         
         CLAIM: "${claim}"
