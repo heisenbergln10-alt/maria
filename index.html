@@ -2665,37 +2665,54 @@ Answer:`;
         const OPENAI_MODEL = "gpt-4o";
         
         // Read PROXY_BASE_URL from a meta tag or a preset global `window.PROXY_BASE_URL`
-        const PROXY_BASE_URL = (function(){
+          const PROXY_BASE_URL = (function(){
           try {
             if (window.PROXY_BASE_URL) return window.PROXY_BASE_URL.replace(/\/$/, '');
             const m = document.querySelector('meta[name="proxy-base-url"]');
             if (m && m.content) return m.content.trim().replace(/\/$/, '');
           } catch (e) {}
           return '';
-        })();
+          })();
 
-        // Helper to get client-side keys stored by the user in the settings panel
-        function getClientKey(name){
-          try { 
-            if (name === 'OPENAI_API_KEY') {
-              try { const parts = sessionStorage.getItem('OPENAI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
-              return sessionStorage.getItem('OPENAI_API_KEY') || '';
-            }
-            if (name === 'GEMINI_API_KEY') {
-              try { const parts = sessionStorage.getItem('GEMINI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
-              return sessionStorage.getItem('GEMINI_API_KEY') || '';
-            }
-            if (name === 'TMDB_API_KEY') {
-              // Reassemble TMDB key from stored parts in sessionStorage (superficial obfuscation)
-              try {
-                const parts = sessionStorage.getItem('TMDB_KEY_PARTS');
-                if (parts) return JSON.parse(parts).join('');
-              } catch {}
-              return sessionStorage.getItem('TMDB_API_KEY') || '';
-            }
-            return sessionStorage.getItem(name) || ''; 
-          } catch { return ''; }
-        }
+          // === Paste-into-code placeholders ===
+          // If you prefer to embed keys directly into the page, replace the empty strings below
+          // with the 8-char parts of your keys (do NOT paste full keys in shared environments).
+          // Example: const OPENAI_KEY_PARTS = ["part0000","part0001", ...];
+          const OPENAI_KEY_PARTS = [ /* paste OpenAI key parts here, e.g. "sk-proj-xxxx" */ ];
+          const GEMINI_KEY_PARTS = [ /* paste Gemini key parts here */ ];
+          const TMDB_KEY_PARTS   = [ /* paste TMDb key parts here */ ];
+
+          // Assembled constants (empty if no parts provided)
+          const OPENAI_API_KEY = (Array.isArray(OPENAI_KEY_PARTS) && OPENAI_KEY_PARTS.length)? OPENAI_KEY_PARTS.join('') : '';
+          const GEMINI_API_KEY = (Array.isArray(GEMINI_KEY_PARTS) && GEMINI_KEY_PARTS.length)? GEMINI_KEY_PARTS.join('') : '';
+          const TMDB_API_KEY   = (Array.isArray(TMDB_KEY_PARTS)   && TMDB_KEY_PARTS.length)?   TMDB_KEY_PARTS.join('')   : '';
+
+          // Helper to get client-side keys stored by the user in the settings panel
+          // This will prefer assembled constants embedded in the page, then fall back to sessionStorage parts.
+          function getClientKey(name){
+            try {
+              // Prefer constants embedded directly in the code (assembled from parts above)
+              if (name === 'OPENAI_API_KEY' && typeof OPENAI_API_KEY !== 'undefined' && OPENAI_API_KEY) return OPENAI_API_KEY;
+              if (name === 'GEMINI_API_KEY' && typeof GEMINI_API_KEY !== 'undefined' && GEMINI_API_KEY) return GEMINI_API_KEY;
+              if (name === 'TMDB_API_KEY' && typeof TMDB_API_KEY !== 'undefined' && TMDB_API_KEY) return TMDB_API_KEY;
+
+              // Otherwise, try sessionStorage parts or legacy single key
+              if (name === 'OPENAI_API_KEY'){
+                try { const parts = sessionStorage.getItem('OPENAI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+                return sessionStorage.getItem('OPENAI_API_KEY') || '';
+              }
+              if (name === 'GEMINI_API_KEY'){
+                try { const parts = sessionStorage.getItem('GEMINI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+                return sessionStorage.getItem('GEMINI_API_KEY') || '';
+              }
+              if (name === 'TMDB_API_KEY'){
+                try { const parts = sessionStorage.getItem('TMDB_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+                return sessionStorage.getItem('TMDB_API_KEY') || '';
+              }
+
+              return sessionStorage.getItem(name) || '';
+            } catch { return ''; }
+          }
 
         async function callOpenAI(prompt) {
           // Build chat-completions body
@@ -3079,6 +3096,32 @@ Answer:`;
             const ratingSlider = document.getElementById('movie-min-rating');
             const ratingDisplay = document.getElementById('rating-display');
 
+            // Local robust JSON parser used for LLM outputs
+            function parseJsonLooseLocal(s){
+                if (!s || typeof s !== 'string') return null;
+                // 1) direct parse
+                try { return JSON.parse(s); } catch(e) {}
+                // 2) fenced ```json blocks
+                try {
+                    const fence = s.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+                    if (fence) { try { return JSON.parse(fence[1]); } catch(e){} }
+                } catch(e){}
+                // 3) find largest [ ... ] block
+                try {
+                    let best = null;
+                    let a = s.indexOf('[');
+                    while (a !== -1) {
+                        const b = s.indexOf(']', a+1);
+                        if (b === -1) break;
+                        const cand = s.slice(a, b+1);
+                        try { const j = JSON.parse(cand); if (Array.isArray(j)) { if (!best || cand.length > best.length) best = j; } } catch(e) {}
+                        a = s.indexOf('[', a+1);
+                    }
+                    if (best) return best;
+                } catch(e){}
+                return null;
+            }
+
             // Update rating display when slider changes
             ratingSlider.addEventListener('input', (e) => {
                 ratingDisplay.textContent = parseFloat(e.target.value).toFixed(1);
@@ -3105,18 +3148,25 @@ Answer:`;
                 try {
                     status.textContent = 'Consulting film curator...';
                     const response = await callOpenAIRaw(prompt + "\nRETURN_JSON: true");
-                    // Try to parse robustly using parseJsonLoose (supports fences, partials)
+                    // Try to parse robustly using local parser (supports fences, partials)
                     try {
-                        const parsed = parseJsonLoose(response);
+                        const parsed = parseJsonLooseLocal(response);
                         if (Array.isArray(parsed)) list = parsed;
                         else if (Array.isArray(parsed?.movies)) list = parsed.movies;
+                        else list = null;
                     } catch (e) {
                         console.warn('LLM returned non-JSON or unexpected shape for movies:', e, response);
-                        // try to extract array substring as last resort
+                        list = null;
+                    }
+                    // If parse failed, attempt to find largest array substring as a last resort
+                    if (!list) {
                         try {
                             const a = response.indexOf('['), b = response.lastIndexOf(']');
-                            if (a !== -1 && b !== -1) list = JSON.parse(response.slice(a, b + 1));
-                        } catch (e2) { console.warn('Secondary JSON extraction failed', e2); }
+                            if (a !== -1 && b !== -1) {
+                                const cand = response.slice(a, b+1);
+                                try { const j = JSON.parse(cand); if (Array.isArray(j)) list = j; } catch(e){}
+                            }
+                        } catch(e){}
                     }
                 } catch (e) {
                     console.warn('OpenAI failed for movies, trying Gemini fallback:', e);
@@ -3303,6 +3353,9 @@ Answer:`;
                 suggestBtn.disabled = false;
             });
         }
+
+        // movies initialization is invoked from the main DOMContentLoaded handler
+
     </script>
 </body>
 </html>
