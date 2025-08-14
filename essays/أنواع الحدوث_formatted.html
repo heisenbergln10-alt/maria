@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أنواع الحدوث — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring أنواع الحدوث">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Amiri', 'Times New Roman', serif;
+            --font-body: 'Amiri', 'Times New Roman', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">أنواع الحدوث</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <p class="essay-paragraph">أنواع الحدوث</p>
+    <h2 class="essay-subtitle">الحدوث له صورٌ منها:</h2>
+    <p class="essay-paragraph">( ١ ) الحدوث الذاتي.</p>
+    <p class="essay-paragraph">( ٢ ) الحدوث الزماني.</p>
+    <p class="essay-paragraph">( ٣ ) الحدوث الدهري.</p>
+    <p class="essay-paragraph">حقيقة الزمان لدى الفلاسفة</p>
+    <p class="essay-paragraph">المقصود بالحدوث الزماني أن يكون وجود الشيء مسبوقاً بعدمه في زمانٍ معيّن.</p>
+    <p class="essay-paragraph">إن أي موجود في عالم الطبيعة، كالكتاب، والسيارة، والإنسان. . . إلخ. ظرف وجوده هو الزمان، أو بعبارة فلسفية: الزمان هو الكمية التي يتحدد بها مقدار الحركة؛ لأن الزمان كمٌّ قارّ يتحدد به مقدار الحركة، وبالتالي فكل موجود زمان، والزمان هو بُعد وجود الشيء. فما دام الشيء موجوداً مادياً إذن هو متحرك، وما دام متحركاً فلا بد من امتداد الحركة، وما بين امتداد الحركة هو الزمان؛ ولهذا نقول: كل موجود مادي في عالم الطبيعة موجود في ظرف زمان.</p>
+    <p class="essay-paragraph">أما الموجودات غير المادية؛ أي المجردة، فالفلاسفة يقولون بوجود عوالم أخرى غير عالم الطبيعة، وهذا العالم المادي يقع في طول تلك العوالم، فالموجودات في تلك العوالم غير زمانية؛ لأن الوجود الزماني هو الواقع في ظرف الزمان؛ أي أن كل موجود زماني يقع في مقطع من مقاطع الزمان؛ فلو فرضنا الزمان خطاً وهمياً عليه درجات، فالسيارة التي عمرها «٥» سنوات، نفرض كونها على هذا الخط بمقدار «٥» درجات، فتكون السيارة غير موجودة على بقية درجات الخط خارج الدرجات الخمس؛ فعدمها في تلك الدرجات هو عدم زماني، ووجودها في هذه الدرجات هو وجود حادث؛ فهي حادث زماني؛</p>
+    <p class="essay-paragraph">إذن الحادث الزماني هو وجود الشيء المسبوق بعدمه في زمان معين؛ ولذلك نعبر عن الأشياء بالزمانيات، والشيء الزماني هو المسبوق بالعدم.</p>
+    <p class="essay-paragraph">والزمان أو كل قطعة من قطع الزمان وجودها حادث زماني؛ لأن وجود اليوم مسبوق بوجود الأمس، ووجود الأمس مسبوق باليوم الذي قبله وهكذا.</p>
+    <p class="essay-paragraph">الفرق بين الحادث الزماني والقديم الزماني</p>
+    <p class="essay-paragraph">الحادث الزماني الذي يكون وجوده مسبوقاً بعدم زماني، وما يقابله وهو القديم الزماني؛ أي الذي وجوده غير مسبوق بعدم زماني، ومثاله الزمان؛ أي مطلق الزمان أو الزمان المطلق. فالزمان قديم زماني؛ لأن وجوده غير مسبوق بعدم زماني، وإلالو كان الزمان حادثاً زمانياً، فلا بد أن يكون مسبوقاً بعدم الزمان، وهذا يلزم منه التنافي، لتقدم وجوده على عدمه.</p>
+    <p class="essay-paragraph">وبعبارة أخرى، تارة نلاحظ مطلق الزمان، فهو قديم زماني، وأخرى نلاحظ بعض قطعات الزمان فهي حادثة. كيوم الأحد، لأن يوم الأحد وجوده مسبوق بعدمه يوم السبت. أما مطلق الزمان، فهو ليس بحادث، بمعنى الحدوث الزماني، وإنما هو قديم زماني؛ لأنه لو تقدمه عدم زماني فيلزم أن يكون الزمان موجوداً قبل وجوده، وهو محال.</p>
+    <p class="essay-paragraph">مثال: لنفرض أننا قلنا إن الزمان حادث زماني بمعنى أنه مسبوق بعدم الزمان في زمان معين، وهذا أمر مستحيل؛ لأن الزمان لا يوجد إلا الزمان، ومعنى ذلك أنه يوجد زمان قبل الزمان يكون ظرفاً ووعاءً لهذا الحادث المتقدم، بينما قلنا إن مطلق الزمان لا زمان قبله أساساً ولا زماني؛ فلا يكون وجوده مسبوقاً بعدمه في زمان معين؛ ولهذا يكون مطلق الزمان من مصاديق القديم الزماني، أما قطعات الزمان، كالثانية، والدقيقة، والساعة، واليوم، فهي من الحادث الزماني وليس من القديم الزماني؛ هذا هو الحادث الزماني والقديم الزماني.</p>
+    <p class="essay-paragraph">الحدوث الذاتي</p>
+    <p class="essay-paragraph">الحدوث الذاتي هو مسبوقية وجود الشيء بإمكانه الذاتي، وليس بعدمه الذاتي. وبعبارة أخرى: هو مسبوقية وجود الشيء بنوع عدم، وهو عدم الوجوب أو عدم الضرورة؛ أي أن ذات الشيء لا تقتضي الوجود، وإنما هو موجود بسبب خارجي، غير ذاته.</p>
+    <p class="essay-paragraph">إن كل موجود ممكن ذاته لا تقتضي الوجود؛ لأن كل ماهيةٍ ممكنة ليس لها بذاتها الوجود، بل وجودها بعلة خارجية؛ ولهذا فإن العدم يجامع وجود هذه الماهية؛ لأنها ما دامت ذاتهالا تقتضي الوجود. إذن هي بذاتهاليست موجودة، بل هي بذاتها معدومة؛ فالعدم يجامع وجودها، ووجودها إنما يتحقق بسبب علّة خارجية، وليس من ذاتها.</p>
+    <p class="essay-paragraph">فالحادث الذاتي هو الشيء الذي يسبق عدمه وجوده؛ أي مسبوقية وجود الشيء بالعدم في ذاته، وهذا العدم هو عدم مجامع لا عدم مقابل، بينما العدم السابق في الحادث الزماني هو العدم المقابل.</p>
+    <p class="essay-paragraph">يُقال: إن الماهية إذا كانت في حدّ ذاتها من حيث هي ليست إلاّ هي لا موجودة ولا معدومة. فكيف نفترض الآن أن الماهية بذاتها معدومة؛ لأن الماهية لا تقتضي الوجود، ومعنى ذلك أنها معدومة.</p>
+    <p class="essay-paragraph">إذن الماهية بذاتها معدومة. وهذا الكلام لا ينسجم مع ما تقدّم مراراً، من أن الماهية من حيث هي لا تقتضي الوجود ولا العدم.</p>
+    <p class="essay-paragraph">جواب الإشكال</p>
+    <p class="essay-paragraph">الماهية في حد ذاتهالا تقتضي الوجود ولا العدم، ولكن عندما يُراد للماهية أن توجد، حتى يكون الكتاب موجوداً، لا بد من توفّر علة تُخرجه من العدم إلى الوجود، فتلبّسه بالوجود متوقف على العلة، وتلبّسه بالعدم يكفي فيه عدم العلة؛ فعدم العلة كافٍ في العدم، بينما الوجود يحتاج علّة.</p>
+    <p class="essay-paragraph">وعلى هذا الأساس فإن الماهية بحد ذاتهالا موجودة ولا معدومة؛ أي لا الوجود ضروري لها ولا العدم ضروري لها. هذا بحسب الحمل الأولي، ولكن بحسب الحمل الشائع؛ أي إذالاحظنا مصداق الماهية. فإذالم تكن علة الماهية موجودة فالماهية معدومة؛ فهي في حدِّ ذاتها؛ أي في حقيقتها، لا موجودة ولا معدومة، ولكن بحسب الواقع ونفس الأمر، إذالم تكن علة الماهية موجودة تكون الماهية معدومة؛ لأن العدم يكفي فيه عدم وجود العلة.</p>
+    <p class="essay-paragraph">القدم الذاتي</p>
+    <p class="essay-paragraph">مقابل الحدوث الذاتي القدم الذاتي، وهو الشيء الذي يكون متّصفاً بذاته بالوجود، أو هو الشيء الذي تقتضي ذاته الوجود، كواجب الوجود.</p>
+    <p class="essay-paragraph">وبعبارة فلسفية: هو عدم مسبوقية الشيء بالعدم في ذاته، بينما الحادث ذاتاً، هو مسبوقية الشيء بالعدم بذاته.</p>
+    <p class="essay-paragraph">فإذا كانت الذات هي عين حقيقة الوجود، حينئذٍ يكون هذا الشيء قديماً ذاتاً. والقديم الذاتي هو الواجب تعالى، الذي حقيقة وجوده. أما الحادث فغيره من الموجودات الممكنة.</p>
+    <p class="essay-paragraph">الحدوث الدهري</p>
+    <p class="essay-paragraph">النوع الآخر من الحدوث هو الحدوث الدهري، وقد تحدث عنه الميرداماد مفصلاً في كتابه «القبسات»، بل إن المحور الأساسي لكتاب «القبسات» هو الحدوث الدهري، الذي ابتكره هو، لكن بياناته هناك معقدة وملتبسة.</p>
+    <h2 class="essay-subtitle">وقد أشرنا فيما سبق إلى هذا الموضوع، ولكن نشير إليه مرة أخرى ليتضح هذا المطلب.</h2>
+    <p class="essay-paragraph">ذكرنا أن الموجودات الطبيعية، الموجودة في عالم الطبيعة، كل واحد منهالا بد أن يقع في الزمان، ولكي يكون زمانٌ لا بد من حركة، ولكي توجد حركة لا بد من مادة؛ لأن المادة هي التي تتحرك، فإذا كان العالم مجرداً فلا توجد مادة؛ وبالتالي فلا حركة؛ وإذالم توجد حركة فلا وجود للزمان؛ فالموجودات المجردة غير المادية لا تكون موجودة في زمان.</p>
+    <p class="essay-paragraph">وبعبارة أخرى، يقول الحكماء هناك سلسلتان للوجود، سلسلة عرضية وسلسلة طولية. فالسلسلة العرضية هي هذه الموجودات الطبيعية؛ أي هذه الموجودات المادية الموجودة في العالم الطبيعي، فهي تتحقق بالزمان؛ كما أن هناك موجودات أخرى غير زمانية؛ أي أنها خارج دائرة الزمان، وهي الموجودات في العوالم الأخرى للوجود، التي تقع في مرتبة أعلى من عالم الطبيعة، وهذا الموجود لا بد أن يكون عدمه سابقاً لهذا الزمان الموجود فيه.</p>
+    <p class="essay-paragraph">بينما في العوالم الأخرى التي يقول بها الفلاسفة، كعالم المثال، توجد موجودات، وهذه الموجودات مجردة؛ أي إنها موجودة خارج الزمان؛ أو قل: إنها موجودة في عالم الدهر، حسب تعبير الميرداماد.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

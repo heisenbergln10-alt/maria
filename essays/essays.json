@@ -1,0 +1,89 @@
+{
+  "essays": [
+    {
+      "title": "Divine Command Theory",
+      "excerpt": "Divine Command Theory presents three distinct metaethical interpretations of moral claims. Consider someone asserting \"torture is wrong....",
+      "file": "Divine Command Theory_formatted.html"
+    },
+    {
+      "title": "Emotivism",
+      "excerpt": "When someone declares \"genocide is wrong,\" emotivism radically reinterprets this apparent fact-statement as merely expressing \"Boo genocide! \" or \"Genocide, ugh!...",
+      "file": "Emotivism_formatted.html"
+    },
+    {
+      "title": "Error theory",
+      "excerpt": "When someone asserts \"torturing innocents is wrong,\" error theory agrees this statement purports to describe an objective moral fact but insists no such fact exists, making the statement false like...",
+      "file": "Error theory_formatted.html"
+    },
+    {
+      "title": "Godel Incompletness",
+      "excerpt": "Consider the statement \"This sentence cannot be proved in system S. \" If it's provable, then what it says is false, making S inconsistent....",
+      "file": "Godel Incompletness_formatted.html"
+    },
+    {
+      "title": "Kantian Deontology",
+      "excerpt": "When Kant claims \"lying is wrong,\" the metaethical question arises: what type of fact is this? Kant insists moral truths are synthetic a priori, known through pure reason yet substantive about the...",
+      "file": "Kantian Deontology_formatted.html"
+    },
+    {
+      "title": "Moral intuitionism",
+      "excerpt": "Moral intuitionism, the meta-ethical framework I defend, holds that we possess non-inferential knowledge of irreducible moral properties through intellectual seemings that provide immediate prima...",
+      "file": "Moral intuitionism_formatted.html"
+    },
+    {
+      "title": "The Case for Moral Realism",
+      "excerpt": "The Case for Moral Realism: Addressing Moral Skepticism What would it take for there to be such a thing as morality? What exactly would need to be the case for it to be correct to say that there are...",
+      "file": "The Case for Moral Realism_formatted.html"
+    },
+    {
+      "title": "The truthmaker",
+      "excerpt": "The truthmaker principle maintains that truth is grounded in being: for every true proposition p, there exists some entity or entities whose existence necessitates p's truth....",
+      "file": "The truthmaker_formatted.html"
+    },
+    {
+      "title": "Utilitarianism",
+      "excerpt": "When sophisticated utilitarian theories claim \"torture is wrong,\" they face immediate metaethical questions about what type of fact this represents....",
+      "file": "Utilitarianism_formatted.html"
+    },
+    {
+      "title": "أصالة الماهية",
+      "excerpt": "اعلم أنّ كلّ ممكن، سواء كان أزليّا أو حادثا، يكون بالنّظر إلى ذاته لا شيئا صرفا، فإذا حصل له الشّيئيّة والكون الخارجيّ والحقيقة الخارجيّة المتأصّلة، فلا يكون ثبوت شيء من تلك الأمور في ذاته مع قطع...",
+      "file": "أصالة الماهية_formatted.html"
+    },
+    {
+      "title": "أنواع الحدوث",
+      "excerpt": "أنواع الحدوث الحدوث له صورٌ منها: ( ١ ) الحدوث الذاتي. ( ٢ ) الحدوث الزماني. ( ٣ ) الحدوث الدهري. حقيقة الزمان لدى الفلاسفة المقصود بالحدوث الزماني أن يكون وجود الشيء مسبوقاً بعدمه في زمانٍ معيّن....",
+      "file": "أنواع الحدوث_formatted.html"
+    },
+    {
+      "title": "ان احتياج الممكن الى مؤثر",
+      "excerpt": "ان احتياج الممكن الى مؤثر سواء كان ذلك الاحتياج لإمكانه أو لغيره انما يتحقق اذا أمكن تأثير شيء في شيء لكنه غير معقول اذ التأثير في الوجود مثلا اما حال الوجود أي وجود الأثر و هو محال لأنه ايجاد...",
+      "file": "ان احتياج الممكن الى مؤثر_formatted.html"
+    },
+    {
+      "title": "فصل في برهان امتناع تعدد واجب الوجود بالذات",
+      "excerpt": "فصل في برهان امتناع تعدد واجب الوجود بالذات لما كان قد استقر في أذهان جمهور العقلاء وجوب وجود موجود هو واجب الوجود بذاته، لا بغيره، وهو الذي استغنى في وجوده عن علة خارجة عن ماهيته، وجب علينا أن نبين...",
+      "file": "فصل في برهان امتناع تعدد واجب الوجود بالذات_formatted.html"
+    },
+    {
+      "title": "فصل في بساطة الواجب",
+      "excerpt": "فصل في بساطة الواجب ونقول أيضاً إن واجب الوجود لا يجوز أن يكون لذاته مبادئ تجتمع فيقوم منها واجب الوجود لا أجزاء الكمية ولا أجزاء الحد والقول سواء كانت كالمادة والصورة أو كانت على وجه آخر بأن تكون...",
+      "file": "فصل في بساطة الواجب_formatted.html"
+    },
+    {
+      "title": "في أصالة الوجود",
+      "excerpt": "في أصالة الوجود ( ١ ) البرهان الأول الماهية من حيث هي لا موجودة ولا معدومة، الماهية بحد ذاتهالا تقتضي الوجود ولا العدم؛ لأن الوجود والعدم خارجان عن ذاتها، فهي متساوية النسبة إليهما؛...",
+      "file": "في أصالة الوجود_formatted.html"
+    },
+    {
+      "title": "في مساوقة الوجود للشيئية",
+      "excerpt": "في مساوقة الوجود للشيئية ان جماعة من الناس ذهبوا إلى أن الوجود صفة يتجدد على الذات التي هي ذات في حالتي الوجود و العدم وهذا في غاية السخافة والوهن فإن حيثية الماهية وإن كانت غير حيثية الوجود إلا أن...",
+      "file": "في مساوقة الوجود للشيئية_formatted.html"
+    },
+    {
+      "title": "مطلب في بيان تركب الممكنات من وجود وماهية",
+      "excerpt": "مطلب في بيان تركب الممكنات من وجود وماهية إن كل شيء ندركه نرى فيه حيثيتين إحداهما ماهية الشيء والأخرى وجوده....",
+      "file": "مطلب في بيان تركب الممكنات من وجود وماهية_formatted.html"
+    }
+  ]
+}

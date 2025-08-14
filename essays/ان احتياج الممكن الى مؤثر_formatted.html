@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ان احتياج الممكن الى مؤثر — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring ان احتياج الممكن الى مؤثر">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Amiri', 'Times New Roman', serif;
+            --font-body: 'Amiri', 'Times New Roman', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">ان احتياج الممكن الى مؤثر</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <p class="essay-paragraph first-paragraph"><span class="drop-cap">ا</span>ن احتياج الممكن الى مؤثر سواء كان ذلك الاحتياج لإمكانه أو لغيره انما يتحقق اذا أمكن تأثير شيء في شيء لكنه غير معقول اذ التأثير في الوجود مثلا اما حال الوجود أي وجود الأثر و هو محال لأنه ايجاد الموجود و تحصيل الحاصل و اما حال العدم و هو باطل أيضالأنه جمع‌ للنقيضين و ذلك لان وجود الاثر مع التأثير لا يتخلف عنه أصلا كالانكسار مع الكسر و الوجود مع الايجاد و لما فرض أن التأثير في الوجود أعني الايجاد انما هو حال العدم كان وجود الاثر أيضا في تلك الحال فيجتمع وجود الاثر و عدمه معا و لأنه أي الاثر حال عدمه نفى محض فلا يصلح هو في هذه الحالة أن يكون أثراللموجد و اذ لا أثر له فلا تأثير و لا ايجاد منه حينئذ و لأنه أعنى الاثر حال عدمه مستمر على ما كان عليه قبل أن يتعلق به تأثير و ايجاد فلا يستند هو مع كونه مستمرا على حالته السابقة على الايجاد الى مؤثر الوجود فقد بطل كون التأثير في الموجود حال العدم بوجوه ثلاثة و ان شئت نفى التأثير في العدم قلت التأثير اما فيه حال كون الأثر معدوما و هو تحصيل الحاصل و اما حال كونه موجودا و انه جمع للنقيضين و أيضا هو حال الوجود لا يصلح أثراللمعدوم و أيضا هو حينئذ مستمر على ما كان‌ عليه قبل أن يتعلق به الاعدام فلا يستند الى مؤثر العدم و الجواب أن المحال ايجاد ما هو موجود بوجود قبل أي قبل الايجاد فانه تحصيل لما كان حاصلا قبل هذا التحصيل و هو محال بديهة و الا فالإيجاد للموجود بوجود مقارن للإيجاد لان حصول الاثر مع التأثير زمانا و ذلك تحصيل للحاصل بهذا التحصيل و لا استحالة فيه و لو صح ما ذكرتم لزم أن لا يحدث صفة في نفسها أصلا كهذه السخونة و هذا الصوت لان حدوثها اما حال أو عدمها و هو اجتماع النقيضين أعنى الوجود و العدم و اما حال وجودها و هو حصول الحاصل نقول لزم أن لا يحدث صفة في شيء من مؤثر يحدثهالان احداثها و ايجادها اما حال الوجود أو العدم و كلاهما باطل لكن حدوث هذه الصفات و استنادها الى أمر يحدثها أمر بديهي فانتقض دليلكم قطعا و الحل أن ذلك الذي ذكرتموه من استحالة التأثير حال الوجود أو حال العدم ضرورة بشرط المحمول فان التأثير في وجود الاثر بشرط الوجود أو بشرط العدم محال فسلب التأثير في الوجود مثلا ضروري بشرط اتصاف الاثر بالوجود أو العدم و مثل ذلك يسمى ضرورة بشرط المحمول و هو أي هذا المذكور أعنى الضرورة المشروطة بالمحمول لا ينافى الامكان الذاتي لان الملاحظ فيه الذات دون مالها من الصفات فامتناع التأثير بشرط إحدى هاتين الصفتين لا ينافى امكانه بالنظر الى ذات الممكن في زمان كل واحدة منهما و تحريره أن يقال قولك التأثير اما حال الوجود أو حال العدم و كلاهما باطل ان اردت به ان التأثير اما بشرط الوجود أو لا بشرط العدم فالحصر ممنوع فان التأثير في ذات الممكن من حيث هو لا بشرط الوجود و لا بشرط العدم و ان أردت به أنه في زمان الوجود أو زمان العدم اخترنا أنه في زمان الوجود كما مر و منهم من أجاب بان التأثير في زمان الخروج من العدم الى الوجود و ليس ذلك زمان الوجود و لا زمان العدم بل في زمان الواسطة بينهما و من النافين للواسطة من جوز تقدم التأثير على حصول الاثر فقال‌ التأثير حال العدم في آن و حصول الاثر في آن آخر يعقبه و ليس في ذلك اجتماع الوجود و العدم أصلا.</p>
+    <p class="essay-paragraph">شبهة الفخر الرازي</p>
+    <p class="essay-paragraph">مطلب آخر أشرناله وهو شبهة الفخر الرازي المعروفة. قلنا إنه طرحت من قبل الفخر الرازي شبهة قوية جداً في عصر الإسلام، ولعلها في عصر اليونان أيضاً قد طرحت بنحو ما، كما أنها ذكرت في العصور الجديدة وهي إنكار العلية من جهة فلسفية، لأن العلة هي التي تعطي الوجود للمعلول والمعلول مديون في وجوده إليها.</p>
+    <p class="essay-paragraph">يقولون: العلة إما أنها توجد الموجود أو أنها توجد المعدوم ولا يخلو الأمر منهما. فإن كانت توجد المعلول المعدوم يلزم اجتماع النقيضين، إذ هذا يعني أن الشيء في حال كونه معدوماً يكون موجوداً أيضاً، وهذا اجتماع النقيضين، وإن كانت توجد الموجود فهذا تحصيل الحاصل وهو محال إذ إن الشيء إذا كان عنده شيء، فإنه لا يمكن أن يكون عنده الشيء، مرة أخرى، إلا على نحو التكرار والتكرار تارة يكون ممكناً وأخرى يكون غير ممكن، وفي الوجود التكرار غير ممكن وعليه أصل العلية غير صحيح.</p>
+    <p class="essay-paragraph">قلنا: جواب هذه الشبهة أن العلة لا توجد المعدوم ولا توجد الموجود، لأن إيجاد المعدوم يكون بالجعل التأليفي أي أن العلة تغير المعدوم وتعطي المعدوم حالة، تتصرف في المعدوم وتخرجه من حالة العدم إلى حالة الوجود، مثلما أنها تخرج الجسم من حالة البياض إلى حالة السواد، فالجعل لا يتعلق بالمعدوم من حيث هو معدوم والعلة لا توجد المعدوم فهذا يصير جعلاً تأليفياً، كما أن إيجاد الموجود يكون بالجعل التأليفي وهذا مالا تفعله العلة.</p>
+    <p class="essay-paragraph">فماذا تفعل العلة إذن؟ العلة تجعل الوجود بالجعل البسيط، ومعنى جعل الوجود أن العلة تعطي الوجود للمعلول لكن الوجود هو عين الإيجاد لا أن هناك موجوداً وهذا الإيجاد يتعلق به، العلية تعني الإيجاد والإيجاد يعني أن هذا الوجود هو عين الإضافة والارتباط بالعلة. إذن لا الموجود صار موجوداً بالجعل التأليفي، ولا المعدوم صار موجوداً بالجعل التأليفي أي ليس أن العلة تجعل المعدوم موجوداً ولا أنها تجعل الوجود موجوداً، مثل أن يكون الشيء شيئاً بل هي تجعل الشيء، بالجعل البسيط والذي تجعله هو الوجود لا الماهية.</p>
+    <p class="essay-paragraph">وبناء عليه فإن الإشكال مبني على الجعل التأليفي: والحال أن الجعل بسيط والإيجاد هو نحو الجعل البسيط وبالتالي فقد اتجهت الإشكال من أصله خصوصاً بناء على القول بتعلق الجعل بالوجود لا بالماهية.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

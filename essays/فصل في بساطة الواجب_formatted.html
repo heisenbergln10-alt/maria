@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فصل في بساطة الواجب — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring فصل في بساطة الواجب">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Amiri', 'Times New Roman', serif;
+            --font-body: 'Amiri', 'Times New Roman', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">فصل في بساطة الواجب</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <h2 class="essay-subtitle">فصل في بساطة الواجب</h2>
+    <p class="essay-paragraph">ونقول أيضاً إن واجب الوجود لا يجوز أن يكون لذاته مبادئ تجتمع فيقوم منها واجب الوجود لا أجزاء الكمية ولا أجزاء الحد والقول سواء كانت كالمادة والصورة أو كانت على وجه آخر بأن تكون أجزاء القول الشارح لمعنى اسمه فيدل كل واحد منها على شيء هو في الوجود غير الآخر بذاته - وذلك لأن كل ما هذا صفته فذات كل جزء منه ليس هو ذات الآخر ولا ذات المجتمع فإما أن يصح لكل واحد من جزئيه مثلاً وجود منفرد لكنه لا يصح للمجتمع وجود دونها فلا يكون المجتمع واجب الوجود أو يصح ذلك لبعضها ولكنه لا يصح للمجتمع وجود دونه فمالم يصح له من المجتمع والأجزاء الأخرى وجود منفرد فليس واجب الوجود ولم يكن واجب الوجود إلا الذي يصح له وإن كان لا يصح لتلك الأجزاء مفارقة الجملة في الوجود ولاللجملة مفارقة الأجزاء وتعلق وجود كل بالآخر وليس واحد أقدم بالذات فليس شيء منها بواجب الوجود " فقد أوضحت هذا على أن الأجزاء بالذات أقدم من الكل " فتكون العلة الموجبة للوجود توجب أولاً الأجزاء ثم الكل ولا يكون شيء منهما واجب الوجود وليس يمكننا أن نقول إن الكل أقدم بالذات من الأجزاء فهو إما متأخر وإما معاً وكيف كان فليس بواجب الوجود فقد اتضح من هذا أن واجب الوجود ليس بجسم ولا مادة جسم ولا صورة جسم ولا مادة معقولة لصورة معقولة ولا صورة معقولة في مادة معقولة ولاله قسمة لا في الكم ولا في المبادئ ولا في القول فهو واحد من هذه الجهات الثلاث.</p>
+    <h2 class="essay-subtitle">فصل في أنه واحد من وجود شتى</h2>
+    <p class="essay-paragraph">وأيضاً فهو تام الوجود لأن نوعه له فقط فليس من نوعه شيء خارج عنه واحد وجوه الواحد أن يكون تاماً فإن الكثير والزائد لا يكونان واحدين فهو واحد من جهة تمامية وجوده وواحد من جهة أن حده له واحد وواحد من جهة أنه لا ينقسم لا بالكم ولا بالمبادئ المقومة له ولا بأجزاء الحد وواحد من جهة أن لكل شيء وجدة تخصه وبها كمال حقيقته الذاتية وأيضاً هو واحد من جهة أخرى وتلك الجهة هي أن مرتبته من الوجود وهو وجوب الوجود ليس إلاله. فصل في البرهان على أنه لا يجوز أن يكون اثنان واجبي الوجود أي أن الوجود الذي يوصف به ليس هو لغيره وإن لم يكن من جنسه ونوعه. ولا يجوز أن يكون وجوب الوجود مشتركاً فيه ولنبرهن على هذا فنقول إن وجوب الوجود إما أن يكون شيئاً لازماً لماهية تلك الماهية هي التي لها وجوب الوجود كما نقول للشيء إنه مبدأ فتكون لذلك الشيء ذات وماهية ثم يكون معنى المبدأ لازماً لتلك الذات كما أن إمكان الوجود قد يوجد لازماً لشيء له في نفسه معنى مثل أنه جسم أو بياض أو لون ثم هو ممكن الوجود وإمكان الوجود يلزمه ولا يكون داخلاً في حقيقته وإما أن يكون وجوب الوجود هو نفس واجب الوجود ويكون نفس وجوب الوجود طبيعة كلية ذاتية له فنقول أولاً أنه لا يم كن أن يكون وجوب الوجود من المعاني اللازمة لماهية فإن تلك الماهية حينئذ تكون سبباً لوجوب الوجود فيكون وجوب الوجود متعلقاً بسبب فلا يكون وجوب الوجود موجوداً بذاته فإن وجوب ال وجود من المعلوم أنه إذالم يكن داخلاً في ماهية شيء بل كان الشيء كإنسان أو شجرة أو سماء أو غير ذلك مما قد علمت أن الوجود ووجوبه ليس داخلاً في ماهيته كان لازماً له كالخاصية أو العارض العام لا كالجنس والفصل وإذا كان لازماً كان تابعاً غير متقدم والتابع معلول فكان وجوب الوجود معلولاً فلم يكن وجوب وجود بالذات وقد أخذناه بالذات فإن لم يكن وجوب الوجود كاللازم بل كان داخلاً في الماهية أو ماهية فإن كان ماهية عاد إلى أن النوعية واحدة وإن كان داخلاً في الماهية فتلك الماهية إما أن تكون بعينهالكليهما فيكون نوع وجوب الوج ود مشتركاً فيه وقد أبطلنا هذا أو يكون لكل ماهية أخرى فإن لم يشتركا في شيء لم يجب أن يكون كل واحد منهما قائماً في موضوع وهو معنى الجوهرية المقول عليهما بالسوية وليس لأحدهما أولاً وللثاني آخراً فلذلك هو جنس لهما فإذالم يجب ذلك كان أحدهما قائماً في موضوع فيكون ليس واجب الوجود وإن اشتركا في شيء ثم كان لكل واحد منهما بعده معنى على حدة تتم به الماهية ويكون داخلاً فيها فكل واحد منهما منقسم بالقول وقد قيل أن واجب الوجود لا ينقسم بالقول فليس ولا واحد منهما واجب الوجود وإن كان لأحدهما ما يشتركان فيه فقط وللثاني معنى زائد عليه فأما الأول فيفارقه بعدم هذا المعنى ووجود ذلك المعنى المشترك فيه بشرط تجريده عمالغيره وعدمه فيه فيكون الذي لا تجريد له منقسماً في القول غير واجب الوجود ويكون الآخر هو الواجب الوجود وحده ويكون المعنى المشترك فيه لا يوجب وجوب وجود إلا أن يشترك فيه عدم ما سواه من غير أن تكون تلك الأعدام وجودات لأشياء وذواتاً فإنه ليس كل اعدام تكون للأشياء تكون ذواتاً ومعاني زائدة ولو كان كذلك لكان في كل شيء واحد أشياء بلا نهاية موجودة لأن في كل شيء اعدام أشياء بلا نهاية ومع هذا كله فإن كل ما يجب وجوده فليس يجب وجوده بما يشارك به غيره ولا يتم به وحده وجوب ذاته بل إنما يتم وجوده بجميع ما يشارك به غيره وبما يتم به وجود ذاته فالذي يتم به وجوده ويزيد على ما يشارك به غيره فإما أن يكون شرطاً في نفس وجوب الوجود وإما أن لا يكون فإن كان ذلك كله شرطاً في نفس وجوب الوجود وجب أن يوجد لكل واجب الوجود فكل ما يوجد لكل واحدة من الماهية يوجد للأخرى فلا يكون بينهما انفصال البتة بمقوم وقد وضع بينهما اختلاف في هذا النوع هذا خلف وأما إن لم يكن شرطاً في نفس وجوب الوجوب وماليس بشرط في شيء فالشيء يتم دونه فوجوب الوجود يتم دون ما اختلفا فيه ف يكون ما اختلفا فيه عارضين لوجوب الوجود وهما متفقان في ماهية وجوب الوجود ونوعيته واختلفا بالعوارض دون الأنواع هذا خلف فإن جعل الشرط في وجوب الوجود أحد الفصلين لا بعينه فليس أحدهما بعينه شرطاً ولا الآخر بعينه شرط فتساويا في أنه ليس أحدهما بشرط فكيف يكون أحدهمالا بعينه شرطاً " فإن قال قائل " هذا مثل المادة ليست هذه الصورة لها بعينها شرطاً ولا ضدها ولكن أحدهمالا بعينه أو مثل أن اللون لا يتقرر وجوده إلا أن يكون سواداً أو بياضاً لا بعينه ولكن أحدهما فقد ذهب عليه الفرق فيقال له أما المادة فإحدى الصورتين بعينها ش رط لها في زمان والأخرى ليست بشرط في ذلك الزمان وفي الزمان الآخر فإن الصورة الأخرى بعينها شرط لها والأولى ليست وكل واحدة منهما في نفسها ممكنة لها إذا أخذت مطلقة بلا شرط والمادة أيضاً ممكنة فإذا وجبت بعلة إحدى الصورتين أوجبت تلك الصورة بعينها وكيفما كان الحال فإن المادة سواء كان أحدهما شرطاً في وجوبها بعينه أو إحداهمالا بعينه فلها شرط في الوجوب غير نفس طبيعتها ولو كان لوجوب الوجود شرط متعلق بشيء خارج عنه لكان ليس وجوب الوجود بالذات وأما اللونية فليست تصير لونية بسواد أو بياض بل هي لونية بأمر يعمهمالكن لا تو جد مفردة إلا مع فصل كل واحد منهما فليس ولا واحد من الأمرين للونية بشرط في اللونية ولكنه شرط في الوجود المحض ثم في كل زمان وفي كل مادة فالشرط أحدهما بعينه لا الآخر فهذه اللونية التي بحسب الزمان وبحسب هذه المادة إنما يوجدها فصل السواد وكذلك الأخرى موجدها فصل البياض واللونية المطلقة إما أن يكون ولا واحد منهما شرطاً في وجوده على أنه بعض الشرط ولا شرط تام والشرط التام هو اجتماعهما وبالجملة فإن الشيء الواحد من جهة واحدة يكون شرطه شيئاً واحداً لا أي شيئين اتفقا إنما يكون هذا إذا كان له جهتان ولكل جهة شرط بعينه فلا يخلو عنهما فلا يتعلق بأحدهما بعينه لذاته بل باتفاق سبب من جهته وأما ذاته بذاته فلا شرط له إلا الواحد كما أن اللونية شرطها بذاتها أمر واحد وشرطها في جهات وجودها أمور تكون لكل وقت بعينه وكما أن اللونية في أنهالونية ليس أحد الأمرين بعينه وبغير عينه شرطاً لها في ماهية لونيتها بل في انية لونيتها وحصولها بالفعل كذلك يجب أن لا يكون أحد الأمرين شرطاً في وجوب الوجود من جهة ماهية كونه وجوب الوجود بل من جهة انيته فتكون انية وجوب الوجود غير ماهيته وهذا خلف فإنه يلزم أن يكون واجب الوجود يطرأ عليه وجود ليس له في حد نفس ه كما يطرأ على الانسانية والفرسية وكما في اللونية بل كما أنه يجوز أن يقال في اللونية إن أحدهمالا بعينه شرط في اللونية لالنفس اللونية بل لاختلاف وجودات اللونية كذلك إن كان لوجوب الوجود أحد الفصلين لا بعينه شرطاً فيجب أن يكون لالأنه وجوب الوجود فيكون وجوب الوجود متقرراً دونه غير محتاج إليه ولكنه شرط في تخصيص وجوده فإن كان سبب تخصيص وجوده أن رفع يبطله فهو غير واجب الوجود وإن لم يكن يبطله فيبقى حينئذ واجب الوجود واحداً أو كثيراً لا اختلاف بين آحاده البتة وكلاهما على الوضع المفروض محال فقد بان أنه ليس ولا واح د من خاصيتي الماهيتين المذكورتين شرطاً في وجوب الوجود بوجه من الوجوه لا بعينه ولالا بعينه فقد بطل أن يكون وجوب الوجود مشتركاً فيه على أن يكون لازماً أو يكون جنساً ونقول ولا على أن يكون مقومالماهية الشيء وهذا أظهر فإن وجوب الوجود إذا كان طبيعة بنفسها فليكن " ا " ثم انقسمت إلى مثيرين فإنها تنقسم في مختلفين بالعدد فقط وقد منعنا هذا: إذاً فتختلف في منقسمين بالنوع فينقسم بفصول فلتكن هي " ب و ج " وتلك الفصول لا تكون شريطة فيها " وهي في نفسها طبيعة منفردة أظهر " فإن طبيعة وجوب الوجود ليست طبيعة وجوب الوجود هذا خ لف وبالجملة يجب أن تعرف أن حقيقة وجوب الوجود ليست كطبيعة اللون والحيوان الجنسين اللذين يحتاجان إلى فصل وفصل حتى يتقرر وجودهمالأن تلك الطبائع معلولة وإنما يحتاجان إلى الفصول لا في نفس اللونية والحيوانية المشتركة فيهما بل في الوجود وههنا فوجوب الوجود هو مكان اللونية والحيوانية وكما أن ذينك لا يحتاجان إلى فصول في أن يكونالوناً وحيواناً فكذلك هذالا يحتاج إلى الفصول في أن يكون وجوب وجود ثم وجوب الوجود ليس له وجود ثان يحتاج فيه إليها فإن اللون هناك يحتاج بعد اللونية إلى الوجود مشتركاً فيه لا أن كان لازماً لطبي عة ولا أن كان طبيعة بذاته فإذاً واجب الوجود واحد لا بالنوع فقط أو بالعدد أو عدم الانقسام أو التمام فقط بل في أن وجوده ليس لغيره وإن لم يكن من جنسه ولا يجوز أن يقال واجبي الوجود لا يشتركان في شيء كيف وهما مشتركان في وجوب الوجود ومشتركان في البراءة عن الموضوع فإن كان وجوب الوجود يقال عليهما بالاشتراك فكلامناليس في معنى منع كثرة ما يقال له واجب الوجود بالاسم بل بمعنى واحد من معاني ذلك الاسم فإن كان بالتواطؤ فقد حصل معنى عام عموم لازم أو عموم جنس وقد بينا استحالة ذلك وكيف يكون عموم وجوب الوجوب لشيئين على سبيل اللوازم التي تعرض من خارج واللوازم معلولة ووجوب الوجود المحض غير معلول.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

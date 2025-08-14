@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moral intuitionism — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring moral intuitionism">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Bodoni Moda', 'Playfair Display', serif;
+            --font-body: 'Crimson Pro', 'Georgia', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">Moral intuitionism</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <p class="essay-paragraph first-paragraph"><span class="drop-cap">M</span>oral intuitionism, the meta-ethical framework I defend, holds that we possess non-inferential knowledge of irreducible moral properties through intellectual seemings that provide immediate prima facie justification for moral beliefs. By "intellectual seeming" I mean a unique conscious state with propositional content that presents that content with stringent normative force - not as metaphysically necessary like logical truths, but as authoritatively binding in the practical domain. These seemings are phenomenologically distinct from beliefs, inclinations, or emotions, presenting moral facts as making claims on us that demand response. This position must be carefully distinguished from other meta-ethical views: while sharing with robust moral realism a commitment to mind-independent moral facts, intuitionism specifically emphasizes the epistemic accessibility of these facts through rational intuition; unlike minimal realism's merely semantic claims about truth-aptness, it provides a substantive epistemology; and contrary to coherentist approaches, it recognizes foundational moral knowledge not derivable from other beliefs.</p>
+    <p class="essay-paragraph">The notion of stance-independent normative reality requires careful elaboration. Moral facts exist independently of any particular agent's attitudes, beliefs, or practices - torture's wrongness doesn't depend on anyone believing it wrong. However, unlike mathematical truths that would exist in a world without agents, moral properties may be essentially tied to possible agency. This isn't a form of response-dependence where moral facts are constituted by idealized responses, but rather a recognition that moral properties necessarily concern how agents ought to act, feel, and relate to one another. The wrongness of torture is stance-independent in that no individual or community's attitudes determine its moral status, yet the very concept of wrongness may depend conceptually on the existence of agents who can suffer and act. This places moral facts in a unique ontological category: more robust than social constructions yet not free-floating Platonic entities divorced from the realm of agency and action.</p>
+    <p class="essay-paragraph">Against particularism's rejection of moral principles, I maintain a sophisticated principled view that acknowledges contextual sensitivity while preserving invariant moral truths. Following recent debates with holists like Dancy, I concede that moral reasons function holistically - that someone would enjoy something is typically reason to provide it, but not when they enjoy others' suffering. However, this holism about reasons is compatible with what I call "invariant valence principles": certain considerations always count in the same direction even as their weight varies contextually. Consider how the fact that an action would break a promise always counts against performing it, though this reason might be overridden when keeping the promise would cause severe harm, as when a doctor must break confidentiality to prevent a patient from committing murder. The principle that suffering provides prima facie reason against actions remains constant across contexts; what varies is whether this reason is overridden, undercut, or intensified by other features. This isn't the crude view that fixed rules determine right action, but rather that certain moral considerations retain stable normative significance while their interaction with other considerations produces contextually sensitive all-things-considered judgments.</p>
+    <p class="essay-paragraph">My response to evolutionary debunking arguments, particularly Street's Darwinian Dilemma, proceeds along multiple convergent lines. First, debunking arguments prove too much: if evolutionary pressures systematically mislead about morality, why would they permit reliable cognition in logic, mathematics, and empirical domains equally relevant to survival? The debunker cannot selectively target moral beliefs without explaining this asymmetry. Second, the claim that fitness-enhancing moral beliefs need not be true assumes that systematic false beliefs about cooperation, reciprocity, and harm would be adaptive. Yet plausibly, true beliefs about when cooperation genuinely benefits participants, when reciprocity is actually warranted, and when harm truly damages group cohesion would be more fitness-enhancing than false ones. Consider how accurately recognizing cheaters in social exchange, correctly identifying when helping others yields reciprocal benefits, and truly understanding which actions undermine group cohesion would provide survival advantages over false beliefs in these domains. Third, the actual content of evolved moral intuitions - focusing on cooperation, harm prevention, fairness, and reciprocity - matches what we would expect if they tracked real features of beneficial social arrangements rather than arbitrary fitness-enhancing illusions. Fourth, debunking arguments undermine themselves by relying on epistemic norms ( we ought to believe what our best theories support ) that would themselves be subject to evolutionary influence.</p>
+    <p class="essay-paragraph">The epistemic framework I endorse draws on phenomenal conservatism while acknowledging domain-specific features of moral seemings. In the absence of defeaters, how things seem provides prima facie justification for believing they are that way - this applies to perceptual, memorial, rational, and moral seemings alike. However, moral seemings differ from mathematical intuitions in important ways: they are more defeasible by empirical information about bias and social influence, more sensitive to imaginative engagement with affected parties, and more susceptible to ideological distortion. These differences affect the degree and defeasibility conditions of justification rather than eliminating it entirely. When someone has the strong seeming that gratuitous suffering is wrong after careful reflection, this provides defeasible justification for that belief just as the visual seeming of a red apple provides defeasible justification for believing an apple is present. For instance, the immediate judgment that it would be wrong to push someone off a footbridge to stop a runaway trolley engages moral perception in ways that calculating five lives versus one does not, and this perceptual response carries epistemic weight even if not decisive weight.</p>
+    <p class="essay-paragraph">Contemporary findings about implicit bias and systematic moral judgment errors pose genuine challenges that require sophisticated responses rather than dismissal. Such findings serve as defeaters for particular intuitions, especially those concerning out-groups formed under conditions known to produce bias. They highlight the need for debiasing strategies: slowing down judgment, considering multiple perspectives, engaging imaginatively with affected parties, and subjecting initial intuitions to reflective scrutiny. The well-documented tendency to judge identical actions more harshly when performed by out-group members reveals how social psychology can distort moral perception, just as knowing about the Müller-Lyer illusion helps us correct visual judgments about line length. However, these findings don't undermine moral knowledge generally any more than perceptual illusions undermine empirical knowledge. We can identify conditions promoting reliable judgment ( reduced time pressure, emotional regulation without disengagement, diverse perspectives ) and adjust our confidence accordingly. The existence of moral illusions is compatible with moral knowledge just as optical illusions are compatible with visual knowledge - what matters is developing epistemic practices that minimize error while remaining appropriately responsive to genuine moral features.</p>
+    <p class="essay-paragraph">The challenge of persistent moral disagreement on issues like abortion, distributive justice, or end-of-life care requires careful treatment. Following recent work on peer disagreement, I maintain that such cases demand examining whether disputants genuinely share relevant concepts, background beliefs, and experiential engagement rather than immediately concluding no truth exists. Often, tracing disagreements reveals differences in empirical beliefs ( about fetal development, economic systems ) , weightings of acknowledged values ( autonomy versus sanctity of life ) , or limitations in perspective-taking rather than fundamental incommensurability. Consider how disagreements about wealth redistribution often stem from different empirical beliefs about economic incentives, social mobility, and the causes of poverty rather than irreducible value conflicts. The persistence of some disagreement is compatible with objectivity - just as ongoing scientific disputes don't entail natural relativism. What matters is whether disagreement follows predictable patterns explicable by recognized sources of error rather than appearing arbitrary or rationally irresolvable.</p>
+    <p class="essay-paragraph">Against sophisticated expressivism and quasi-realist programs, I advance several objections that reveal their ultimate inadequacy. While contemporary expressivists like Blackburn and Gibbard can mimic much realist-sounding discourse, they cannot adequately capture three crucial features of moral thought and practice. First, the categoricity of moral demands: moral requirements present themselves as authoritative regardless of our desires, attitudes, or cultural membership. When we judge torture wrong, we aren't merely expressing disapproval but recognizing a fact that provides reasons for all agents. Second, the possibility of fundamental moral error: entire communities can be mistaken about basic moral truths, as history repeatedly demonstrates. Was the antebellum South merely expressing different attitudes toward slavery, or were they wrong about its permissibility? The ancient Carthaginian practice of child sacrifice to Moloch wasn't just different from our values but morally mistaken, a judgment expressivism struggles to accommodate. Third, the deliberative perspective: when agents ask what they really ought to do, they seek stance-independent truths rather than attitudes to adopt. This deliberative stance presupposes that there are right answers to discover rather than preferences to express or coordinate.</p>
+    <p class="essay-paragraph">Recent hybrid theories that combine cognitive and non-cognitive elements ultimately face a dilemma: either they preserve genuine objectivity by smuggling in realist commitments, or they collapse into sophisticated subjectivism that cannot vindicate moral practice. The cognitive component either carries the full weight of moral facts ( making the theory a form of realism ) or serves merely to describe the non-cognitive attitudes being expressed ( failing to capture moral authority ) . No stable middle position preserves both the motivational internalism expressivists seek, and the genuine objectivity moral discourse presupposes. Consider Ridge's ecumenical expressivism: either the "acceptable moral standards" his view invokes are genuinely normative ( collapsing into realism ) or merely descriptive of what people happen to accept ( failing to capture moral authority ) .</p>
+    <p class="essay-paragraph">The practical implications of intuitionism extend throughout applied ethics, providing essential resources unavailable to alternative frameworks. In bioethics, recognizing irreducible moral principles that can genuinely conflict enables nuanced analysis of cases where autonomy, beneficence, non-maleficence, and justice pull in different directions. Consider the case of a Jehovah's Witness refusing life-saving blood transfusion: respecting autonomy conflicts with beneficence, and intuitionism acknowledges the genuine moral cost whichever path is chosen rather than pretending one value simply cancels the other. In public policy, this framework resists the economistic reduction of all values to commensurable utilities, maintaining that some moral considerations ( dignity, rights, fairness ) cannot be captured in cost-benefit terms without loss of meaning. The dignity violation in subjecting prisoners to medical experiments cannot be offset by sufficiently large benefits to others, a constraint utilitarian frameworks struggle to explain. In moral education, intuitionism grounds pedagogical approaches emphasizing perception and judgment: students learn to recognize morally salient features through engagement with paradigm cases, development of moral imagination through literature and experience, and refinement of judgment through practice and reflection rather than mere rule-memorization or utilitarian calculation.</p>
+    <p class="essay-paragraph">The relationship between moral knowledge and moral understanding deserves special attention, particularly given recent work on moral testimony. While we can gain moral knowledge through testimony ( learning that discrimination is wrong by trusting reliable sources ) , moral understanding seems to require first-personal grasp of the reasons making actions right or wrong. This explains our discomfort with purely deferential moral views: someone who acts rightly solely on others' say-so without understanding why lacks something important. Consider the difference between a child who avoids hitting others because trusted adults say it's wrong versus one who understands how hitting causes pain and violates others' legitimate interests. Intuitionism explains this by distinguishing propositional knowledge from the kind of intuitive grasp that comes through moral perception and reflection. This has implications for moral education and development, suggesting that while testimony can start moral learning, genuine moral competence requires cultivating one's own capacity for moral perception.</p>
+    <p class="essay-paragraph">Regarding moral motivation, I defend a moderate externalist position that navigates between implausible extremes. Moral judgments necessarily provide reasons for all rational agents - recognizing something as morally required entails recognizing reason to do it. However, these reasons can fail to motivate due to competing desires, weakness of will, depression, or ideological distortion. This explains both the authority of morality ( moral facts provide reasons whether we like it or not ) and the psychological possibility of amoralism ( people can recognize moral requirements yet remain unmoved ) . The person who says "I know I ought to help but I don't care" exhibits a rational defect analogous to someone who accepts theoretical reasons yet refuses to update beliefs accordingly. Consider the case of a cynical lawyer who fully understands why fabricating evidence is wrong yet remains unmoved: their failure isn't cognitive but motivational, revealing a defect in rational agency rather than disproving moral truth. This defect might involve psychological incapacity rather than logical incoherence, but it represents a failure to respond appropriately to recognized reasons.</p>
+    <p class="essay-paragraph">The charge of cultural bias demands sophisticated treatment acknowledging both the reality of cultural influence and the possibility of transcending parochial limitations. While particular moral judgments undeniably reflect cultural shaping, several factors support the possibility of objective moral knowledge. First, the process of wide reflective equilibrium incorporating cross-cultural dialogue, empirical information about human psychology and social systems, and imaginative engagement with diverse perspectives progressively identifies universal elements. The gradual recognition across cultures that honor killings are wrong, that women deserve equal moral status, and that racial hierarchies lack justification exemplifies this process. Second, the pattern of moral convergence and divergence across cultures supports objectivity: convergence on abstract principles ( harm is bad, fairness matters, reciprocity has value ) combined with divergence in application suggests shared recognition of objective features interpreted through different cultural lenses. Third, moral progress within cultures - recognizing the wrongness of practices once accepted - demonstrates capacity to transcend cultural starting points through rational reflection. The abolition of foot-binding in China, the rejection of sati in India, and the abandonment of dueling in Europe show cultures correcting their own moral errors through internal reflection and external dialogue.</p>
+    <p class="essay-paragraph">My defense of intuitionism ultimately rests on its unique capacity to preserve what cannot be abandoned without practical and theoretical catastrophe. If moral properties are mere projections, social constructions, or useful fictions, then our fundamental practices of holding people responsible, deliberating about right action, working for justice, and raising children with moral values lose their point. We would be left with manipulation and power politics dressed in moral language rather than genuine moral discourse aimed at truth. Even critics of intuitionism cannot maintain their position consistently - they inevitably invoke normative concepts ( what we ought to believe, what counts as good reasoning, what theories are better ) that presuppose the very objectivity they deny. When the error theorist argues we should accept that moral discourse is systematically mistaken, they employ the very normative concepts their theory undermines. This performative self-refutation reveals the inescapability of normative commitment and the need for a meta-ethical theory that vindicates rather than undermines it.</p>
+    <p class="essay-paragraph">The intuitionist framework I defend provides that vindication through a sophisticated epistemology that acknowledges both the fallibility and the general reliability of moral judgment, a nuanced metaphysics that places moral facts in their proper ontological category, and a practical orientation that preserves moral discourse as a cognitive endeavor aimed at truth rather than mere attitude coordination. It alone among meta-ethical theories maintains fidelity to moral phenomenology while meeting demands of theoretical rigor, providing resources for moral progress through expanded understanding rather than attitude adjustment, and grounding practices of moral education, deliberation, and criticism that are indispensable to human flourishing. This framework invites further development and refinement through engagement with ongoing debates in moral epistemology, moral psychology, and normative ethics, establishing itself not as a completed system but as the most promising foundation for understanding how finite, fallible beings like ourselves can nevertheless access moral truth and work toward its fuller realization in our shared moral life.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

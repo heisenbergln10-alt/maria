@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotivism — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring emotivism">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Bodoni Moda', 'Playfair Display', serif;
+            --font-body: 'Crimson Pro', 'Georgia', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">Emotivism</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <p class="essay-paragraph first-paragraph"><span class="drop-cap">W</span>hen someone declares "genocide is wrong," emotivism radically reinterprets this apparent fact-statement as merely expressing "Boo genocide! " or "Genocide, ugh! " This metaethical position denies that moral utterances state facts or possess truth-values, instead treating them as emotional expressions akin to cheering or booing. Consider what this means ontologically: the statement "torturing innocents is evil" transforms from describing a moral fact to merely venting negative feelings, like saying "ouch" when pricked. If moral statements lack truth-values, apparent moral reality dissolves into psychological projection. The truthmaker problem becomes acute: if no entities make moral claims true, how do we explain moral discourse's apparent objectivity? When we debate whether abortion is permissible, we seem to argue about facts, not compare emotional reactions. Emotivism must explain away these appearances as systematic confusion. Take witnessing someone drowning a kitten for amusement: intuition suggests we perceive genuine wrongness in the act, but emotivism insists we merely experience negative feelings and mistakenly project them onto external reality. The ontological consequences prove radical: moral properties like rightness, wrongness, and obligation simply don't exist. When condemning slavery, we're not describing slavery's moral status but expressing our attitudes, making moral reality nothing more than collective emotional responses masquerading as objective facts.</p>
+    <p class="essay-paragraph">Emotivism faces severe difficulties explaining moral reasoning and disagreement. If "charity is good" merely expresses approval, equivalent to "Hurray for charity! ", how can this serve as a premise in arguments? Consider the inference: "Honesty is good; this action is honest; therefore, this action is good. " If the first premise merely expresses "Yay honesty! ", the argument becomes nonsensical, like inferring from "Yay honesty! " to "Yay this action! " The Frege-Geach problem crystalizes this difficulty: consider "If stealing is wrong, then getting your brother to steal is wrong. " In the conditional's antecedent, "stealing is wrong" cannot express disapproval since we're not asserting it but embedding it hypothetically. Yet emotivism claims moral language always expresses attitudes. Take another example: "Either lying is wrong or self-deception is worse than lying. " Neither disjunct expresses an attitude, yet both contain moral language. Moral explanations become impossible: when someone asks "Why is genocide wrong?", answering "Because I have negative feelings about it" completely misses what they're asking. They want reasons that justify the judgment, not psychological autobiography. Even sophisticated versions like Blackburn's quasi-realism struggle here: if moral attitudes are projected onto reality and treated as if they were objective, how can these projections support logical operations? When we negate "Torture is permissible" to get "Torture is not permissible," what exactly gets negated if the original expresses approval rather than stating a fact?</p>
+    <p class="essay-paragraph">Intuitionist objections highlight how emotivism mischaracterizes moral phenomenology. When witnessing someone burn a cat alive for entertainment, do we first feel disapproval then judge it wrong, or do we perceive wrongness that causes disapproval? Intuitionists insist the perception comes first: we disapprove because we apprehend moral properties, just as we feel fear because we perceive danger. Consider aesthetic parallels: hearing beautiful music, we don't first experience pleasure then judge beauty; rather, perceiving beauty causes pleasure. Similarly, witnessing gratuitous cruelty involves detecting wrongness, not just experiencing emotions. Emotivism inverts this explanatory order, making emotions primary and moral properties illusory. Examine calm moral judgment: a judge determining whether breach of contract occurred needn't feel any emotion while recognizing moral violations. A moral philosopher analyzing trolley problems might dispassionately conclude that pushing the fat man is wrong without experiencing disapproval. Consider the phenomenological difference between moral disapproval and mere dislike: condemning torture feels categorically different from disliking brussels sprouts, yet emotivism reduces both to negative attitudes. When someone kicks a dog, the wrongness seems to inhere in the action itself, not in spectators' reactions. We can imagine aliens without human emotions still recognizing the act's moral status through rational perception.</p>
+    <p class="essay-paragraph">Emotivism cannot explain moral authority and categoricity. Moral demands present themselves as universally binding, not optional preferences. "Don't murder" appears categorically imperative, unlike "Don't wear white after Labor Day. " If moral claims merely express speaker attitudes, why should they constrain others? Consider someone saying "Boo torture! "—this expresses their attitude but creates no obligation for anyone else. The normativity problem proves insurmountable: even if I express strong negative attitudes toward promise-breaking, what gives my attitudes authority over your behavior? Shared attitudes don't help: even if everyone disapproves of cruelty, this makes cruelty unpopular, not wrong. Mass disapproval of homosexuality doesn't make it immoral, just socially condemned. The amoralist challenge reveals emotivism's inadequacy: someone saying "I know charity is good but don't care" seems coherent on emotivism ( acknowledging others' positive attitudes while not sharing them ) but confused on realism ( acknowledging a moral fact while denying its relevance ) . Consider prudential versus moral imperatives: "Don't touch the hot stove" gains authority from your desire to avoid pain, but "Don't lie" claims authority regardless of desires. Emotivism reduces all moral imperatives to hypothetical ones: "Don't steal ( if you have anti-theft attitudes ) . " This eliminates morality's special bindingness, making moral requirements no different from etiquette or fashion rules.</p>
+    <p class="essay-paragraph">Sophisticated emotivism still cannot preserve moral practice while denying moral facts. Gibbard's norm-expressivism claims moral judgments express acceptance of norms governing guilt and anger, but what makes some norms correct? If "equality is just" expresses acceptance of egalitarian norms, what privileges these over hierarchical norms besides our contingent acceptance? The moral progress problem proves devastating: when abolitionists condemned slavery, were they discovering moral facts or merely expressing different attitudes than their contemporaries? If the latter, abolition represents mere attitudinal shift, not moral progress. Consider how we evaluate past practices: we don't say ancient Romans had different attitudes toward gladiatorial games but that they were morally mistaken. Expressivist semantics cannot explain moral claims' systematic behavior: moral statements appear in contexts incompatible with expressing attitudes. "Is torture wrong?" asks a question without expressing disapproval. "If the war was unjust, then the reparations are required" embeds moral claims without endorsing them. "There's a 70% probability that genetic enhancement is permissible" assigns credence without expressing attitudes. "John believes but I doubt that lying is always wrong" mentions moral claims without expressing anything. These embeddings pervade moral discourse, yet emotivism cannot accommodate them without abandoning its core thesis. Ultimately, emotivism commits a fundamental metaethical error: it confuses moral judgment's typical accompaniments ( emotions, attitudes ) with its essence ( representing moral facts ) . By denying moral truth, emotivism undermines the very possibility of coherent moral discourse, reducing ethics to a sophisticated form of manipulation where we pressure others through emotional expression rather than reasoning about objective moral reality.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

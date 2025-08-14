@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطلب في بيان تركب الممكنات من وجود وماهية — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring مطلب في بيان تركب الممكنات من وجود وماهية">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Amiri', 'Times New Roman', serif;
+            --font-body: 'Amiri', 'Times New Roman', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">مطلب في بيان تركب الممكنات من وجود وماهية</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <h2 class="essay-subtitle">مطلب في بيان تركب الممكنات من وجود وماهية</h2>
+    <p class="essay-paragraph">إن كل شيء ندركه نرى فيه حيثيتين إحداهما ماهية الشيء والأخرى وجوده. فنحن مثلاً نعلم أن العدد أو الزاوية أو الخط أو الإنسان أشياء موجودة في الخارج، وهناك أمر مشترك بينها يحضر إلى الذهن، اسمه الوجود. فجميع هذه الأمور تشترك من هذه الجهة وهي جهة كونها أموراً واقعية عينية خارجية – في مقابل سلسلة أمور أخرى ليست في متن الواقع، مثل أن نقول: لا وجود للخط، للصدفة، للتناقض – لكن مع كون هذه الأمور التي ذكرت مشتركة في شيء نرى أن بينها ما به الامتياز فإن أحدها هو العدد لا الزاوية ولا الخط ولا الإنسان والثاني هو الزاوية، وثالثها الخط ورابعها الإنسان وهو غير تلك الأمور. ومن هنا ندرك، أنه حين يقال: الشيء الفلاني موجود، فإن الموجودية حقيقة في مقابل أعدام وليس تصورناللوجود عين تصورنالعدم الوجود، ومع قطع النظر عن التصور، فإن الوجود في الخارج غير العدم أيضاً، لأن الوجود عين الخارج، كذلك هناك فرق بين أن يكون الموجود هو العدد بين كونه الزاوية أو الخط أو الإنسان، في تصورنا وفي الواقع أيضاً. ومن هنا ندرك أمرين:</p>
+    <p class="essay-paragraph">أن هذه الأمور التي أدركناها معاً حقيقتها أنها مركبة من ماهية ووجود وهذا هو معنى الجملة المأثورة عن الحكماء: "كل ممكن زوج تركيبي له ماهية ووجود ".</p>
+    <p class="essay-paragraph">إن تصورنا عن الوجود غير تصورنا عن الماهية وهذه المسألة تطرح تحت عنوان زيادة الوجود على الماهية ومسألة زيادة الوجود على الماهية لو تصورت بشكل صحيح لم تحتج إلى دليل وبرهان، فهي من المسائل التي يكون التصديق بها ملازماً لتصورها. وهذا المطلب بلغ من الوضوح مرتبة بحيث إنه يوجد بين الأشاعرة المخالفين لنظرية زيادة الوجود على الماهية، من قال بها. ومع ذلك فقد ذكروا براهين على المسألة وهي عبارة عن:</p>
+    <p class="essay-paragraph">١ - صحة سلب الوجود عن الماهية: فقد ذكروا في باب الوجود صحة السلب لكن لا بالألفاظ، بل في المعاني وذكروها كبرهان فقالوا: إن الوجود غير الماهية بدليل أن الماهية لا تسلب عن نفسها كما أن أجزاءهالا تسلب منها، فالعالم مثلاً لا يمكن القول إنه ليس عالماً كما أنه لا يمكن القول إنه ليس شكلاً، فرض شيء مثلاً يساوي إثبات نفسه لنفسه وإثبات أجزاء ذاته لنفسه، فلا نفسه يمكن سلبها عن نفسه ولا أجزاء ذاته يمكن سلبها عنه. لكن نرى أن الوجود يمكن سلبه عن الماهيات، هل المثلث موجود أم غير موجود؟ قد يكون موجوداً وقد يكون غير موجود. فنجرد فرض المثلث لا يعني أنه موجود بالضرورة، والحال أن الوجود لو كان جنساً للماهية لم يمكن التشكيك بينهما.</p>
+    <p class="essay-paragraph">٢ - " ولا ف تقار حمله إلى الوسط ": يقولون في الذاتيات أنه بمجرد أن تنحل الذات إلى الأجزاء فإن حمل الذاتي على الذات لا يحتاج إلى برهان ولذا يقولون: "لا يكتسب الحد بالبرهان"، فبمجرد وصول الإنسان إلى أجزاء الذات وتمكنه من تجزئتها فهذا يكفي لإثباتهالذاتها. لا نستطيع أن نثبت بالبرهان أن المثلث شكل أو ليس شكلاً، وأنه من مقولة الكم أو الكيف. والحال أن الوجود يجب إثباته بالبرهان، أي عليك أن تثبت بالدليل أن الدائرة مثلاً موجودة في الخارج أم لا. وعليه فالشيء الذي يحتاج حمله على موضعه إلى برهان لا يمكن أن يكون عين الموضوع ولا جزءه وهذا معنى: لانتقار حمله إلى الوسط.</p>
+    <p class="essay-paragraph">٣ - " والانفكاك منه في العقل ": يقولون إن الذاتيات لا تقبل الانفكاك عن الذات لا في الخارج ولا في الذهن، ومن المعلوم أنه لا يمكن مثلاً فصل الحيوانية عن الإنسان في الخارج، إذ لا يمكن أن يكون هناك إنسان في الخارج والجسمية منفكة عنه أو الناطقية منفكة عنه. وكذلك الحال في الذهن فإن تصور الإنسان في الذهن هو عيناً تصور الجسم والحيوان والناطق أيضاً، أي هذا التصور هو تصور لمركب وتلك الأجزاء موجودة في ضمن المركب غير منفكة عنه. لكن الوجود وإن لم يكن قابلاً للانفكاك عن الماهية في الخارج، ولكنه ينفك عنها في العقل فليس من الضروري عند تعقل الماهية تعقل وجودها في الخارج أو في الذهن، فالعلاقة بين الوجود والماهية في العقل مثل علاقة البياض أو السواد مع الإنسان، فتصور الإنسان لا يلازمه تصور البياض أو السواد، وكذلك فإن تصور الإنسان لا يلازمه تصور وجوده.</p>
+    <p class="essay-paragraph">٤ - " ولاتحاد الكل والتسلسل ": أي يلزم أن تكون جميع الماهيات ماهية واحدة لا اختلاف بينها أو يلزم التسلسل، وكل واحد من هذين الشقين مترتب على افتراض.</p>
+    <p class="essay-paragraph">أما نلزم كون جميع الماهيات ماهية واحدة فهو مبني على افتراض أن الوجود عين الماهية وهذالازمه أن الوجود عين ماهية الفرس، وهو عين ماهية الفرس، وعن ماهية المثلث، فالوجود مساو للإنسان وهو من جهة أخرى مساو للمثلث، وهذالازمه أن يكون الإنسان مساوياً للمثلث، أي أن تصورناللإنسان هو عين تصورناللمثلث، لأنه عين تصورناللوجود الذي هو عين تصورناللمثلث حسب الفرض. فهذا البرهان إذن مبني على افتراض القول إن مفهوم الوجود عين الماهيات وهذا الكلام ليس كلاماً يقوله عالم.</p>
+    <p class="essay-paragraph">أما إذا قال شخص: إن الوجود هو جزء الماهية فلا يلزم حينئذ أن تكون جميع الماهيات ماهية واحدة، لأن معنى ذلك أن يكون الوجود جنس الأجناس، والماهيات تفترق وتتمايز عن بعضها بالفصول معلوماً أن الجوهر هو جنس الأجناس لكل أنواع الجواهر، فهذالا يلزم منه أن تكون ماهيات هذه الأنواع واحدة، بل هي مشتركة في هذا الجنس الأعلى وتختلف بالفصول والتي بشكل كل واحد منها نوعاً، وبالتالي يرتفع إشكال لزوم اتحاد الجميع في ماهية. لكن يرد هنا إشكال آخر وهو لزوم التسلسل. وهذا الإشكال أيضاً وارد على كلام هيغل لأن هذا البرهان يوافق نظرية هيغل بحيث لو أراد أحد أن يعترض على برهان من هذه البراهين يتلاءم مع كلام هيغل فهو هذا البرهان وهو أكثر انسجاماً معه من غيره.</p>
+    <p class="essay-paragraph">نظرية هيغل في الوجود والماهية</p>
+    <h2 class="essay-subtitle">نظرية هيغل:</h2>
+    <p class="essay-paragraph">يقول هيغل: بأي دليل نقول إن الوجود أعلى مقولة؟ يدخل من طريق التقدم فيقول: من المعاني التي تصدق على الأشياء الجنس والفصل المؤخر، ثم يمثل لذلك بـ "هذه الطاولة موجودة"، "هذه الطاولة بنية اللون"، "هذه الطاولة برائقة"، "هذه الطاولة محكمة". ثم يقول إننا نستطيع أن نسلب اللون عن الطاولة وتبقى الطاولة هي نفسها، ونستطيع أن نسلب عنها متانتها وتبقى هي نفسها، لكن إذا سلبنا عنها الوجود فإنهالا تبقى ولا يبقى شيء، "هذه" لا تبقى. وبهذا البيان يريد أن يثبت أن الموجود هو بمنزلة الجنس وتلك بمنزلة الفصل.</p>
+    <h2 class="essay-subtitle">الإشكالات الواردة على هذه النظرية:</h2>
+    <p class="essay-paragraph">أولاً: النقض الوارد على كلام هيغل</p>
+    <p class="essay-paragraph">يرد نقض على كلام هيغل، وهذا النقض لا يختص بالوجود، لكن لا يضر بأصل مدعاه. والإشكال هو أن "عدم الطاولة" هو - حسب قول أمثر - ذات صورة ووضع، مادة وصورة، وصورتها مثلاً خشب أو حديد، وصورتها أيضاً ذلك الشيء الذي باعتباره يقال له صورة الطاولة، أي الشكل الخاص الذي تصور به الطاولة والذي يترتب عليه الأثر الخاص. واللون ( بني ) وكونها برائقة ومحكمة، هذه عوارض ليست مقومة للطاولة، فمفهوم الطاولة إما الصورة أو المادة أو كلاهما. ولا شأن لنا الآن بمفهوم الوجود. وإذا سلبنا عن الطاولة أو عن الكرسي صورتها فلن تبقى الطاولة طاولة ولا الكرسي كرسياً، أي زالت ماهية الطاولة أيضاً.</p>
+    <p class="essay-paragraph">إذا قال شخص إن شيئية الشيء هي فقط بصورته لا بمادته - وهو كلام صحيح - وأن المادة مهما تبدلت فالطاولة تبقى طاولة، طاولة من المعدن أو الخشب أو البلاستيك، فالأساس هو الصورة. وليس لنا بحث الآن في أن الأساس هو المادة والصورة على حد سواء أم أن الأساس هو الصورة، وعلى كلا التقديرين لن يتأثر كلامنا ومقصدنا وهو أن لدينا من الماهيات ما إذا قلنا عنه "هذا غير موجود" فإنه يزول "وهذه الطاولة" لن تبقى طاولة، لكن "هذه" موجودة نعم ليست طاولة. أو لو سلبنا الصورة وأعطينا صورة أخرى فإن "هذه" تبقى وتزول الطاولة، لكن على كلام هيغل إذا سلبنا الوجود فلا يبقى شيء.</p>
+    <p class="essay-paragraph">رد الحكماء على هيغل</p>
+    <p class="essay-paragraph">بعبارة فنية أجاب الحكماء عن هيغل بهذا النحو: إن الجنس هو شيء يمكن بالانضمام إلى أجزاء أخرى أن يشكل ماهية، ولكن الكلام هو أن الجنس والفصل متحدان مع بعضهما، فالجنس والفصل جزء من الفصل، فالجنس هو جنس النوع لكن النوع ليس جزء الجنس، فالجنس هو فصل للنوع لاللجنس، والفصل هو فصل للنوع لا يضر. لكن إذا أردنا أن نعتبر الوجود جنساً وقلنا: إن الوجود بالإضافة إلى هذا الفصل، مثل شكل الواقع، نحن بهذا العمل غفلنا عن ذلك الكلام الذي ذكرناه في البداية من كون الوجود أعم من جميع الأشياء.</p>
+    <p class="essay-paragraph">فذلك الذي يكون أعم من جميع الأشياء، ويطله وارد على جميع الأشياء على حد سواء، أي أن الوجود كما أنه يغطي الأجناس كذلك يغطي الفصول والأنواع - سواء كان حقيقة أم اعتبارياً - وبالتالي فهو لا يمكن أن يكون جنساً والأشياء الأخرى فصولاً، أو هو فصولاً والأشياء الأخرى أجناساً. لأن في الأشياء أو أن جميع تلك التعيينات هي الثابتة وهو مفهوم اعتباري يعبر الذهن في الأشياء أو أن جميع تلك التعيينات هي الثابتة وهو مفهوم اعتباري، لكن على كل حال لا مجال لأن نجعله دقيقاً ومقرراً للأشياء الأخرى فهذا غير معقول بأي وجه.</p>
+    <p class="essay-paragraph">نظرية القائلين بأن الوجود جزء</p>
+    <p class="essay-paragraph">وعليه فإن نظرية القائلين بأن الوجود جزء، وهم من المتكلمين، وإن لم يذكروه بالنحو الذي ذكرناه، ترجع تقريباً إلى أصلين: نصفه الوجود ونصفه الماهية، وهذا الطلب سيجده في أصالة الوجود. وهذا هو معنى الشعر الذي يقول: "ولاتحاد الكل والتسلسل ".</p>
+    <p class="essay-paragraph">الشعر التوضيحي</p>
+    <p class="essay-paragraph">ثم يذكر المصنف في أخذ هذا الفصل شعراً تقريباً من محل الاستدلال وهو نوع استنتاج وهو في الواقع أمر زائد فيقول:</p>
+    <p class="essay-paragraph">" والفرد كالمطلق منه والخصوص زيد عليها مطلقاً عاماً وخص "</p>
+    <p class="essay-paragraph">يريد أن يقول: إن الفرد من الوجود مثل مفهوم الوجود المطلق وخصوص الوجود هو خارج أيضاً عن الماهية زائد عليها سواء كان الفرد عاماً أو خاصاً.</p>
+    <p class="essay-paragraph">المقصود من الفرد حقيقة الوجود، والمقصود من كون حقيقة الوجود زائدة على الماهية - والحال أننا قلنا: إن الوجود والماهية متحدان في الخارج - هو أن حقيقة الوجود في الخارج غير حقيقة الماهية وإن اتحدتا، إحداهما عين الحقيقة والأخرى اعتبارية.</p>
+    <p class="essay-paragraph">اصطلاح العرفاء في الوجود</p>
+    <p class="essay-paragraph">في باب حقيقة الوجود ظهر اصطلاح منشؤه المرآة حسب الظاهر، وهذا الاصطلاح المرآتي صار سبباً لترجيح بعض كلام القدماء، مثل أفلاطون والذي لم يكن معقولاً ولا مقبولاً. واصطلاح المناطقة والفلاسفة في العام والخاص هو الاصطلاح الحديدي - أي العام والخاص - صفتان للمعنى المفهوم في الذهن. نقول مثلاً: الإنسان مفهوم عام، زيد خاص، الإنسان عام لأنه صدق على كثيرين، والحيوان عام وأعم من الإنسان.</p>
+    <p class="essay-paragraph">لكن جاء العرفاء باصطلاح في العام والخاص في باب حقيقة الوجود لا المفاهيم، فهم يقولون: إن حقيقة الوجود لها في عالم التحقق سعة وضيق، أي لها مرتبة سعة في مرتبة الوجود ولها مرتبة ضيق ومحدودية الوجود. مثلاً الطبيعة بشكل عام ومراتب الطبيعة هي وجود لكنه ضيق. وما وراء الطبيعة وجود واسع، وكلما ارتفعنا كلما اتسع أوسع، أي أن عوالم الوجود يحيط بعضها ببعض، وكل مرتبة تحيط بالمرتبة الأدنى منها. وهذالا ربط له بعالم الذهن والمفهوم. يطلق العرفاء أيضاً لفظي الكلي والجزئي، وهذا هو مفهومهم، فإن قالوا: وجود كلي ووجود جزئي، أي عيشته أنه محيط أحياناً يقولون عن وجود ولي كامل إنه وجود كلي، ووجود تلميذ مبتدئ إنه وجود جزئي، من جهة أن وجود ذلك محيط بوجود هذا.</p>
+    <p class="essay-paragraph">تفسير كلام أفلاطون</p>
+    <p class="essay-paragraph">بهذا المعنى فسروا الكلي في كلام أفلاطون، فقد قال أفلاطون: "الكليات موجودة في عالم المثل". مولانا يقولون: إن الكلي بالمعنى الذي يُذكر في المنطق أي الشيء الصادق على كثيرين، من خصائص الذهن، ومن باب - وحسب قول أساتذتنا المرء على أفق الكائنات حيث كان إذا وصل إلى كلام عالم غير قابل للتأييد بوجهه بشكل آخر ويقول "صورنالكلام الأمل عن اللغوية" - ومولانا أيضاً لأن الحكيم عن اللغوية قالوا إن مقصوده من الوجود الكلي ليس المعنى المنطقي، بل الوجود الباطني.</p>
+    <p class="essay-paragraph">خلاصة الاصطلاحات</p>
+    <p class="essay-paragraph">في باب الوجود إذا استُعملت هذه الاصطلاحات: عام وخاص، كلي وجزئي وأمثال هذه التعبيرات فهي اصطلاحات أتت من العرفان.</p>
+    <p class="essay-paragraph">فالمصنف يقول: إن حقيقة الوجود ومفهوم الوجود سواء كانت حقيقة الوجود واسعة "مثل كليات أفلاطون وآراة الأفراد"، كل أفلاطون بالنحو الذي يفسره به هؤلاء أم كانت خاصة ضيقة، وسواء كان مفهوم الوجود مطلقاً أم خاصاً "وذلك عندما نضيف الوجود إلى شيء، ونقول وجود الإنسان، وجود النار، وجود البهائم ( . . ) فهي بأجمعها مغايرة للماهية.</p>
+    <h2 class="essay-subtitle">تفسير الشعر:</h2>
+    <p class="essay-paragraph">" والفرد كالمطلق منه ": أي مفهوم الوجود المطلق</p>
+    <p class="essay-paragraph">" والخصوص ": أي مفهوم الوجود المضاف إلى الماهيات</p>
+    <p class="essay-paragraph">" زيد عليها مطلقاً ": و"مطلقاً" متعلقة بالفرد أي الفرد الوجود زائد على الماهية مطلقاً سواء كان فرداً عاماً - باصطلاح العرفاء - أم خاصاً</p>
+    <p class="essay-paragraph">وعلى كل حال هذا هو الشعر الذي ذكره المصنف في هذا البحث.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

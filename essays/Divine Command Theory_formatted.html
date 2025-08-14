@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Command Theory — Maria's Essays</title>
+    <meta name="description" content="An essay by Maria exploring divine command theory">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⭐</text></svg>">
+    
+    <!-- Fonts matching main page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,200..900;1,6..96,200..900&family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Import design system from main page */
+        :root {
+            --base-light: #faf8f6;
+            --base-dark: #f5f1ed;
+            --text-primary: #0a0a0a;
+            --text-secondary: rgba(10, 10, 10, 0.7);
+            --accent-gold: #c9a961;
+            --accent-gold-dark: #a88545;
+            --gray-muted: #e3ddd7;
+            --charcoal: #2a2928;
+            
+            --font-display: 'Bodoni Moda', 'Playfair Display', serif;
+            --font-body: 'Crimson Pro', 'Georgia', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --fs-hero: clamp(3rem, 8vw, 6rem);
+            --fs-title: clamp(2rem, 5vw, 3.5rem);
+            --fs-heading: clamp(1.5rem, 3vw, 2.5rem);
+            --fs-body: clamp(1rem, 2vw, 1.25rem);
+            --fs-small: clamp(0.875rem, 1.5vw, 1rem);
+            
+            --space-xs: clamp(0.5rem, 1vw, 1rem);
+            --space-sm: clamp(1rem, 2vw, 1.5rem);
+            --space-md: clamp(2rem, 4vw, 3rem);
+            --space-lg: clamp(3rem, 6vw, 5rem);
+            --space-xl: clamp(4rem, 8vw, 8rem);
+            
+            --blur-subtle: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 30px rgba(201, 169, 97, 0.3);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base-light: #1a1918;
+                --base-dark: #0f0e0e;
+                --text-primary: #faf8f6;
+                --text-secondary: rgba(250, 248, 246, 0.7);
+                --gray-muted: #3a3836;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background: linear-gradient(180deg, var(--base-light) 0%, var(--base-dark) 100%);
+            min-height: 100vh;
+            position: relative;
+            font-size: var(--fs-body);
+        }
+
+        /* Subtle background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        .essay-container {
+            max-width: min(75ch, 90vw);
+            margin: 0 auto;
+            padding: var(--space-lg) var(--space-md);
+        }
+
+        .essay-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+            position: relative;
+        }
+
+        .essay-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-title);
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .essay-subtitle {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            font-weight: 400;
+            color: var(--accent-gold);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+
+        .essay-meta {
+            color: var(--text-secondary);
+            font-size: var(--fs-small);
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .essay-content {
+            position: relative;
+        }
+
+        .essay-paragraph {
+            margin-bottom: var(--space-md);
+            text-align: justify;
+            hyphens: auto;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* Enhanced first paragraph with drop cap */
+        .first-paragraph {
+            font-size: calc(var(--fs-body) * 1.1);
+            margin-bottom: var(--space-lg);
+        }
+
+        .drop-cap {
+            font-family: var(--font-display);
+            font-size: calc(var(--fs-body) * 4);
+            line-height: 0.8;
+            float: left;
+            margin: 0.1em 0.1em 0 0;
+            color: var(--accent-gold);
+            font-weight: 400;
+        }
+
+        /* Navigation back button */
+        .back-nav {
+            position: fixed;
+            top: var(--space-md);
+            left: var(--space-md);
+            z-index: 100;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(var(--blur-subtle));
+            transition: var(--transition-smooth);
+        }
+
+        .back-button:hover {
+            background: rgba(201, 169, 97, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        /* Reading progress indicator */
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(201, 169, 97, 0.2);
+            z-index: 100;
+        }
+
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-dark));
+            width: 0;
+            transition: width 0.1s ease-out;
+        }
+
+        /* Enhanced typography for readability */
+        .essay-paragraph em {
+            font-style: italic;
+            color: var(--accent-gold-dark);
+        }
+
+        .essay-paragraph strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .essay-paragraph code {
+            font-family: var(--font-mono);
+            background: rgba(201, 169, 97, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .essay-container {
+                padding: var(--space-md) var(--space-sm);
+            }
+            
+            .back-nav {
+                top: var(--space-sm);
+                left: var(--space-sm);
+            }
+            
+            .drop-cap {
+                font-size: calc(var(--fs-body) * 3);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .back-nav,
+            .reading-progress {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .essay-container {
+                max-width: none;
+                margin: 0;
+                padding: 1in;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-gold);
+            color: var(--base-light);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-muted);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-dark);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reading-progress"></div>
+    
+    <nav class="back-nav">
+        <a href="../index.html#chamber" class="back-button">
+            Chamber of Echoes
+        </a>
+    </nav>
+
+    <main class="essay-container">
+        <header class="essay-header">
+            <h1 class="essay-title">Divine Command Theory</h1>
+            <div class="essay-meta">Maria's Essays • 2025-08-14</div>
+        </header>
+
+        <article class="essay-content">
+    <p class="essay-paragraph first-paragraph"><span class="drop-cap">D</span>ivine Command Theory presents three distinct metaethical interpretations of moral claims. Consider someone asserting "torture is wrong. " On the semantic version, this statement means "God forbids torture," making moral language fundamentally theological. The metaphysical version holds that God's attitudes constitute moral facts: torture possesses the property of wrongness because God disapproves, not merely that God disapproves because torture is wrong. The epistemic version treats God as revealing independent moral truths: torture's wrongness exists autonomously, but we know it through divine disclosure. These distinctions matter for truthmaker theory. If God commanded honesty yesterday at 3 PM, what makes "lying is wrong" true today? The semantic version suggests the truthmaker is the historical fact of divine commanding. The metaphysical version points to God's current attitude or nature as the truthmaker. Consider a specific divine command: "Honor your parents. " Does God's utterance of these words serve as truthmaker, or God's continuing will that children honor parents, or perhaps a divine state of affairs involving God's nature? The bootstrapping worry emerges starkly: we seemingly need God to be good for His commands to generate obligations, yet DCT defines goodness through divine commands. If we say God is good because He commands what He commands, we've explained nothing. If God is good by some independent standard, then that standard, not God, grounds morality.</p>
+    <p class="essay-paragraph">The Euthyphro dilemma crystallizes through examining specific divine commands. Take honesty: does God command truth-telling because honesty is independently right, or is honesty right solely because God commands it? Consider God potentially commanding "Always tell the truth to spare feelings. " If this reflects honesty's prior rightness, then moral facts exist independently of God, making divine commands epistemically useful but metaphysically unnecessary. Conversely, if truth-telling becomes obligatory only through divine decree, then had God commanded systematic deception for social harmony, lying would be virtuous. Imagine God commanding Abraham not just to sacrifice Isaac but to torture him first: would this make child torture praiseworthy? Adams responds that God's loving nature constrains possible commands, preventing cruel directives. But consider what makes love good: if love is good because God commands it, we've moved the problem back a step. If love is inherently good, then goodness exists independently of divine will. Craig's solution grounds morality in God's nature rather than commands: God's essential properties make truth-telling right. Yet this faces a revenge dilemma: what makes God's nature good? If we answer "God's nature is good by definition," we've offered a stipulation, not an explanation. The counterfactual test proves revealing: in the nearest possible world where God's nature includes cruelty, would a rational person accepting torture as good, or would they conclude that this being isn't God precisely because true divinity excludes cruelty?</p>
+    <p class="essay-paragraph">Intuitionists challenge DCT through immediate moral perceptions. Witness someone drowning while you hold a life preserver: the obligation to help seems to arise from the situation itself, not from consulting divine commands. You perceive the duty directly, just as you perceive the victim's distress. Consider walking past a burning building hearing children screaming inside: do you experience moral obligation as detecting God's attitudes about rescue, or as recognizing intrinsic features of the situation? Huemer's examples prove compelling: observing someone torturing an infant for amusement generates immediate moral revulsion. This resembles perceiving that 2+2=4 more than detecting divine disapproval. When you see a smaller child bullied by a larger one, moral wrongness seems as directly perceivable as the physical size difference. The phenomenology of moral judgment rarely involves experiencing divine attitudes. Judge whether tax evasion, promise-breaking, or racial discrimination is wrong: do you introspect God's stance or evaluate the acts themselves? Consider moral disagreement's persistence: if God clearly commanded specific behaviors, why do equally thoughtful, religiously devout people reach opposite conclusions about abortion, capital punishment, or wealth redistribution? The intuitionist explanation seems cleaner: we possess fallible moral intuitions that sometimes conflict, rather than unclear divine commands generating confusion. When someone judges genocide wrong, they typically report perceiving intrinsic evil, not detecting supernatural disapproval.</p>
+    <p class="essay-paragraph">Epistemic DCT attempts reconciliation by treating God as validating or correcting natural moral intuitions. Consider conflicting intuitions: you sense lying to save lives seems permissible, but scripture contains "Thou shalt not bear false witness. " How should divine revelation interact with moral seemings? Suppose you intuit that stealing medicine to save your child is justified, but religious texts prohibit all theft. Does revelation override intuition, or must we interpret scripture through moral common sense? The reliability problem emerges through evolutionary considerations: if our fairness intuitions evolved for reciprocal cooperation among hunter-gatherers, why expect them to track God's attitudes rather than survival advantages? Consider detecting spoiled food: evolution explains why disgust tracks toxicity. But why would evolution ensure our moral intuitions track divine commands rather than social cooperation? Sophisticated epistemic DCT might claim God guided evolution to produce generally reliable moral intuitions while allowing specific errors. Test this through moral progress: ancient societies accepted slavery, medieval Christians endorsed crusades, early Americans permitted marital rape. If our ancestors were wrong, did God change moral truth, improve our epistemic access, or were past intuitions simply mistaken? The epistemic dilemma tightens: either our intuitions reliably detect moral truth ( making divine validation unnecessary ) or they're unreliable ( making divine commands epistemically inaccessible since we'd need reliable intuitions to recognize genuine divine commands ) .</p>
+    <p class="essay-paragraph">Truthmaker versions of DCT face pointed intuitionist critiques. If "promise-breaking is wrong" requires God as truthmaker, what specific divine aspect grounds this truth? Consider making a deathbed promise to care for someone's children. Does the obligation await God's disapproval of promise-breaking, or does the promising act itself create duties? When you promise to meet a friend for lunch, does bindingness depend on divine facts or the interpersonal commitment? Examine everyday wrongs: cutting in line, cheating at cards, gossiping maliciously. Do these require divine truthmakers or do social relationships and human interests suffice? The modal problem proves severe: "gratuitous suffering is bad" seems necessarily true across all possible worlds. But if God's attitudes serve as truthmaker, and God could have approved gratuitous suffering, then moral truths become contingent. Perhaps God exists necessarily with unchangeable attitudes. Yet why think God's stance toward cruelty is essential rather than accidental to divinity? Even if God necessarily exists and essentially disapproves of cruelty, this resembles saying "red is a color" is true because God disapproves of red's non-colorhood. The intuitionist alternative appears simpler: just as "red is a color" needs only the natures of red and color as truthmakers, "pain is bad" needs only pain's intrinsic features. Consider pleasure's goodness: does it await divine approval or does pleasure's phenomenology suffice? When you taste chocolate or hear beautiful music, does value depend on God's attitudes or experiential qualities? DCT might ground some moral truths ( perhaps duties to God ) while intuition grounds others ( perhaps duties regarding suffering ) . But this concession suggests morality's foundation lies deeper than divine will, in features of consciousness, relationships, and value that exist independently of theological facts.</p>
+        </article>
+    </main>
+
+    <script>
+        // Reading progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.reading-progress::after') && 
+                document.documentElement.style.setProperty('--reading-progress', scrolled + '%');
+        });
+        
+        // Update reading progress
+        const updateProgress = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.querySelector('.reading-progress');
+            if (progressBar) {
+                progressBar.style.background = `linear-gradient(90deg, var(--accent-gold) ${scrolled}%, rgba(201, 169, 97, 0.2) ${scrolled}%)`;
+            }
+        };
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Smooth scroll to top on page load
+        window.addEventListener('load', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
