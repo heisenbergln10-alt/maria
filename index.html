@@ -1116,7 +1116,7 @@
 
                     <article class="guide-card glass" data-anchor="#movies">
                       <h3>Discover: Cinema Suggestions</h3>
-                      <p class="mono" style="color:var(--text-secondary)">AI-curated film recommendations with mood, era, and language filters.</p>
+                      <p class="mono" style="color:var(--text-secondary)">Intelligent film curation based on mood, era, and language preferences.</p>
                       <button class="guide-cta">Find films</button>
                     </article>
                   </div>
@@ -1128,7 +1128,7 @@
         <section id="movies" class="fade-in">
           <div class="container">
             <h2 class="section-title">Cinema Suggestions</h2>
-            <p class="mono" style="text-align:center;max-width:900px;margin:0 auto var(--space-sm);">Tell Maria what mood, era, or theme you want — get concise, curated film recommendations with posters.</p>
+            <p class="mono" style="text-align:center;max-width:900px;margin:0 auto var(--space-sm);">Tell Maria your preferences — get expertly curated film recommendations with posters based on mood, era, and language.</p>
 
             <div class="glass" style="padding:var(--space-md);border-radius:20px;">
               <div class="movie-controls" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;align-items:end;">
@@ -1164,8 +1164,8 @@
                   </select>
                 </label>
 
-                <label class="mono">Minimum Rating
-                  <input id="movie-min-rating" type="range" min="0" max="10" value="6">
+                <label class="mono">Minimum Rating: <span id="rating-display">6</span>/10
+                  <input id="movie-min-rating" type="range" min="0" max="10" value="6" step="0.1">
                 </label>
 
                 <div style="grid-column: span 2; display:flex; gap:.5rem; align-items:center;">
@@ -1502,25 +1502,37 @@
             };
             
             const langText = langMap[criteria.lang] || criteria.lang;
-            const eraText = criteria.era === 'any' ? 'from any era' : 
-                           criteria.era === 'classic' ? 'from before 1980' :
-                           criteria.era === 'modern' ? 'from 1980-2009' :
-                           'from 2010 onwards';
+            const eraText = criteria.era === 'any' ? 'from any time period' : 
+                           criteria.era === 'classic' ? 'made before 1980' :
+                           criteria.era === 'modern' ? 'made between 1980-2009' :
+                           'made from 2010 onwards';
             
-            return `You are a sophisticated film curator. Recommend 6 films that are:
-- ${criteria.mood} in tone and mood
-- ${eraText}
-- In ${langText}
-- With a minimum IMDb/critical rating around ${criteria.minRating}/10
+            // Add randomness to prevent duplicate responses
+            const randomId = Math.random().toString(36).substring(7);
+            const timestamp = Date.now();
+            
+            return `I need 6 diverse film recommendations based on these specific criteria:
 
-Focus on acclaimed, thoughtful cinema that matches the mood. Include both well-known and hidden gems.
+MOOD: ${criteria.mood}
+TIME PERIOD: ${eraText}  
+LANGUAGE: ${langText}
+MINIMUM RATING: ${criteria.minRating}/10
 
-Respond with ONLY a valid JSON array of objects, each with:
-{ "title": "Film Title", "year": "2023", "reason": "Brief compelling reason why this fits the criteria" }
+Requirements:
+- Each film must genuinely match the "${criteria.mood}" mood
+- Films should be ${eraText}
+- Spoken primarily in ${langText}
+- Have ratings of ${criteria.minRating}/10 or higher on IMDb/critical consensus
+- Mix of well-known classics and lesser-known gems
+- Diverse directors and countries when possible
 
-Example format:
-[{"title": "Persona", "year": "1966", "reason": "Bergman's contemplative masterpiece exploring identity and consciousness"}]
+Return ONLY a JSON array with this exact format:
+[
+  {"title": "Film Title", "year": "1234", "reason": "One sentence why this perfectly matches the criteria"},
+  {"title": "Film Title", "year": "1234", "reason": "One sentence why this perfectly matches the criteria"}
+]
 
+Session ID: ${randomId}-${timestamp}
 JSON array only:`;
         }
 
@@ -1745,7 +1757,7 @@ JSON array only:`;
                                     answerEl.textContent = '';
                                     if (!q) { answerEl.textContent = 'Please write a question.'; return; }
 
-                                    // AI-based relevance check using essay title and content
+                                    // Automated relevance check using essay title and content
                                     answerEl.textContent = 'Checking if your question is related to the essay...';
                                     try {
                                         const isRelevant = await checkQuestionRelevance(q, item.title, essayPlain.slice(0, 2000));
@@ -1829,7 +1841,7 @@ JSON array only:`;
           { name: "Ethics",      seeds: ["dirty-hands governance", "supererogation", "role morality vs impartiality"]},
           { name: "Agency",      seeds: ["precommitment & identity", "akrasia (weakness of will)", "self-editing desires"]},
           { name: "Logic",       seeds: ["reference without liar", "vagueness without heaps", "self-reference in laws"]},
-          { name: "AI",          seeds: ["value lock-in", "reward hacking", "alignment tax vs innovation"]}
+          { name: "Technology",  seeds: ["value lock-in", "reward hacking", "alignment tax vs innovation"]}
         ];
         
         function loadHistory() {
@@ -1860,7 +1872,7 @@ JSON array only:`;
           return union ? inter / union : 0;
         }
 
-        // AI-based question relevance checker
+        // Automated question relevance checker
         async function checkQuestionRelevance(question, essayTitle, essayContent) {
           const prompt = `You are a relevance checker. Determine if the QUESTION is directly related to the ESSAY based on its title and content. 
 
@@ -3021,6 +3033,13 @@ Answer:`;
             const suggestBtn = document.getElementById('movie-suggest');
             const status = document.getElementById('movie-status');
             const results = document.getElementById('movie-results');
+            const ratingSlider = document.getElementById('movie-min-rating');
+            const ratingDisplay = document.getElementById('rating-display');
+
+            // Update rating display when slider changes
+            ratingSlider.addEventListener('input', (e) => {
+                ratingDisplay.textContent = parseFloat(e.target.value).toFixed(1);
+            });
 
             suggestBtn.addEventListener('click', async ()=>{
                 status.textContent = '';
@@ -3041,7 +3060,7 @@ Answer:`;
                 let apiError = false;
                 
                 try {
-                    status.textContent = 'Consulting AI curator...';
+                    status.textContent = 'Consulting film curator...';
                     const response = await callOpenAIRaw(prompt);
                     // Try to parse as JSON, but be flexible about format
                     try {
