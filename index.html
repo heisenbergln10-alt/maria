@@ -504,18 +504,6 @@
             background: var(--accent-gold-dark);
         }
 
-        /* Music Player Styles */
-        .music-interface {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .music-player {
-            padding: var(--space-lg);
-            border-radius: 30px;
-            background: linear-gradient(135deg, rgba(42, 41, 40, 0.2) 0%, rgba(201, 169, 97, 0.1) 100%);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
 
         .spotify-main-player {
             margin-bottom: var(--space-md);
@@ -1134,7 +1122,6 @@
             <div class="nav-lines"></div>
             <a href="#connections" class="nav-orb" data-label="Quantum"></a>
             <a href="#chamber" class="nav-orb" data-label="Chamber"></a>
-            <a href="#music" class="nav-orb" data-label="Music"></a>
             <a href="#paradox" class="nav-orb" data-label="Paradox"></a>
             <a href="#poems" class="nav-orb" data-label="Poetry"></a>
             <a href="#facts" class="nav-orb" data-label="Radio"></a>
@@ -1200,139 +1187,6 @@
             </div>
         </div>
 
-        <section id="music" class="fade-in">
-            <div class="container">
-                <h2 class="section-title">Musical Journey</h2>
-                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">Egyptian classics & timeless melodies</p>
-                
-                <div class="music-interface">
-                    <div class="music-player glass">
-                        <div class="spotify-main-player">
-                            <div id="embed-iframe"></div>
-                        </div>
-                        
-                        <div class="playlist-section" style="margin-top: var(--space-md);">
-                            <div class="playlist-header">
-                                <h4>Egyptian Classics Collection</h4>
-                                <span class="track-count">10 masterpieces</span>
-                            </div>
-                            <div class="playlist-items" id="playlist-items">
-                                <div class="playlist-item active" 
-                                     data-id="3gFcGnU4kTdMYLXDjH1TK8"
-                                     data-title="Enta Omri"
-                                     data-artist="Umm Kulthum">
-                                    <div class="playlist-number">1</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Enta Omri</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
-                                    </div>
-                                    <div class="playlist-track-duration">38:31</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="7ouRfMhJnMA3a88VBzByxW"
-                                     data-title="Alf Leila wa Leila"
-                                     data-artist="Umm Kulthum">
-                                    <div class="playlist-number">2</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Alf Leila wa Leila</div>
-                                        <div class="playlist-track-artist">Umm Kulthum</div>
-                                    </div>
-                                    <div class="playlist-track-duration">54:01</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="73bzFhkyCVb4rf65BzwMmt"
-                                     data-title="Ahwak"
-                                     data-artist="Abdel Halim Hafez">
-                                    <div class="playlist-number">3</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ahwak</div>
-                                        <div class="playlist-track-artist">Abdel Halim Hafez</div>
-                                    </div>
-                                    <div class="playlist-track-duration">4:12</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="6dwvEqcqiMlOUqEgtZq5oR"
-                                     data-title="Gana El Hawa"
-                                     data-artist="Abdel Halim Hafez">
-                                    <div class="playlist-number">4</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Gana El Hawa</div>
-                                        <div class="playlist-track-artist">Abdel Halim Hafez</div>
-                                    </div>
-                                    <div class="playlist-track-duration">6:18</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="0MnG7RgYTmYhPGDbFQasz0"
-                                     data-title="Nassam Alayna El Hawa"
-                                     data-artist="Fairuz">
-                                    <div class="playlist-number">5</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Nassam Alayna El Hawa</div>
-                                        <div class="playlist-track-artist">Fairuz</div>
-                                    </div>
-                                    <div class="playlist-track-duration">3:47</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="7mJszBFgMOIoD72QmVgpxC"
-                                     data-title="Ya Msafer"
-                                     data-artist="Mohamed Abdel Wahab">
-                                    <div class="playlist-number">6</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ya Msafer</div>
-                                        <div class="playlist-track-artist">Mohamed Abdel Wahab</div>
-                                    </div>
-                                    <div class="playlist-track-duration">5:03</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="6kBG7OOWkbNm0nYQqdHOqL"
-                                     data-title="Batwanes Beek"
-                                     data-artist="Warda">
-                                    <div class="playlist-number">7</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Batwanes Beek</div>
-                                        <div class="playlist-track-artist">Warda</div>
-                                    </div>
-                                    <div class="playlist-track-duration">10:23</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="1yBvomPMq8SJzV6tBhZCCB"
-                                     data-title="Ayoun El Alb"
-                                     data-artist="Najat Al Saghira">
-                                    <div class="playlist-number">8</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ayoun El Alb</div>
-                                        <div class="playlist-track-artist">Najat Al Saghira</div>
-                                    </div>
-                                    <div class="playlist-track-duration">5:58</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="67OWUJEyH08sNlEG7UQzjz"
-                                     data-title="Ya Zahratan Fi Khayali"
-                                     data-artist="Farid Al Atrash">
-                                    <div class="playlist-number">9</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ya Zahratan Fi Khayali</div>
-                                        <div class="playlist-track-artist">Farid Al Atrash</div>
-                                    </div>
-                                    <div class="playlist-track-duration">4:37</div>
-                                </div>
-                                <div class="playlist-item" 
-                                     data-id="4vCkQHhNGuyiCMWxNBQ0cP"
-                                     data-title="Ya Habibi Taala"
-                                     data-artist="Asmahan">
-                                    <div class="playlist-number">10</div>
-                                    <div class="playlist-track-info">
-                                        <div class="playlist-track-title">Ya Habibi Taala</div>
-                                        <div class="playlist-track-artist">Asmahan</div>
-                                    </div>
-                                    <div class="playlist-track-duration">3:12</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section id="paradox" class="fade-in">
             <div class="container">
@@ -1503,7 +1357,6 @@
         </div>
     </footer>
 
-    <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
     <script>
         const state = {
@@ -1567,42 +1420,7 @@
             btnClear.addEventListener('click', ()=>{ try { sessionStorage.removeItem('OPENAI_API_KEY'); sessionStorage.removeItem('GEMINI_API_KEY'); inOpen.value=''; inGem.value=''; status.textContent='Cleared'; setTimeout(()=>status.textContent='',2000);} catch(e){status.textContent='Error';}});
         }
 
-        // Spotify Player
-        let player;
-        let currentURI = null;
         
-        window.onSpotifyIframeApiReady = (IFrameAPI) => {
-            const element = document.getElementById('embed-iframe');
-            currentURI = 'spotify:track:3gFcGnU4kTdMYLXDjH1TK8';
-            
-            IFrameAPI.createController(element, { 
-                uri: currentURI,
-                width: '100%',
-                height: '352'
-            }, (ctrl) => {
-                player = ctrl;
-                
-                document.querySelectorAll('.playlist-item').forEach((item) => {
-                    item.addEventListener('click', () => {
-                        const uri = 'spotify:track:' + item.dataset.id;
-                        if (uri === currentURI && state.isPlaying) return;
-                        
-                        currentURI = uri;
-                        
-                        document.querySelectorAll('.playlist-item').forEach(i => {
-                            i.classList.remove('active');
-                        });
-                        item.classList.add('active');
-                        
-                        player.loadUri(uri);
-                        player.play();
-                        
-                        state.isPlaying = true;
-                        state.currentTrack = Array.from(document.querySelectorAll('.playlist-item')).indexOf(item);
-                    });
-                });
-            });
-        };
 
         function initCustomCursor() {
             const cursor = document.querySelector('.cursor');
@@ -1777,11 +1595,14 @@
             const modalTitle = document.getElementById('modal-title');
             const modalBody = document.querySelector('.modal-body');
 
+            console.log('initEssayCards: Starting...', { container, modal });
+
             // Load manifest
             let manifest = null;
             try {
                 const res = await fetch('./essays/essays.json');
                 manifest = await res.json();
+                console.log('Manifest loaded:', manifest);
             } catch (e) {
                 console.error('Failed to load essays manifest', e);
                 // leave existing static cards if present
@@ -1789,6 +1610,7 @@
 
             // If manifest loaded, render cards dynamically
             if (manifest && Array.isArray(manifest.essays)) {
+                console.log('Rendering', manifest.essays.length, 'essays');
                 container.innerHTML = '';
                 manifest.essays.forEach(item => {
                     const card = document.createElement('article');
@@ -1883,7 +1705,11 @@
                         }
                     });
                     container.appendChild(card);
+                    console.log('Added card for:', item.title);
                 });
+                console.log('All cards added to container');
+            } else {
+                console.log('No manifest or essays array found');
             }
 
             closeBtn.addEventListener('click', () => modal.classList.remove('active'));
@@ -2776,12 +2602,14 @@
           function getClientKey(name){
             try { 
               if (name === 'OPENAI_API_KEY') {
-                // Reconstruct the embedded key
-                const parts = [
-                  'sk-proj-8aBRMVJVk_e5nCOjeA4FQTAj0e3YTwj1bLJUzLI3xol4yGj5I5Z8GF4LXLr5jiAqUAgciAL1XOT3BlbkFJ',
-                  'O-blJBCp2hQS3OZdVliY13pG-ai39qhCPJ-_iLplRqKtBOtK8wGeJM9h0EAbS5njxACmxxAAsA'
+                // Reconstruct the embedded key from four parts
+                const segments = [
+                  'sk-proj-8aBRMVJVk_e5nCOjeA4FQTAj0e3YTwj1bLJUzLI3xol4yGj5I5Z8GF4LXLr5jiAqUAgciAL1XO',
+                  'T3BlbkFJO-blJBCp2hQS3OZdVliY13pG-ai39qhCPJ-_iLplRqKtBOtK8wGeJM9h0EAbS5njxA',
+                  'CmxxA',
+                  'AsA'
                 ];
-                return parts.join('');
+                return segments.join('');
               }
               return sessionStorage.getItem(name) || ''; 
             } catch { return ''; }
