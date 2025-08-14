@@ -1402,7 +1402,7 @@
             initFloatingParticles();
             initDoubleCruxStudio();
             initKeySettings();
-            initMovies(); // Initialize cleaned movies functionality
+            initMovies(); // Initialize movies functionality
 
         });
 
@@ -2674,6 +2674,10 @@ Answer:`;
           return '';
           })();
 
+          // === Paste-into-code placeholders ===
+          // If you prefer to embed keys directly into the page, replace the empty strings below
+          // with the 8-char parts of your keys (do NOT paste full keys in shared environments).
+          // Example: const OPENAI_KEY_PARTS = ["part0000","part0001", ...];
           const OPENAI_KEY_PARTS = [ "sk-proj-8aBRMVJVk_e5nCOje", "A4FQTAj0e3YTwj1bLJUzLI3xol4yGj5I5Z8GF4L", "XLr5jiAqUAgciAL1XOT3BlbkFJO-blJBCp2hQS3OZdVliY13pG-ai39qhCPJ", "-_iLplRqKtBOtK8wGeJM9h0EAbS5njxACmxxAAsA" ];
           const GEMINI_KEY_PARTS = ["AIzaSyAqXYggfgL", "t5_dL6wLEkNZUnGXr5QHBch4"];
           const TMDB_KEY_PARTS   = [ "4511961cbe3d628", "1498c1923f1234eac" ];
