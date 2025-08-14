@@ -3241,36 +3241,7 @@ Answer:`;
             });
         }
 
-        // Initialize movies after all utility functions are defined
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set API keys (obfuscated by splitting into parts)
-            try {
-                // OpenAI API Key (split into 8-char parts)
-                const openaiParts = ['sk-proj-','8aBRMVJV','k_e5nCOj','eA4FQTAj','0e3YTwj1','bLJUzLI3','xol4yGj5','I5Z8GF4L','XLr5jiAq','UAgciAL1','XOT3Blbk','FJO-blJB','Cp2hQS3O','ZdVliY13','pG-ai39q','hCPJ-_iL','plRqKtBO','tK8wGeJM','9h0EAbS5','njxACmxx','AAsA'];
-                if (!sessionStorage.getItem('OPENAI_API_KEY')) {
-                    sessionStorage.setItem('OPENAI_API_KEY', openaiParts.join(''));
-                }
-                
-                // Gemini API Key (split into 8-char parts) 
-                const geminiParts = ['AIzaSyAq','XYggfgLt','5_dL6wLE','kNZUnGXr','5QHBch4'];
-                if (!sessionStorage.getItem('GEMINI_API_KEY')) {
-                    sessionStorage.setItem('GEMINI_API_KEY', geminiParts.join(''));
-                }
-                
-                // TMDb API Key (split into 8-char parts)
-                const tmdbParts = ['45119616','be3d6281','498c1923','f1234eac'];
-                if (!sessionStorage.getItem('TMDB_API_KEY')) {
-                    sessionStorage.setItem('TMDB_API_KEY', tmdbParts.join(''));
-                }
-            } catch (e) {
-                console.warn('API key setup failed:', e);
-            }
-            
-            // Wait a bit to ensure all other initializations are complete
-            setTimeout(() => {
-                initMovies();
-            }, 100);
-        });
+        // movies initialization is invoked from the main DOMContentLoaded handler
 
     </script>
 </body>
