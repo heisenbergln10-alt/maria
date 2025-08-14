@@ -283,6 +283,14 @@
             transition: var(--transition-smooth);
         }
 
+        .nav-orb::before{
+              background: rgba(0,0,0,0.9);
+              color: var(--text-primary); /* stays light in dark mode */
+              border: 1px solid rgba(201,169,97,0.35);
+              box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+              text-shadow: 0 1px 1px rgba(0,0,0,0.35);
+            }
+
         .nav-orb:hover {
             transform: scale(2);
             box-shadow: var(--shadow-glow);
@@ -1154,14 +1162,17 @@
     </header>
 
     <nav>
-        <div class="nav-orbs">
-            <div class="nav-lines"></div>
-            <a href="#connections" class="nav-orb" data-label="Quantum"></a>
-            <a href="#chamber" class="nav-orb" data-label="Chamber"></a>
-            <a href="#paradox" class="nav-orb" data-label="Paradox"></a>
-            <a href="#facts" class="nav-orb" data-label="Radio"></a>
-        </div>
+      <div class="nav-orbs">
+        <div class="nav-lines"></div>
+        <a href="#connections"  class="nav-orb" data-label="Guide"></a>
+        <a href="#movies"       class="nav-orb" data-label="Movies"></a>
+        <a href="#chamber"      class="nav-orb" data-label="Chamber"></a>
+        <a href="#paradox"      class="nav-orb" data-label="Paradox"></a>
+        <a href="#double-crux"  class="nav-orb" data-label="Double-Crux"></a>
+        <a href="#facts"        class="nav-orb" data-label="Radio"></a>
+      </div>
     </nav>
+
 
     <main>
         <!-- Guide: an adult introduction to the site -->
