@@ -1287,6 +1287,18 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Movies & Guide styles */
+        .guide-grid { margin-top: .5rem; }
+        .guide-card { padding: 1rem; border-radius:12px; text-align:left; }
+        .guide-card h3 { margin-bottom: .25rem; }
+        .guide-cta { margin-top:.5rem; padding:.5rem .75rem; border-radius:8px; background:var(--accent-gold); color:var(--base-light); border:none; cursor:pointer }
+
+        .movie-controls select, .movie-controls input { width:100%; padding:.5rem; border-radius:8px; border:1px solid rgba(201,169,97,0.12); background:transparent }
+        #movie-results .movie-card { background:var(--base-light); padding:.5rem; border-radius:8px; display:flex; flex-direction:column; gap:.5rem; align-items:center; text-align:center }
+        .movie-poster { width:100%; height:240px; object-fit:cover; border-radius:6px; background:#eee }
+        .movie-title { font-weight:600; color:var(--accent-gold-dark) }
+        .movie-reason { font-size:.95rem; color:var(--text-secondary); }
     </style>
 </head>
 <body>
@@ -1314,22 +1326,92 @@
     </nav>
 
     <main>
-        <!-- Quantum Entanglement Web -->
+        <!-- Guide: an adult introduction to the site -->
         <section id="connections" class="fade-in">
             <div class="container">
-                <h2 class="section-title">Quantum Entanglement</h2>
-                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">Explore the hidden connections between realities</p>
-                
-                <div class="thought-web" id="thought-web">
-                    <!-- Concept nodes will be generated here -->
-                </div>
-                
-                <div class="thought-display glass">
-                    <div class="thought-content" id="thought-content">
-                        Click on quantum states to collapse their wave functions...
-                    </div>
+                <h2 class="section-title">Guide to Maria</h2>
+                <p class="mono" style="text-align:center;max-width:900px;margin:0 auto var(--space-sm);">A short map to this world — pick a doorway and begin.</p>
+
+                <div class="glass" style="padding:var(--space-md);border-radius:20px;">
+                  <div class="guide-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;">
+                    <article class="guide-card glass" data-anchor="#chamber">
+                      <h3>Read: The Chamber</h3>
+                      <p class="mono" style="color:var(--text-secondary)">Deep essays and meditations — begin with ‘On Consciousness’.</p>
+                      <button class="guide-cta">Enter the chamber</button>
+                    </article>
+
+                    <article class="guide-card glass" data-anchor="#paradox">
+                      <h3>Think: Paradox Engine</h3>
+                      <p class="mono" style="color:var(--text-secondary)">Short dilemmas and mental workouts to stretch your mind.</p>
+                      <button class="guide-cta">Challenge a paradox</button>
+                    </article>
+
+                    <article class="guide-card glass" data-anchor="#music">
+                      <h3>Listen: Musical Journey</h3>
+                      <p class="mono" style="color:var(--text-secondary)">Curated selections to accompany your reading.</p>
+                      <button class="guide-cta">Follow the music</button>
+                    </article>
+
+                    <article class="guide-card glass" data-anchor="#double-crux">
+                      <h3>Interact: Double-Crux Studio</h3>
+                      <p class="mono" style="color:var(--text-secondary)">Paste a claim, and we’ll help you dissect it with rigor.</p>
+                      <button class="guide-cta">Deconstruct a claim</button>
+                    </article>
+                  </div>
                 </div>
             </div>
+        </section>
+
+        <!-- Movie suggestions section -->
+        <section id="movies" class="fade-in">
+          <div class="container">
+            <h2 class="section-title">Cinema Suggestions</h2>
+            <p class="mono" style="text-align:center;max-width:900px;margin:0 auto var(--space-sm);">Tell Maria what mood, era, or theme you want — get concise, curated film recommendations with posters.</p>
+
+            <div class="glass" style="padding:var(--space-md);border-radius:20px;">
+              <div class="movie-controls" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;align-items:end;">
+                <label class="mono">Mood
+                  <select id="movie-mood">
+                    <option value="contemplative">Contemplative</option>
+                    <option value="romantic">Romantic</option>
+                    <option value="dark">Dark / intense</option>
+                    <option value="uplifting">Uplifting</option>
+                    <option value="philosophical">Philosophical</option>
+                    <option value="mysterious">Mysterious</option>
+                  </select>
+                </label>
+
+                <label class="mono">Era
+                  <select id="movie-era">
+                    <option value="any">Any</option>
+                    <option value="classic">Classic (before 1980)</option>
+                    <option value="modern">Modern (1980-2009)</option>
+                    <option value="contemporary">Contemporary (2010+)</option>
+                  </select>
+                </label>
+
+                <label class="mono">Language
+                  <select id="movie-lang">
+                    <option value="any">Any</option>
+                    <option value="ar">Arabic</option>
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                  </select>
+                </label>
+
+                <label class="mono">Minimum Rating
+                  <input id="movie-min-rating" type="range" min="0" max="10" value="6">
+                </label>
+
+                <div style="grid-column: span 2; display:flex; gap:.5rem; align-items:center;">
+                  <button id="movie-suggest" class="paradox-button">Suggest Films</button>
+                  <div id="movie-status" class="mono" style="color:var(--text-secondary)"></div>
+                </div>
+              </div>
+
+              <div id="movie-results" style="margin-top:1rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:1rem;"></div>
+            </div>
+          </div>
         </section>
 
         <section id="chamber" class="fade-in">
@@ -1593,7 +1675,8 @@
             initCustomCursor();
             initCosmicCanvas();
             initIntersectionObserver();
-            initQuantumWeb();
+            // guide replaces the old quantum web
+            initGuide();
             initEssayCards();
             initEnhancedParadox();
             initArabicPoetry();
@@ -1601,6 +1684,7 @@
             initFloatingParticles();
             initDoubleCruxStudio();
             initKeySettings();
+            initMovies();
 
         });
 
@@ -1617,6 +1701,7 @@
                 <div style="margin-top:.5rem;max-width:360px;">
                   <label class="mono">OpenAI Key (paste here):<br><input id="k_openai" style="width:100%"></label>
                   <label class="mono" style="margin-top:.5rem;display:block">Gemini Key (optional):<br><input id="k_gemini" style="width:100%"></label>
+                  <label class="mono" style="margin-top:.5rem;display:block">TMDb API Key (paste here):<br><input id="k_tmdb" style="width:100%" placeholder="v3 API key"></label>
                   <div style="display:flex;gap:.5rem;margin-top:.5rem;">
                     <button id="k_save" class="paradox-button">Save</button>
                     <button id="k_clear" class="paradox-button">Clear</button>
@@ -1631,11 +1716,58 @@
             const btnSave = document.getElementById('k_save');
             const btnClear = document.getElementById('k_clear');
             const status = document.getElementById('k_status');
-            try { inOpen.value = sessionStorage.getItem('OPENAI_API_KEY') || ''; inGem.value = sessionStorage.getItem('GEMINI_API_KEY') || ''; } catch {}
+            const inTmdb = document.getElementById('k_tmdb');
+            try {
+                // Reassemble OpenAI/Gemini keys from parts if stored, otherwise read legacy single key
+                const openParts = sessionStorage.getItem('OPENAI_KEY_PARTS');
+                if (openParts) { try { inOpen.value = JSON.parse(openParts).join(''); } catch { inOpen.value = sessionStorage.getItem('OPENAI_API_KEY') || ''; } }
+                else { inOpen.value = sessionStorage.getItem('OPENAI_API_KEY') || ''; }
+
+                const gemParts = sessionStorage.getItem('GEMINI_KEY_PARTS');
+                if (gemParts) { try { inGem.value = JSON.parse(gemParts).join(''); } catch { inGem.value = sessionStorage.getItem('GEMINI_API_KEY') || ''; } }
+                else { inGem.value = sessionStorage.getItem('GEMINI_API_KEY') || ''; }
+                // Try reassembling TMDB parts if present
+                const parts = sessionStorage.getItem('TMDB_KEY_PARTS');
+                if (parts) {
+                    try { inTmdb.value = JSON.parse(parts).join(''); } catch { inTmdb.value = sessionStorage.getItem('TMDB_API_KEY') || ''; }
+                } else {
+                    inTmdb.value = sessionStorage.getItem('TMDB_API_KEY') || '';
+                }
+            } catch {}
+
             btnSave.addEventListener('click', ()=>{
-                try { sessionStorage.setItem('OPENAI_API_KEY', inOpen.value.trim()); sessionStorage.setItem('GEMINI_API_KEY', inGem.value.trim()); status.textContent = 'Saved'; setTimeout(()=>status.textContent='',2000); } catch(e){ status.textContent='Error'; }
+                try {
+                    // store OpenAI and Gemini as split parts for superficial obfuscation
+                    const open = inOpen.value.trim();
+                    if (open) {
+                        const parts = []; for (let i=0;i<open.length;i+=8) parts.push(open.slice(i,i+8));
+                        sessionStorage.setItem('OPENAI_KEY_PARTS', JSON.stringify(parts));
+                        try { sessionStorage.removeItem('OPENAI_API_KEY'); } catch {}
+                    } else { sessionStorage.removeItem('OPENAI_KEY_PARTS'); sessionStorage.removeItem('OPENAI_API_KEY'); }
+
+                    const gem = inGem.value.trim();
+                    if (gem) {
+                        const parts = []; for (let i=0;i<gem.length;i+=8) parts.push(gem.slice(i,i+8));
+                        sessionStorage.setItem('GEMINI_KEY_PARTS', JSON.stringify(parts));
+                        try { sessionStorage.removeItem('GEMINI_API_KEY'); } catch {}
+                    } else { sessionStorage.removeItem('GEMINI_KEY_PARTS'); sessionStorage.removeItem('GEMINI_API_KEY'); }
+
+                    // split TMDB key into parts for superficial obfuscation
+                    const tm = inTmdb.value.trim();
+                    if (tm) {
+                        const parts = [];
+                        for (let i=0;i<tm.length;i+=8) parts.push(tm.slice(i,i+8));
+                        sessionStorage.setItem('TMDB_KEY_PARTS', JSON.stringify(parts));
+                        try { sessionStorage.removeItem('TMDB_API_KEY'); } catch {}
+                    } else {
+                        sessionStorage.removeItem('TMDB_KEY_PARTS');
+                        sessionStorage.removeItem('TMDB_API_KEY');
+                    }
+                    status.textContent = 'Saved'; setTimeout(()=>status.textContent='',2000);
+                } catch(e){ status.textContent='Error'; }
             });
-            btnClear.addEventListener('click', ()=>{ try { sessionStorage.removeItem('OPENAI_API_KEY'); sessionStorage.removeItem('GEMINI_API_KEY'); inOpen.value=''; inGem.value=''; status.textContent='Cleared'; setTimeout(()=>status.textContent='',2000);} catch(e){status.textContent='Error';}});
+
+            btnClear.addEventListener('click', ()=>{ try { sessionStorage.removeItem('OPENAI_API_KEY'); sessionStorage.removeItem('OPENAI_KEY_PARTS'); sessionStorage.removeItem('GEMINI_API_KEY'); sessionStorage.removeItem('GEMINI_KEY_PARTS'); sessionStorage.removeItem('TMDB_KEY_PARTS'); sessionStorage.removeItem('TMDB_API_KEY'); inOpen.value=''; inGem.value=''; inTmdb.value=''; status.textContent='Cleared'; setTimeout(()=>status.textContent='',2000);} catch(e){status.textContent='Error';}});
         }
 
         
@@ -1652,6 +1784,109 @@
                 cursorDot.style.left = e.clientX - 2 + 'px';
                 cursorDot.style.top = e.clientY - 2 + 'px';
             });
+        }
+
+        // Guide initializer (simple: attach anchor links)
+        function initGuide(){
+            document.querySelectorAll('.guide-card .guide-cta').forEach(btn=>{
+                btn.addEventListener('click', (e)=>{
+                    const card = e.target.closest('.guide-card');
+                    const anchor = card?.dataset?.anchor;
+                    if (anchor) {
+                        const el = document.querySelector(anchor);
+                        if (el) el.scrollIntoView({behavior:'smooth'});
+                    }
+                });
+            });
+        }
+
+        // Movies initializer
+        function initMovies(){
+            const suggestBtn = document.getElementById('movie-suggest');
+            const status = document.getElementById('movie-status');
+            const results = document.getElementById('movie-results');
+
+            suggestBtn.addEventListener('click', async ()=>{
+                status.textContent = '';
+                results.innerHTML = '';
+                const mood = document.getElementById('movie-mood').value;
+                const era = document.getElementById('movie-era').value;
+                const lang = document.getElementById('movie-lang').value;
+                const minRating = document.getElementById('movie-min-rating').value;
+
+                status.textContent = 'جاري البحث عن اقتراحات...';
+                suggestBtn.disabled = true;
+
+                const criteria = { mood, era, lang, minRating };
+                const prompt = buildMoviePrompt(criteria);
+
+                let list = null;
+                try {
+                    // Prefer structured JSON via callOpenAI
+                    const json = await callOpenAI(prompt);
+                    if (Array.isArray(json)) list = json;
+                    else if (Array.isArray(json?.movies)) list = json.movies;
+                } catch (e) {
+                    console.warn('callOpenAI failed for movies', e);
+                }
+
+                // fallback: try raw and parse lines
+                if (!list) {
+                    try {
+                        const raw = await callOpenAIRaw(prompt.replace('RETURN_JSON: true',''));
+                        // try to extract JSON
+                        const a = raw.indexOf('['), b = raw.lastIndexOf(']');
+                        if (a!==-1 && b!==-1) {
+                            list = JSON.parse(raw.slice(a,b+1));
+                        }
+                    } catch (e){ console.warn('raw parse failed', e); }
+                }
+
+                if (!list || !list.length) {
+                    // canned fallback
+                    list = [
+                        { title: 'Wings of Desire', year: '1987', reason: 'A poetic meditation on longing and the human condition.' },
+                        { title: 'In the Mood for Love', year: '2000', reason: 'A restrained, romantic study of desire and missed chances.' },
+                        { title: 'The Double Life of Veronique', year: '1991', reason: 'Quiet, haunting, and beautifully scored.' }
+                    ];
+                }
+
+                // For each title try to fetch poster from TMDB if key present
+                const tmdbKey = getClientKey('TMDB_API_KEY');
+                for (const item of list.slice(0,8)){
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    const poster = document.createElement('img');
+                    poster.className = 'movie-poster';
+                    poster.alt = item.title;
+                    const titleEl = document.createElement('div'); titleEl.className='movie-title'; titleEl.textContent = `${item.title} (${item.year||''})`;
+                    const reasonEl = document.createElement('div'); reasonEl.className='movie-reason'; reasonEl.textContent = item.reason || '';
+                    card.appendChild(poster);
+                    card.appendChild(titleEl);
+                    card.appendChild(reasonEl);
+                    results.appendChild(card);
+
+                    if (tmdbKey) {
+                        try {
+                            const q = encodeURIComponent(item.title + ' ' + (item.year||''));
+                            const r = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(tmdbKey)}&query=${q}`);
+                            const j = await r.json();
+                            const path = j?.results?.[0]?.poster_path;
+                            if (path) poster.src = 'https://image.tmdb.org/t/p/w500' + path; else poster.src='';
+                        } catch (e) { console.warn('TMDB fetch failed', e); poster.src=''; }
+                    } else {
+                        poster.src='';
+                    }
+                }
+
+                status.textContent = '';
+                suggestBtn.disabled = false;
+            });
+        }
+
+        function buildMoviePrompt(criteria){
+            // ask OpenAI to return strict JSON array: [{title, year, reason}, ...]
+            return `Recommend 6 films matching these criteria and return ONLY valid JSON (an array of objects):\nCRITERIA: ${JSON.stringify(criteria)}\nEach object should have: { "title": "...", "year": "...", "reason": "one-sentence reason why this fits" }\nRespond with the array only.`;
         }
 
         function initCosmicCanvas() {
@@ -2921,24 +3156,20 @@ Answer:`;
           function getClientKey(name){
             try { 
               if (name === 'OPENAI_API_KEY') {
-                // Reconstruct the embedded key from four parts
-                const segments = [
-                  'sk-proj-8aBRMVJVk_e5nCOjeA4FQTAj0e3YTwj1bLJUzLI3xol4yGj5I5Z8GF4LXLr5jiAqUAgciAL1XO',
-                  'T3BlbkFJO-blJBCp2hQS3OZdVliY13pG-ai39qhCPJ-_iLplRqKtBOtK8wGeJM9h0EAbS5njxA',
-                  'CmxxA',
-                  'AsA'
-                ];
-                return segments.join('');
+                try { const parts = sessionStorage.getItem('OPENAI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+                return sessionStorage.getItem('OPENAI_API_KEY') || '';
               }
               if (name === 'GEMINI_API_KEY') {
-                // Reconstruct the embedded Gemini key from four parts  
-                const parts = [
-                  'AIzaSyAqXYgg',
-                  'fgLt5_dL6w',
-                  'LEkNZUnGXr',
-                  '5QHBch4'
-                ];
-                return parts.join('');
+                try { const parts = sessionStorage.getItem('GEMINI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+                return sessionStorage.getItem('GEMINI_API_KEY') || '';
+              }
+              if (name === 'TMDB_API_KEY') {
+                // Reassemble TMDB key from stored parts in sessionStorage (superficial obfuscation)
+                try {
+                  const parts = sessionStorage.getItem('TMDB_KEY_PARTS');
+                  if (parts) return JSON.parse(parts).join('');
+                } catch {}
+                return sessionStorage.getItem('TMDB_API_KEY') || '';
               }
               return sessionStorage.getItem(name) || ''; 
             } catch { return ''; }
