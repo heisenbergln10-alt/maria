@@ -126,7 +126,11 @@
             width: 90%;
             max-width: 1400px;
             margin: 0 auto;
-            padding: var(--space-md) 0;
+            padding: var(--space-sm) 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .glass {
@@ -306,9 +310,13 @@
 
         section {
             min-height: 100vh;
-            padding: var(--space-xl) 0;
+            max-height: 100vh;
+            padding: var(--space-md) 0;
             position: relative;
             border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+            display: flex;
+            align-items: center;
+            overflow-y: auto;
         }
 
         section:last-of-type {
@@ -317,7 +325,7 @@
 
         .section-title {
             text-align: center;
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
             font-weight: 300;
         }
 
@@ -402,9 +410,11 @@
 
         .essay-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-md);
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-sm);
             perspective: 1000px;
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         .essay-card {
@@ -620,7 +630,7 @@
         .paradox-interface {
             max-width: 900px;
             margin: 0 auto;
-            padding: var(--space-lg);
+            padding: var(--space-md);
             border-radius: 20px;
         }
 
@@ -1092,14 +1102,48 @@
 
             .essay-container {
                 grid-template-columns: 1fr;
+                max-height: 65vh;
             }
 
-            #embed-iframe {
-                height: 250px !important;
+            section {
+                padding: var(--space-sm) 0;
+            }
+
+            .container {
+                padding: var(--space-xs) 0;
+            }
+
+            .section-title {
+                margin-bottom: var(--space-sm);
+                font-size: var(--fs-heading);
+            }
+
+            .paradox-interface,
+            .poem-interface,
+            .radio-interface {
+                padding: var(--space-sm);
             }
 
             .complexity-controls {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-height: 800px) {
+            .essay-container {
+                max-height: 60vh;
+            }
+            
+            .section-title {
+                margin-bottom: var(--space-sm);
+            }
+            
+            .container {
+                padding: var(--space-xs) 0;
+            }
+
+            section {
+                padding: var(--space-sm) 0;
             }
         }
     </style>
