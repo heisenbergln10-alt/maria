@@ -768,53 +768,238 @@
             overflow: hidden;
         }
 
-        .poem-interface {
+        /* Mystical Poetry Interface */
+        .mystical-poetry-interface {
             max-width: 900px;
             margin: 0 auto;
             text-align: center;
         }
 
-        .poem-display {
-            padding: var(--space-lg);
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            margin-bottom: var(--space-md);
-            min-height: 300px;
+        .poetry-wheel {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .mystical-orb {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-gold) 0%, var(--accent-gold-dark) 70%);
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .poem-text {
-            font-size: 1.75rem;
-            line-height: 2.5;
-            color: var(--text-primary);
-            max-width: 700px;
-            text-align: center;
-            white-space: pre-line;
-            font-family: 'Amiri', serif;
-            direction: rtl;
-        }
-
-        .generate-poem-btn {
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, 
-                rgba(201, 169, 97, 0.2) 0%, 
-                rgba(201, 169, 97, 0.1) 100%);
-            border: 2px solid var(--accent-gold);
-            color: var(--accent-gold);
-            font-family: var(--font-display);
-            font-size: var(--fs-body);
-            border-radius: 50px;
+            font-size: 2rem;
             cursor: pointer;
+            transition: var(--transition-smooth);
+            animation: mysticalPulse 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(201, 169, 97, 0.6);
+        }
+
+        .wheel-instruction {
+            margin-top: var(--space-sm);
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+        }
+
+        .mood-ring {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mood-crystal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            margin: -30px 0 0 -30px;
+            transform-origin: 0 0;
+            transform: rotate(var(--angle)) translateX(120px) rotate(calc(-1 * var(--angle)));
+            cursor: pointer;
+            transition: var(--transition-spring);
+        }
+
+        .mood-crystal::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: var(--color, var(--accent-gold));
+            opacity: 0.2;
             transition: var(--transition-smooth);
         }
 
-        .generate-poem-btn:hover {
-            background: var(--accent-gold);
-            color: var(--base-light);
-            transform: translateY(-2px);
+        .mood-crystal:hover::before {
+            opacity: 0.4;
+            transform: scale(1.2);
+        }
+
+        .mood-crystal.selected::before {
+            opacity: 0.6;
+            transform: scale(1.3);
+            box-shadow: 0 0 20px var(--color);
+        }
+
+        .mood-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        .mood-label {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-body);
+            font-size: var(--fs-small);
+            color: var(--text-primary);
+            white-space: nowrap;
+            direction: rtl;
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .mood-crystal:hover .mood-label,
+        .mood-crystal.selected .mood-label {
+            opacity: 1;
+        }
+
+        .invocation-area {
+            margin: var(--space-xl) 0;
+        }
+
+        .mystical-scroll-btn {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            color: var(--charcoal);
+            border: 2px solid transparent;
+            padding: var(--space-md) var(--space-xl);
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: var(--fs-body);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(201, 169, 97, 0.3);
+        }
+
+        .mystical-scroll-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--gray-muted);
+        }
+
+        .mystical-scroll-btn:not(:disabled):hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 169, 97, 0.5);
+        }
+
+        .magical-particles {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: magicalShimmer 2s linear infinite;
+            opacity: 0;
+        }
+
+        .mystical-scroll-btn:not(:disabled):hover .magical-particles {
+            opacity: 1;
+        }
+
+        .ancient-scroll {
+            background: linear-gradient(135deg, #f4e4c1 0%, #e6d3a3 100%);
+            border: 3px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: var(--space-lg);
+            margin-top: var(--space-lg);
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .ancient-scroll::before {
+            content: '📜';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            background: var(--base-light);
+            padding: 0 var(--space-sm);
+        }
+
+        .scroll-content {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .poem-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-heading);
+            color: var(--accent-gold-dark);
+            margin-bottom: var(--space-md);
+            text-align: center;
+        }
+
+        .poem-verses {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            line-height: 2.2;
+            color: var(--charcoal);
+            white-space: pre-line;
+            margin-bottom: var(--space-md);
+        }
+
+        .poet-signature {
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: var(--fs-small);
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: var(--space-lg);
+        }
+
+        .scroll-again-btn {
+            background: var(--accent-gold);
+            color: var(--charcoal);
+            border: none;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: 15px;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            margin-top: var(--space-md);
+        }
+
+        .scroll-again-btn:hover {
+            background: var(--accent-gold-dark);
+            transform: translateY(-2px);
+        }
+
+        @keyframes mysticalPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(201, 169, 97, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(201, 169, 97, 0.9); }
+        }
+
+        @keyframes magicalShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         /* Midnight Radio with Old Design */
@@ -1234,42 +1419,72 @@
 
         <section id="poems" class="fade-in">
             <div class="container">
-                <h2 class="section-title">مولّد الشعر العربي</h2>
-                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">شعر أصيل بالذكاء الاصطناعي</p>
+                <h2 class="section-title">⭐ بيت الشعر ⭐</h2>
+                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">حيث تتراقص المعاني في قوالب الكلمات</p>
                 
-                <div class="poem-interface">
-                    <div class="poem-controls" style="display: flex; gap: 1rem; justify-content: center; margin-bottom: var(--space-md); flex-wrap: wrap;">
-                        <select id="poem-theme" style="padding: 0.5rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: var(--text-primary); border: 1px solid var(--accent-gold);">
-                            <option value="غزل">الغزل والحب</option>
-                            <option value="حكمة">الحكمة والفلسفة</option>
-                            <option value="طبيعة">وصف الطبيعة</option>
-                            <option value="حنين">الحنين والذكريات</option>
-                            <option value="فخر">الفخر والعزة</option>
-                            <option value="زهد">الزهد والتصوف</option>
-                            <option value="رثاء">الرثاء والحزن</option>
-                            <option value="وطن">حب الوطن</option>
-                        </select>
+                <div class="mystical-poetry-interface">
+                    <!-- Mystical Poetry Wheel -->
+                    <div class="poetry-wheel" id="poetry-wheel">
+                        <div class="wheel-center">
+                            <div class="mystical-orb" id="mystical-orb">✨</div>
+                            <p class="wheel-instruction">اختر مزاجك الشعري</p>
+                        </div>
                         
-                        <select id="poem-meter" style="padding: 0.5rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: var(--text-primary); border: 1px solid var(--accent-gold);">
-                            <option value="بحر_الطويل">بحر الطويل</option>
-                            <option value="بحر_البسيط">بحر البسيط</option>
-                            <option value="بحر_الكامل">بحر الكامل</option>
-                            <option value="بحر_الوافر">بحر الوافر</option>
-                            <option value="بحر_الرمل">بحر الرمل</option>
-                            <option value="بحر_الخفيف">بحر الخفيف</option>
-                            <option value="حر">شعر حر</option>
-                        </select>
-                    </div>
-                    
-                    <div class="poem-display glass">
-                        <div class="poem-text" id="poem-text">
-                            اختر الموضوع والبحر واضغط "أنشد شعراً"...
+                        <div class="mood-ring">
+                            <div class="mood-crystal" data-mood="غزل" data-color="#ff6b9d" style="--angle: 0deg;">
+                                <span class="mood-icon">💕</span>
+                                <span class="mood-label">غزل</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="حكمة" data-color="#c9a961" style="--angle: 45deg;">
+                                <span class="mood-icon">🧿</span>
+                                <span class="mood-label">حكمة</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="طبيعة" data-color="#4ecdc4" style="--angle: 90deg;">
+                                <span class="mood-icon">🌿</span>
+                                <span class="mood-label">طبيعة</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="حنين" data-color="#a8e6cf" style="--angle: 135deg;">
+                                <span class="mood-icon">🌙</span>
+                                <span class="mood-label">حنين</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="فخر" data-color="#ffd93d" style="--angle: 180deg;">
+                                <span class="mood-icon">⚔️</span>
+                                <span class="mood-label">فخر</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="زهد" data-color="#b19cd9" style="--angle: 225deg;">
+                                <span class="mood-icon">🕯️</span>
+                                <span class="mood-label">زهد</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="رثاء" data-color="#95a5a6" style="--angle: 270deg;">
+                                <span class="mood-icon">🥀</span>
+                                <span class="mood-label">رثاء</span>
+                            </div>
+                            <div class="mood-crystal" data-mood="وطن" data-color="#e74c3c" style="--angle: 315deg;">
+                                <span class="mood-icon">🏛️</span>
+                                <span class="mood-label">وطن</span>
+                            </div>
                         </div>
                     </div>
-                    
-                    <button class="generate-poem-btn" id="generate-poem">
-                        أنشد شعراً
-                    </button>
+
+                    <!-- Mystical Invocation Button -->
+                    <div class="invocation-area">
+                        <button class="mystical-scroll-btn" id="invoke-muse" disabled>
+                            <span class="scroll-text">استدع ربة الشعر</span>
+                            <div class="magical-particles"></div>
+                        </button>
+                    </div>
+
+                    <!-- Ancient Scroll Display -->
+                    <div class="ancient-scroll" id="poem-scroll" style="display: none;">
+                        <div class="scroll-content">
+                            <div class="poem-title" id="poem-title-display"></div>
+                            <div class="poem-verses" id="poem-verses-display"></div>
+                            <div class="poet-signature">~ من إلهام الأقدمين ~</div>
+                        </div>
+                        <button class="scroll-again-btn" id="scroll-again">
+                            <span>طلب إلهام جديد</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1283,7 +1498,7 @@
             </p>
         
             <div class="glass" style="padding:var(--space-md);border-radius:20px;">
-              <textarea id="dc-input" rows="4" placeholder="Example: “Men should start their life in jail and fight their way out.”"
+              <textarea id="dc-input" rows="4" placeholder="Example: “Open-source AGI is safer than closed-source.”"
                 style="width:100%;padding:1rem;border-radius:12px;border:1px solid rgba(201,169,97,.25);background:rgba(0,0,0,.15);color:var(--text-primary);"></textarea>
         
               <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin: .75rem 0 0;">
@@ -2276,135 +2491,90 @@ Answer:`;
         }
         // Enhanced Arabic Poetry Generator with AI
         function initArabicPoetry() {
-            const btn = document.getElementById('generate-poem');
-            const text = document.getElementById('poem-text');
-            const themeSelect = document.getElementById('poem-theme');
-            const meterSelect = document.getElementById('poem-meter');
-            
+            const crystals = document.querySelectorAll('.mood-crystal');
+            const invokeBtn = document.getElementById('invoke-muse');
+            const poemScroll = document.getElementById('poem-scroll');
+            const titleDisplay = document.getElementById('poem-title-display');
+            const versesDisplay = document.getElementById('poem-verses-display');
+            const scrollAgainBtn = document.getElementById('scroll-again');
+
+            let selectedMood = null;
+
             // Poetic themes with authentic Arabic terminology
             const themes = {
-                'غزل': {
-                    name: 'الغزل والحب',
-                    keywords: ['العشق', 'الهوى', 'الوجد', 'الشوق', 'الوصال', 'الفراق', 'الحبيب', 'القلب', 'الروح'],
-                    style: 'رقيق عذب يفيض بالمشاعر'
-                },
-                'حكمة': {
-                    name: 'الحكمة والفلسفة', 
-                    keywords: ['الحكمة', 'الفطنة', 'العقل', 'التدبر', 'اليقين', 'الحق', 'الباطل', 'الزمان', 'القدر'],
-                    style: 'محكم البناء عميق المعنى'
-                },
-                'طبيعة': {
-                    name: 'وصف الطبيعة',
-                    keywords: ['الربيع', 'الزهر', 'النسيم', 'الغدير', 'الطير', 'الأقحوان', 'الرياض', 'الأوراق'],
-                    style: 'مفعم بالصور الجميلة والتشبيهات'
-                },
-                'حنين': {
-                    name: 'الحنين والذكريات',
-                    keywords: ['الذكرى', 'الماضي', 'الأحباب', 'الديار', 'الأطلال', 'الشباب', 'الأيام', 'العهد'],
-                    style: 'حزين يفيض بالشجن والأسى'
-                },
-                'فخر': {
-                    name: 'الفخر والعزة',
-                    keywords: ['المجد', 'الشرف', 'الكرم', 'النجدة', 'الشجاعة', 'العلا', 'المعالي', 'الهمة'],
-                    style: 'قوي الوقع رنان الألفاظ'
-                },
-                'زهد': {
-                    name: 'الزهد والتصوف',
-                    keywords: ['التوبة', 'الزهد', 'الآخرة', 'الفناء', 'البقاء', 'الحق', 'الطريق', 'المقام'],
-                    style: 'روحاني عميق يدعو للتأمل'
-                },
-                'رثاء': {
-                    name: 'الرثاء والحزن',
-                    keywords: ['الفقيد', 'الحزن', 'الألم', 'الدموع', 'الوداع', 'الذكرى', 'الأسى', 'الفراق'],
-                    style: 'حزين موجع يبكي الفقدان'
-                },
-                'وطن': {
-                    name: 'حب الوطن',
-                    keywords: ['الوطن', 'الأرض', 'التراب', 'الهوية', 'الأصالة', 'المجد', 'التاريخ', 'الأجداد'],
-                    style: 'وطني ملتهب يثير الحماس'
-                }
+                'غزل': { name: 'الغزل والحب', keywords: ['العشق','الهوى','الوجد','الشوق','الوصال'], style: 'رقيق عذب يفيض بالمشاعر' },
+                'حكمة': { name: 'الحكمة والفلسفة', keywords: ['الحكمة','الفطنة','العقل','التدبر','اليقين'], style: 'محكم البناء عميق المعنى' },
+                'طبيعة': { name: 'وصف الطبيعة', keywords: ['الربيع','الزهر','النسيم','الغدير','الطير'], style: 'مفعم بالصور الجميلة والتشبيهات' },
+                'حنين': { name: 'الحنين والذكريات', keywords: ['الذكرى','الماضي','الأحباب','الديار','الأطلال'], style: 'حزين يفيض بالشجن والأسى' },
+                'فخر': { name: 'الفخر والعزة', keywords: ['المجد','الشرف','الكرم','النجدة','الشجاعة'], style: 'قوي الوقع رنان الألفاظ' },
+                'زهد': { name: 'الزهد والتصوف', keywords: ['التوبة','الزهد','الآخرة','الفناء','البقاء'], style: 'روحاني عميق يدعو للتأمل' },
+                'رثاء': { name: 'الرثاء والحزن', keywords: ['الفقيد','الحزن','الألم','الوداع','الأسى'], style: 'حزين موجع يبكي الفقدان' },
+                'وطن': { name: 'حب الوطن', keywords: ['الوطن','الأرض','التراب','الهوية','الأصالة'], style: 'وطني ملتهب يثير الحماس' }
             };
-            
-            // Classical Arabic meters with patterns
-            const meters = {
-                'بحر_الطويل': 'فَعُولُنْ مَفَاعِيلُنْ فَعُولُنْ مَفَاعِلُنْ',
-                'بحر_البسيط': 'مُسْتَفْعِلُنْ فَاعِلُنْ مُسْتَفْعِلُنْ فَعِلُنْ',
-                'بحر_الكامل': 'مُتَفَاعِلُنْ مُتَفَاعِلُنْ مُتَفَاعِلُنْ',
-                'بحر_الوافر': 'مُفَاعَلَتُنْ مُفَاعَلَتُنْ فَعُولُنْ',
-                'بحر_الرمل': 'فَاعِلاتُنْ فَاعِلاتُنْ فَاعِلُنْ',
-                'بحر_الخفيف': 'فَاعِلاتُنْ مُسْتَفْعِلُنْ فَاعِلاتُنْ',
-                'حر': 'شعر حر بلا قيود العروض'
-            };
-            
-            btn.addEventListener('click', async () => {
-                const theme = themeSelect.value;
-                const meter = meterSelect.value;
-                const themeData = themes[theme];
-                
-                btn.disabled = true;
-                btn.textContent = 'ينسج الأبيات...';
-                text.style.opacity = '0.5';
-                text.textContent = 'جاري إنشاد الشعر...';
-                
-                try {
-                    const poem = await generateArabicPoetry(theme, meter, themeData);
-                    text.style.opacity = '0';
-                    setTimeout(() => {
-                        text.textContent = poem;
-                        text.style.opacity = '1';
-                    }, 300);
-                } catch (error) {
-                    console.error('Poetry generation error:', error);
-                    text.textContent = 'عذراً، لم أستطع إنشاد الشعر في هذه اللحظة...';
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = 'أنشد شعراً';
-                }
+
+            const meters = ['بحر_الطويل','بحر_البسيط','بحر_الكامل','بحر_الوافر','بحر_الرمل','بحر_الخفيف','حر'];
+
+            function clearSelection() {
+                crystals.forEach(c => c.classList.remove('selected'));
+                selectedMood = null;
+                invokeBtn.disabled = true;
+            }
+
+            crystals.forEach(cr => {
+                cr.addEventListener('click', () => {
+                    clearSelection();
+                    cr.classList.add('selected');
+                    selectedMood = cr.dataset.mood;
+                    // tint orb
+                    const color = cr.dataset.color || getComputedStyle(document.documentElement).getPropertyValue('--accent-gold');
+                    const orb = document.getElementById('mystical-orb');
+                    if (orb) orb.style.boxShadow = `0 0 30px ${color}`;
+                    invokeBtn.disabled = false;
+                });
             });
-            
-            async function generateArabicPoetry(theme, meter, themeData) {
-                const meterDesc = meters[meter] || 'نظم حر';
-                const keywords = themeData.keywords.slice(0, 5).join('، ');
-                
-                const prompt = `أنت شاعر عربي عريق متمكن من أصول الشعر والعروض. أنشد قصيدة أصيلة:
 
-الموضوع: ${themeData.name}
-البحر: ${meterDesc}
-الأسلوب: ${themeData.style}
-المفردات المفضلة: ${keywords}
+            async function invokePoem() {
+                if (!selectedMood) return;
+                invokeBtn.disabled = true;
+                titleDisplay.textContent = themes[selectedMood]?.name || selectedMood;
+                versesDisplay.innerHTML = '<div class="loading" aria-label="loading"></div>';
+                poemScroll.style.display = 'block';
+                try {
+                    const poem = await generateArabicPoetry(selectedMood);
+                    versesDisplay.textContent = poem;
+                } catch (e) {
+                    console.error('Poetry generation failed', e);
+                    versesDisplay.textContent = 'عذراً، لم أستطع استدعاء الأبيات الآن.';
+                } finally {
+                    invokeBtn.disabled = false;
+                }
+            }
 
-شروط الإنشاد:
-1. اكتب 4-6 أبيات فقط
-2. استخدم اللغة العربية الفصحى الأصيلة
-3. تجنب الكلمات العامية أو الحديثة
-4. اجعل المعنى عميقاً والصورة الشعرية جميلة
-5. التزم بوحدة القافية والروي
-6. تجنب التكرار المباشر والوضوح المفرط
-7. استخدم الاستعارات والكنايات كالشعراء العظام
-8. اجعل كل بيت قائماً بذاته مع تماسك القصيدة ككل
+            invokeBtn.addEventListener('click', invokePoem);
+            scrollAgainBtn.addEventListener('click', invokePoem);
 
-أنشد الآن شعراً أصيلاً:`;
+            // Core generator - tries OpenAI then falls back to prewritten verses
+            async function generateArabicPoetry(themeKey) {
+                const themeData = themes[themeKey] || { name: themeKey, keywords: [] };
+                const meter = meters[Math.floor(Math.random()*meters.length)];
+                const meterDesc = meter === 'حر' ? 'شعر حر بلا قيود العروض' : meter;
+                const keywords = (themeData.keywords||[]).slice(0,5).join('، ');
+
+                const prompt = `أنت شاعر عربي عريق متمكن من أصول الشعر والعروض. أنشد قصيدة قصيرة وعميقة:\n\nالموضوع: ${themeData.name}\nالبحر: ${meterDesc}\nالأسلوب: ${themeData.style || ''}\nالمفردات المفضلة: ${keywords}\n\nشروط: اكتب 4 أبيات-6 أبيات، باللغة العربية الفصحى، اجعل الصور قوية واللغة موسيقية.`;
 
                 try {
                     const response = await callOpenAIRaw(prompt);
-                    // Clean up the response
-                    let poem = response.trim();
-                    
-                    // Remove any leading/trailing quotes or extra text
-                    poem = poem.replace(/^["']|["']$/g, '');
-                    poem = poem.replace(/^(القصيدة:|الشعر:|إليك|هذه)/i, '').trim();
-                    
-                    return poem;
-                } catch (error) {
-                    // Fallback to high-quality pre-written verse
+                    let poem = (response||'').trim();
+                    poem = poem.replace(/^\s*[:\-–—]+/,'').trim();
+                    return poem || 'لم ترد أبيات واضحة.';
+                } catch (e) {
+                    console.warn('OpenAI failed, using fallback', e);
                     const fallbacks = [
-                        "يا من سكنت فؤادي دون استئذان\nوملكت مفاتيح الروح والأحزان\nعينيك نجمان في ليل انتظاري\nتضيئان دربي وتمحوان أشجاني\n\nأحبك حتى ينتهي العمر كله\nوحتى يذوب القلب في الخفقان\nفأنت الحياة التي أحيا لأجلها\nوأنت الأمان الهارب الضيعان",
-                        
-                        "في غيابك تزدحم الذكريات\nكأسراب طيور تبحث عن أوكار\nأسترجع صوتك من خزائن قلبي\nفتشرق في عتمة الليل أقمار\n\nما أجمل أن تكون لي وطناً\nأعود إليه كلما عصفت الأخطار\nوما أروع أن أحيا في ضلالك\nحيث تنمو بين الحشايا الأزهار",
-                        
-                        "خذني إلى حيث تسكن الأحلام\nحيث البراءة لم تزل عذراء\nحيث القلوب تعانق الأرواح\nولا تعرف المعنى للجفاء\n\nخذني بعيداً عن ضجيج الأيام\nإلى ذلك السكن الهادئ الجميل\nحيث الصدق لا يحتاج برهان\nوالحب يجري في العروق كالنيل"
+                        'يا سائراً بين خيوط الليل والنجوم\nتأمل القلب فربما به السلام\nقد يزهر حبٌ في صمتك القديم\nويرتقي سواد الليل إلى صباح',
+                        'في سماء الشتاء قلبٌ مشتاق\nينهش الثرى بِذكرى لا تنام\nيا ليت حبيبا يعود بالسلام\nفأغني له ما تبقى من كلام',
+                        'نقشتُ اسمك على رِمال الصباح\nورجعَ البحر يهدهُ أمواج الرجعة\nيا من سكنتَ أعمق مسارح الروح\nسأظل أُعيدُ رسمك في العيون'
                     ];
-                    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                    return fallbacks[Math.floor(Math.random()*fallbacks.length)];
                 }
             }
         }
