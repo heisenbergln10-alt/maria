@@ -1405,7 +1405,187 @@
             initMovies(); // Initialize movies functionality
 
         });
-
+        // --- Random helpers ---
+        function shuffleInPlace(a){
+          for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+          return a;
+        }
+        function sampleRandom(a, n){ return shuffleInPlace(a.slice()).slice(0, n); }
+        
+        // --- Criteria helpers ---
+        function eraToRange(era){
+          switch (era) {
+            case 'classic':        return { gte: '1900-01-01', lte: '1979-12-31' };
+            case 'eighties':       return { gte: '1980-01-01', lte: '1989-12-31' };
+            case 'nineties':       return { gte: '1990-01-01', lte: '1999-12-31' };
+            case 'two-thousands':  return { gte: '2000-01-01', lte: '2009-12-31' };
+            case 'twenty-tens':    return { gte: '2010-01-01', lte: '2019-12-31' };
+            case 'twenty-twenties':return { gte: '2020-01-01', lte: '2100-01-01' };
+            default:               return {};
+          }
+        }
+        function moodToGenres(mood){
+          switch (mood) {
+            case 'contemplative': return [18, 9648];       // Drama, Mystery
+            case 'romantic':      return [10749, 35];      // Romance, Comedy
+            case 'melancholic':   return [18];             // Drama
+            case 'surreal':       return [14, 878, 27];    // Fantasy/Sci-Fi/Horror
+            case 'nostalgic':     return [18, 10751];      // Drama, Family
+            default:              return [];
+          }
+        }
+        
+        // --- BIG fallback from TMDB (300–400+ pool) ---
+        async function discoverManyFromTMDB({ apiKey, mood, era, lang, minRating=7, pages=12, voteCountGte=200 }) {
+          const { gte, lte } = eraToRange(era);
+          const paramsBase = new URLSearchParams({
+            api_key: apiKey,
+            include_adult: 'false',
+            include_video: 'false',
+            sort_by: 'vote_average.desc',
+            'vote_average.gte': String(minRating),
+            'vote_count.gte': String(voteCountGte)
+          });
+          if (gte) paramsBase.set('primary_release_date.gte', gte);
+          if (lte) paramsBase.set('primary_release_date.lte', lte);
+          const genres = moodToGenres(mood);
+          if (genres.length) paramsBase.set('with_genres', genres.join(','));
+          if (lang && lang !== 'any') paramsBase.set('with_original_language', lang);
+        
+          const pool = [];
+          const seen = new Set();
+          for (let page = 1; page <= pages; page++) {
+            const p = new URLSearchParams(paramsBase);
+            p.set('page', String(page));
+            const url = `https://api.themoviedb.org/3/discover/movie?${p.toString()}`;
+            try {
+              const r = await fetch(url);
+              if (!r.ok) continue;
+              const data = await r.json();
+              for (const m of (data.results || [])) {
+                if (!m?.id || seen.has(m.id)) continue;
+                seen.add(m.id);
+                pool.push({
+                  title: m.title,
+                  year: (m.release_date || '').slice(0,4),
+                  poster_path: m.poster_path,
+                  vote_average: m.vote_average,
+                  vote_count: m.vote_count,
+                  original_language: m.original_language,
+                  tmdb_id: m.id
+                });
+              }
+            } catch {}
+          }
+          return pool;
+        }
+        
+        // --- Large preset (offline) as last-ditch safety; randomized each time ---
+        const PRESET_MOVIES_BIG = {
+          // keep triples you actually use; add more arrays to grow the pool
+          "contemplative|classic|en": [
+            {t:"2001: A Space Odyssey",y:1968},{t:"Barry Lyndon",y:1975},{t:"The Conversation",y:1974},{t:"Taxi Driver",y:1976},
+            {t:"The Last Picture Show",y:1971},{t:"McCabe & Mrs. Miller",y:1971},{t:"Badlands",y:1973},{t:"The Deer Hunter",y:1978},
+            {t:"A Woman Under the Influence",y:1974},{t:"Five Easy Pieces",y:1970},{t:"The Graduate",y:1967},{t:"Midnight Cowboy",y:1969},
+            {t:"Network",y:1976},{t:"Serpico",y:1973},{t:"Days of Heaven",y:1978},{t:"Klute",y:1971},{t:"The French Connection",y:1971},
+            {t:"Deliverance",y:1972},{t:"Harold and Maude",y:1971},{t:"Mean Streets",y:1973},{t:"Paris, Texas",y:1984},{t:"The Elephant Man",y:1980},
+            {t:"Koyaanisqatsi",y:1982},{t:"Stalker",y:1979},{t:"Solaris",y:1972},{t:"The Mirror",y:1975}
+          ],
+          "contemplative|twenty-tens|ko": [
+            {t:"Burning",y:2018},{t:"The Handmaiden",y:2016},{t:"Poetry",y:2010},{t:"The Day After",y:2017},{t:"Right Now, Wrong Then",y:2015},
+            {t:"On the Beach at Night Alone",y:2017},{t:"Nobody’s Daughter Haewon",y:2013},{t:"Hill of Freedom",y:2014},{t:"Our Sunhi",y:2013},
+            {t:"The World of Us",y:2016},{t:"Little Forest",y:2018},{t:"1987: When the Day Comes",y:2017},{t:"Oasis",y:2002},{t:"Secret Sunshine",y:2007},
+            {t:"Spring, Summer, Fall, Winter... and Spring",y:2003},{t:"A Tale of Two Sisters",y:2003},{t:"Peppermint Candy",y:1999},{t:"Café Noir",y:2009},
+            {t:"The Attorney",y:2013},{t:"Han Gong-ju",y:2013},{t:"Castaway on the Moon",y:2009}
+          ],
+          "romantic|nineties|en": [
+            {t:"Before Sunrise",y:1995},{t:"Notting Hill",y:1999},{t:"Four Weddings and a Funeral",y:1994},{t:"Sleepless in Seattle",y:1993},
+            {t:"You’ve Got Mail",y:1998},{t:"Pretty Woman",y:1990},{t:"10 Things I Hate About You",y:1999},{t:"The English Patient",y:1996},
+            {t:"Sense and Sensibility",y:1995},{t:"Jerry Maguire",y:1996},{t:"While You Were Sleeping",y:1995},{t:"Shakespeare in Love",y:1998},
+            {t:"Groundhog Day",y:1993},{t:"Titanic",y:1997},{t:"As Good as It Gets",y:1997},{t:"City of Angels",y:1998},{t:"The Wedding Singer",y:1998},
+            {t:"My Best Friend’s Wedding",y:1997},{t:"Clueless",y:1995},{t:"Sliding Doors",y:1998},{t:"The Bridges of Madison County",y:1995}
+          ],
+          "romantic|two-thousands|fr": [
+            {t:"Amélie",y:2001},{t:"Happenstance",y:2000},{t:"The Spanish Apartment",y:2002},{t:"The Russian Dolls",y:2005},
+            {t:"Paris, je t’aime",y:2006},{t:"Love Songs",y:2007},{t:"Priceless",y:2006},{t:"A Very Long Engagement",y:2004},
+            {t:"Changing Times",y:2004},{t:"Ensemble, c’est tout",y:2007},{t:"Je l’aimais",y:2009},{t:"Un baiser s’il vous plaît",y:2007},
+            {t:"Après Vous",y:2003},{t:"Clara et moi",y:2004},{t:"Je ne suis pas là pour être aimé",y:2005},{t:"Avenue Montaigne",y:2006},
+            {t:"Mademoiselle Chambon",y:2009},{t:"Love Me If You Dare",y:2003},{t:"L’Auberge Espagnole 3: Chinese Puzzle",y:2013},{t:"Heartbreaker",y:2010}
+          ],
+          "melancholic|twenty-tens|en": [
+            {t:"Manchester by the Sea",y:2016},{t:"Her",y:2013},{t:"A Ghost Story",y:2017},{t:"Moonlight",y:2016},{t:"Boyhood",y:2014},
+            {t:"Blue Valentine",y:2010},{t:"The Florida Project",y:2017},{t:"The Place Beyond the Pines",y:2012},{t:"Never Let Me Go",y:2010},
+            {t:"Carol",y:2015},{t:"Take Shelter",y:2011},{t:"The Tree of Life",y:2011},{t:"Inside Llewyn Davis",y:2013},{t:"Drive",y:2011},
+            {t:"Call Me by Your Name",y:2017},{t:"Nebraska",y:2013},{t:"Still Alice",y:2014},{t:"Room",y:2015},{t:"If Beale Street Could Talk",y:2018},
+            {t:"The Descendants",y:2011},{t:"Paterson",y:2016},{t:"The Broken Circle Breakdown",y:2012}
+          ],
+          "melancholic|classic|ja": [
+            {t:"Tokyo Story",y:1953},{t:"Late Spring",y:1949},{t:"Early Summer",y:1951},{t:"Floating Weeds",y:1959},{t:"Ikiru",y:1952},
+            {t:"Ugetsu",y:1953},{t:"Sansho the Bailiff",y:1954},{t:"Woman in the Dunes",y:1964},{t:"The Human Condition I",y:1959},
+            {t:"The Human Condition II",y:1959},{t:"The Human Condition III",y:1961},{t:"The Ballad of Narayama",y:1958},{t:"When a Woman Ascends the Stairs",y:1960},
+            {t:"An Autumn Afternoon",y:1962},{t:"Late Autumn",y:1960},{t:"The Story of the Last Chrysanthemums",y:1939},{t:"Floating Clouds",y:1955},
+            {t:"Fires on the Plain",y:1959},{t:"Dodeskaden",y:1970},{t:"The Only Son",y:1936},{t:"I Was Born, But...",y:1932}
+          ],
+          "surreal|classic|es": [
+            {t:"Un Chien Andalou",y:1929},{t:"Viridiana",y:1961},{t:"The Exterminating Angel",y:1962},{t:"Tristana",y:1970},
+            {t:"El Topo",y:1970},{t:"The Holy Mountain",y:1973},{t:"Fando y Lis",y:1968},{t:"The Spirit of the Beehive",y:1973},
+            {t:"La Cabina",y:1972},{t:"Arrebato",y:1979},{t:"Peppermint Frappé",y:1967},{t:"Who Can Kill a Child?",y:1976},
+            {t:"La prima Angélica",y:1974},{t:"Cría cuervos",y:1976},{t:"Nazarín",y:1959},{t:"Los olvidados",y:1950},
+            {t:"El Sur",y:1983},{t:"That Obscure Object of Desire",y:1977},{t:"The Discreet Charm of the Bourgeoisie",y:1972},{t:"Cabeza Borradora (Eraserhead) — not ES, skip if language filter",y:1977}
+          ],
+          "surreal|twenty-tens|en": [
+            {t:"The Lobster",y:2015},{t:"Under the Skin",y:2013},{t:"Annihilation",y:2018},{t:"Enemy",y:2013},{t:"A Field in England",y:2013},
+            {t:"Upstream Color",y:2013},{t:"The Killing of a Sacred Deer",y:2017},{t:"Sorry to Bother You",y:2018},{t:"Swiss Army Man",y:2016},
+            {t:"Mother!",y:2017},{t:"The Lighthouse",y:2019},{t:"Mandy",y:2018},{t:"The Endless",y:2017},{t:"The Neon Demon",y:2016},
+            {t:"Beyond the Black Rainbow",y:2010},{t:"Antiviral",y:2012},{t:"The One I Love",y:2014},{t:"Vivarium",y:2019},{t:"The Double",y:2013},{t:"Coherence",y:2013}
+          ],
+          "nostalgic|two-thousands|hi": [
+            {t:"Lagaan",y:2001},{t:"Swades",y:2004},{t:"Taare Zameen Par",y:2007},{t:"Dil Chahta Hai",y:2001},{t:"Rang De Basanti",y:2006},
+            {t:"Parineeta",y:2005},{t:"Rock On!!",y:2008},{t:"Jab We Met",y:2007},{t:"Veer-Zaara",y:2004},{t:"Wake Up Sid",y:2009},
+            {t:"Kal Ho Naa Ho",y:2003},{t:"Kabhi Khushi Kabhie Gham",y:2001},{t:"Munna Bhai M.B.B.S.",y:2003},{t:"Hum Tum",y:2004},{t:"Fanaa",y:2006},
+            {t:"Jodhaa Akbar",y:2008},{t:"Om Shanti Om",y:2007},{t:"Kabhi Alvida Naa Kehna",y:2006},{t:"Guru",y:2007},{t:"Iqbal",y:2005}
+          ],
+          "nostalgic|classic|it": [
+            {t:"Bicycle Thieves",y:1948},{t:"La Dolce Vita",y:1960},{t:"8½",y:1963},{t:"Amarcord",y:1973},{t:"The Leopard",y:1963},
+            {t:"Rome, Open City",y:1945},{t:"Umberto D.",y:1952},{t:"Rocco and His Brothers",y:1960},{t:"The Tree of Wooden Clogs",y:1978},
+            {t:"Il Posto",y:1961},{t:"The Nights of Cabiria",y:1957},{t:"La Strada",y:1954},{t:"The Conformist",y:1970},{t:"I Vitelloni",y:1953},
+            {t:"Mamma Roma",y:1962},{t:"Il Sorpasso",y:1962},{t:"Ossessione",y:1943},{t:"Bitter Rice",y:1949},{t:"The White Sheik",y:1952},{t:"Paisan",y:1946}
+          ],
+          "contemplative|twenty-twenties|ja": [
+            {t:"Drive My Car",y:2021},{t:"Wheel of Fortune and Fantasy",y:2021},{t:"Monster",y:2023},{t:"Evil Does Not Exist",y:2023},
+            {t:"Plan 75",y:2022},{t:"Small, Slow but Steady",y:2022},{t:"A Balance",y:2020},{t:"Wife of a Spy",y:2020},{t:"Perfect Days",y:2023},
+            {t:"A Man",y:2022},{t:"Under the Open Sky",y:2020},{t:"Aristocrats",y:2020},{t:"My Small Land",y:2022},{t:"Love Life",y:2022},
+            {t:"Remembering Every Night",y:2022},{t:"Just Remembering",y:2022},{t:"Red Post on Escher Street",y:2020},{t:"The Zen Diary",y:2022},
+            {t:"Intolerance",y:2021},{t:"What She Likes!",y:2021}
+          ],
+          "surreal|twenty-twenties|en": [
+            {t:"I’m Thinking of Ending Things",y:2020},{t:"Everything Everywhere All at Once",y:2022},{t:"Beau Is Afraid",y:2023},
+            {t:"The Green Knight",y:2021},{t:"Men",y:2022},{t:"Poor Things",y:2023},{t:"Skinamarink",y:2022},{t:"Flux Gourmet",y:2022},
+            {t:"Triangle of Sadness",y:2022},{t:"Strawberry Mansion",y:2021},{t:"The House",y:2022},{t:"White Noise",y:2022},{t:"Mad God",y:2021},
+            {t:"Annette",y:2021},{t:"Black Bear",y:2020},{t:"Dream Scenario",y:2023},{t:"After Yang",y:2021},{t:"Nope",y:2022},
+            {t:"The Northman",y:2022},{t:"The Tragedy of Macbeth",y:2021}
+          ],
+          "romantic|twenty-tens|en": [
+            {t:"La La Land",y:2016},{t:"The Big Sick",y:2017},{t:"About Time",y:2013},{t:"Silver Linings Playbook",y:2012},{t:"Crazy, Stupid, Love",y:2011},
+            {t:"Brooklyn",y:2015},{t:"Before Midnight",y:2013},{t:"Blue Jay",y:2016},{t:"Me Before You",y:2016},{t:"The Spectacular Now",y:2013},
+            {t:"The Fault in Our Stars",y:2014},{t:"The Shape of Water",y:2017},{t:"Like Crazy",y:2011},{t:"Warm Bodies",y:2013},{t:"Begin Again",y:2013},
+            {t:"One Day",y:2011},{t:"The Perks of Being a Wallflower",y:2012},{t:"Carol",y:2015},{t:"Her",y:2013},{t:"Call Me by Your Name",y:2017}
+          ],
+          "romantic|nineties|ja": [
+            {t:"Love Letter",y:1995},{t:"Whisper of the Heart",y:1995},{t:"Shall We Dance?",y:1996},{t:"April Story",y:1998},{t:"Ocean Waves",y:1993},
+            {t:"Only Yesterday",y:1991},{t:"Fireworks, Should We See It from the Side or the Bottom?",y:1993},{t:"Love & Pop",y:1998},
+            {t:"Suzaku",y:1997},{t:"A Scene at the Sea",y:1991},{t:"Maborosi",y:1995},{t:"After Life",y:1998},{t:"Swallowtail Butterfly",y:1996},
+            {t:"PiCNiC",y:1996},{t:"All About Lily Chou-Chou",y:2001},{t:"Hush!",y:2001},{t:"Happy Hour",y:2015}, {t:"I Wish",y:2011},{t:"Dr. Akagi",y:1998}
+          ]
+        };
+        
+        // pick randomized from preset
+        function pickPresetMoviesRandom({ mood, era, lang, limit=60 }) {
+          const key = `${mood}|${era}|${lang}`.toLowerCase();
+          const arr = PRESET_MOVIES_BIG[key] || [];
+          return sampleRandom(arr, Math.min(limit, arr.length))
+                 .map(x => ({ title: x.t, year: x.y, reason: "" }));
+        }
         // Settings UI for client-side API keys (for GitHub Pages single-page mode)
         function initKeySettings(){
             const node = document.createElement('div');
@@ -3196,60 +3376,59 @@ Answer:`;
                 }
 
                 if (!list || !list.length) {
-                    // Use curated fallback selections
-                    status.textContent = 'Using expertly curated selections...';
-                    const fallbackFilms = {
-                        contemplative: [
-                            { title: 'Stalker', year: '1979', reason: 'Tarkovsky\'s philosophical journey into desire and consciousness.' },
-                            { title: 'Mirror', year: '1975', reason: 'A poetic meditation on memory and time.' },
-                            { title: 'Solaris', year: '1972', reason: 'Profound exploration of human nature and understanding.' }
-                        ],
-                        romantic: [
-                            { title: 'In the Mood for Love', year: '2000', reason: 'Wong Kar-wai\'s masterpiece of restrained longing.' },
-                            { title: 'Chungking Express', year: '1994', reason: 'Playful yet deeply romantic urban love stories.' },
-                            { title: 'Before Sunrise', year: '1995', reason: 'Perfect dialogue-driven romance in Vienna.' }
-                        ],
-                        dark: [
-                            { title: 'Persona', year: '1966', reason: 'Bergman\'s psychological masterpiece on identity.' },
-                            { title: 'Mulholland Drive', year: '2001', reason: 'Lynch\'s enigmatic exploration of Hollywood darkness.' },
-                            { title: 'The Piano Teacher', year: '2001', reason: 'Haneke\'s unsettling study of repression and desire.' }
-                        ],
-                        uplifting: [
-                            { title: 'Wings of Desire', year: '1987', reason: 'Wenders\' poetic celebration of human existence.' },
-                            { title: 'The Double Life of Veronique', year: '1991', reason: 'Kieslowski\'s luminous tale of connection and music.' },
-                            { title: 'A Separation', year: '2011', reason: 'Humanistic drama about family and moral complexity.' }
-                        ],
-                        philosophical: [
-                            { title: 'The Tree of Life', year: '2011', reason: 'Malick\'s cosmic meditation on existence and meaning.' },
-                            { title: 'Synecdoche, New York', year: '2008', reason: 'Kaufman\'s profound exploration of art and mortality.' },
-                            { title: 'The Seventh Seal', year: '1957', reason: 'Bergman\'s medieval allegory confronting death and faith.' }
-                        ],
-                        mysterious: [
-                            { title: 'Vertigo', year: '1958', reason: 'Hitchcock\'s psychological thriller about obsession and illusion.' },
-                            { title: 'Last Year at Marienbad', year: '1961', reason: 'Resnais\' enigmatic puzzle of memory and reality.' },
-                            { title: '2001: A Space Odyssey', year: '1968', reason: 'Kubrick\'s mysterious journey through evolution and consciousness.' }
-                        ],
-                        melancholic: [
-                            { title: 'Manchester by the Sea', year: '2016', reason: 'Lonergan\'s tender portrait of grief and healing.' },
-                            { title: 'Tokyo Story', year: '1953', reason: 'Ozu\'s gentle meditation on family and the passage of time.' },
-                            { title: 'Her', year: '2013', reason: 'Jonze\'s bittersweet exploration of love and loneliness.' }
-                        ],
-                        surreal: [
-                            { title: '8½', year: '1963', reason: 'Fellini\'s dreamlike exploration of artistic creation.' },
-                            { title: 'The Holy Mountain', year: '1973', reason: 'Jodorowsky\'s visionary, symbolic journey of enlightenment.' },
-                            { title: 'Eraserhead', year: '1977', reason: 'Lynch\'s nightmarish industrial fever dream.' }
-                        ],
-                        nostalgic: [
-                            { title: 'Cinema Paradiso', year: '1988', reason: 'Tornatore\'s loving tribute to the magic of movies.' },
-                            { title: 'Amour', year: '2012', reason: 'Haneke\'s tender portrayal of enduring love.' },
-                            { title: 'The 400 Blows', year: '1959', reason: 'Truffaut\'s autobiographical coming-of-age masterpiece.' }
-                        ]
-                    };
-                    list = fallbackFilms[mood] || fallbackFilms.contemplative;
-                    if (apiError) {
-                        status.textContent = 'Using curated backup selections...';
-                    }
+                  const tmdbKey = (typeof getClientKey==='function') ? getClientKey('TMDB_API_KEY') : null;
+                  const desired = 24;         // how many to finally render
+                  const pages   = 12;         // ~12*20 = 240+ raw; increase to 15 for ~300+
+                  const mood    = document.getElementById('movie-mood')?.value || 'contemplative';
+                  const era     = document.getElementById('movie-era')?.value || 'classic';
+                  const lang    = document.getElementById('movie-lang')?.value || 'en';
+                  const minRating = parseFloat(document.getElementById('movie-min-rating')?.value || '7.0');
+                
+                  let pool = [];
+                  if (tmdbKey) {
+                    // 1) Big online pool (randomized later)
+                    try {
+                      status.textContent = 'Fetching a large pool from TMDb…';
+                      pool = await discoverManyFromTMDB({ apiKey: tmdbKey, mood, era, lang, minRating, pages });
+                    } catch(e){ console.warn('discoverManyFromTMDB failed', e); }
+                  }
+                
+                  // 2) If TMDB unavailable or returns too few, append randomized preset
+                  if (pool.length < desired) {
+                    status.textContent = 'Using large offline preset as backup…';
+                    const presetChunk = pickPresetMoviesRandom({ mood, era, lang, limit: desired*3 });
+                    // merge: prefer TMDB (has poster_path) then preset (no poster yet)
+                    pool = pool.concat(presetChunk.map(p => ({
+                      title: p.title, year: p.year, poster_path: null, vote_average: null, vote_count: null
+                    })));
+                  }
+                
+                  // 3) Shuffle and pick final set
+                  shuffleInPlace(pool);
+                  // Keep rating/lang guard (useful if only preset was used and TMDB key exists)
+                  const filtered = pool.filter(m => {
+                    const okRating = (m.vote_average == null) ? true : (m.vote_average >= minRating);
+                    const okLang   = (lang === 'any') ? true : (m.original_language ? m.original_language === lang : true);
+                    return okRating && okLang;
+                  });
+                
+                  // 4) Normalize to your UI list format
+                  list = filtered.slice(0, desired).map(m => ({
+                    title: m.title,
+                    year: m.year,
+                    reason: m.vote_average != null
+                      ? `★ ${Number(m.vote_average||0).toFixed(1)}${m.vote_count?` · ${m.vote_count} votes`:''}`
+                      : ''
+                  }));
+                
+                  // 5) If still nothing, at least show randomized preset
+                  if (!list.length) {
+                    list = pickPresetMoviesRandom({ mood, era, lang, limit: desired });
+                  }
+                
+                  status.textContent = `Showing random picks (${list.length})`;
                 }
+
 
                 status.textContent = 'Loading movie posters...';
                 results.innerHTML = '';
