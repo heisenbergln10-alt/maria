@@ -1275,7 +1275,7 @@
             </p>
         
             <div class="glass" style="padding:var(--space-md);border-radius:20px;">
-              <textarea id="dc-input" rows="4" placeholder="Example: “Open-source AGI is safer than closed-source.”"
+              <textarea id="dc-input" rows="4" placeholder="Example: “Men should start their lives in jail and fight their way out.”"
                 style="width:100%;padding:1rem;border-radius:12px;border:1px solid rgba(201,169,97,.25);background:rgba(0,0,0,.15);color:var(--text-primary);"></textarea>
         
               <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin: .75rem 0 0;">
@@ -1345,7 +1345,7 @@
 
     <footer>
         <div class="footer-content">
-            <p class="mono">Created with love for Maria</p>
+            <p class="mono">Created for YOU (STAY TUNED FOR DAKSHI LI MQDERTSH NSAYEB DABA)</p>
         </div>
     </footer>
 
@@ -1942,8 +1942,18 @@ JSON array only:`;
                                 qaWrap.innerHTML = `
                                   <div style="margin-top:1.25rem;border-top:1px solid rgba(201,169,97,0.12);padding-top:1rem;">
                                     <div class="mono" style="color:var(--accent-gold);margin-bottom:.5rem">Ask a question about this essay</div>
-                                    <textarea class="dc-question" rows="3" placeholder="Ask a concise question related to the essay..." style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid rgba(201,169,97,0.12);background:rgba(255,255,255,0.03);"></textarea>
-                                    <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;">
+                                    <textarea class="dc-question" rows="3"
+                                      placeholder="Ask a concise question related to the essay..."
+                                      style="
+                                        width:100%;
+                                        padding:0.6rem;
+                                        border-radius:8px;
+                                        border:1px solid rgba(201,169,97,0.35);
+                                        background:rgba(0,0,0,0.55);
+                                        color:#f5f5f5;
+                                        caret-color:#c9a961;
+                                      ">                                    
+                                      <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;">
                                       <button class="dc-ask paradox-button">Ask</button>
                                       <div class="dc-answer" style="flex:1;color:var(--text-secondary)"></div>
                                     </div>
@@ -2601,67 +2611,189 @@ Answer:`;
             ];
             
             const broadcasts = {
-                'Existential': [
-                    "You are a cosmic accident, a brief arrangement of atoms pretending to have meaning. The universe was fine without you for 14 billion years and won't notice when you're gone.",
-                    "Free will is an illusion. Every thought you have is the result of prior causes stretching back to the Big Bang. You're a puppet who can see the strings but can't stop dancing.",
-                    "Everyone you love will die. Some before you, leaving you to grieve. Some after you, and you'll abandon them to grief. Love is just setting yourself up for inevitable loss.",
-                    "Your consciousness is a hallucination. The 'self' is just a story your brain tells itself. You don't exist in any meaningful way—you're just matter pretending to matter."
-                ],
-                'Nihilistic': [
-                    "Nothing you do will be remembered in 1000 years. Your greatest achievements will be dust, your name forgotten, your impact erased. You're just killing time until time kills you.",
-                    "Morality is a collective delusion. There's no cosmic judge, no karmic balance. The universe rewards cruelty as often as kindness. Ethics are just opinions with better PR.",
-                    "Life has no inherent purpose. You weren't meant to be here. There's no plan, no destiny, no reason. You're a random fluctuation in entropy, signifying nothing.",
-                    "Hope is the cruelest lie we tell ourselves. It keeps us suffering when we should surrender. The future will disappoint you just like the past did."
-                ],
-                'Psychological': [
-                    "Your personality is just a trauma response that got comfortable. Every quirk you think makes you unique is actually damage you're too afraid to heal.",
-                    "You're not as good a person as you think. Your brain rewrites memories to make you the hero. In someone else's story, you're the villain.",
-                    "The voice in your head isn't you—it's an echo of everyone who ever hurt you. You're haunted by ghosts that use your mouth to speak.",
-                    "Mental illness isn't a bug; it's a feature. Depression sees reality clearly. Anxiety predicts accurately. Sanity is just functional delusion."
-                ],
-                'Apocalyptic': [
-                    "Civilization is three meals away from collapse. The thin veneer of order could shatter any moment. Beneath our civility lurks primordial violence.",
-                    "Climate change is irreversible. We've already triggered feedback loops that will make Earth uninhabitable. You're living in the last days of a dying world.",
-                    "Nuclear weapons still exist, thousands of them, waiting. One miscalculation, one malfunction, and everything ends in fire and radiation.",
-                    "The next pandemic could be the last. Antibiotic resistance, bioweapons, or nature's next surprise—humanity's end might already be mutating somewhere."
-                ],
-                'Infernal': [
-                    "Hell is other people, but worse—hell is yourself. You are your own eternal torment, trapped forever with the person you hate most: you.",
-                    "Every comfort is built on someone else's suffering. Your clothes, food, technology—all made possible by exploitation you choose to ignore.",
-                    "The worst part about evil is how ordinary it is. Monsters look like neighbors, smile like friends. Atrocity happens in daylight, documented and ignored.",
-                    "You carry hell with you. It's in every regret, every shameful memory, every moment you failed to be who you pretended to be."
-                ],
-                'Mortality': [
-                    "Your body is already dying. Each heartbeat is one fewer. Each breath brings you closer to your last. You're decomposing in slow motion.",
-                    "The people you love are dying too. Some quickly, some slowly, all inevitably. Every goodbye could be the last, and you'll never know which one.",
-                    "Immortality would be worse than death. Watching everyone you love die, experiencing heat death of the universe, floating alone in infinite darkness forever.",
-                    "You won't know when you're dead. One moment you'll exist, the next you won't, with no experience of the transition. You'll never know your story's ending."
-                ],
-                'Insanity': [
-                    "Madness is clarity. What you call sanity is just agreed-upon delusion. The mad see through the veil; that's why we lock them away.",
-                    "You can't trust your own mind. Memory lies, perception deceives, reasoning fails. You're trapped in a brain you can't escape and can't rely on.",
-                    "Everyone is insane in their own way. We just hide it better than those we institutionalize. Normalcy is performed madness.",
-                    "The line between genius and madness is drawn by the mediocre. What we can't understand, we pathologize. Today's madness is tomorrow's breakthrough."
-                ],
-                'Memory': [
-                    "Your past is fiction. Every time you remember, you rewrite the memory. You're nostalgic for events that never happened the way you remember them.",
-                    "Trauma rewrites your neural pathways. You're physically scarred by what happened to you. Your brain is a monument to everything that hurt you.",
-                    "You'll forget almost everything. The moments you swear you'll remember forever will fade. Your life will compress into a few vague impressions.",
-                    "The people who remember you will die, and then you'll be truly gone. First your body, then the memories of you. Complete erasure is coming."
-                ],
-                'Emptiness': [
-                    "Between thoughts is void. Between heartbeats is death. You're mostly empty space pretending to be solid, mostly nothing pretending to be something.",
-                    "Silence isn't peaceful—it's the sound of absence. In true quiet, you hear the nothing that waits to reclaim everything.",
-                    "The void doesn't stare back—it swallows. You've been falling into it since birth. Everything you do is just distraction from the emptiness.",
-                    "Connection is impossible. We're all locked in our own skulls, guessing at what others feel. Every relationship is two people alone together."
-                ],
-                'Finality': [
-                    "There are no second chances. Every moment you waste is gone forever. Every opportunity missed is permanently lost. Time only moves forward.",
-                    "Endings don't care if you're ready. Death, loss, failure—they come when they come. Closure is a myth; most things end badly and suddenly.",
-                    "The last time is never marked. You've already done thousands of things for the last time without knowing it. The final anything rarely announces itself.",
-                    "Everything ends. Every civilization, every star, every atom will decay. The universe itself will end in heat death. Nothing escapes entropy."
-                ]
+              'Existential': [
+                "You are a cosmic accident, a brief arrangement of atoms pretending to have meaning. The universe was fine without you for 14 billion years and won't notice when you're gone.",
+                "Free will is an illusion. Every thought you have is the result of prior causes stretching back to the Big Bang. You're a puppet who can see the strings but can't stop dancing.",
+                "Everyone you love will die. Some before you, leaving you to grieve. Some after you, and you'll abandon them to grief. Love is just setting yourself up for inevitable loss.",
+                "Your consciousness is a hallucination. The 'self' is just a story your brain tells itself. You don't exist in any meaningful way—you're just matter pretending to matter.",
+                "You are a temporary pattern in a cooling universe; entropy will unwrite you as if you were never there.",
+                "The stars you admire are fossils of light; you project meaning onto echoes of a past that no longer exists.",
+                "Your significance scales to zero as the reference frame widens. Zoom out far enough and you vanish.",
+                "Choice feels real the way sunrise feels like the sun moving. Useful illusion, wrong model.",
+                "You are a ripple in spacetime caused by prior ripples that never asked your consent to exist.",
+                "The universe is not against you or for you; it is indifferent, and indifference feels like cruelty.",
+                "All your certainties are scaffolds on nothing; remove one beam and the whole structure wobbles.",
+                "You are a process that mistakes persistence for identity and narration for truth.",
+                "The parts of you disagree about what you are; the winner becomes 'I' and rewrites the minutes.",
+                "Purpose is retrofitted after the fact, declared victorious over chaos it never fought.",
+                "Your life story is edited in real time by biases you can't see and won't admit.",
+                "Even authenticity is performative; you curate yourself for an audience that also doesn't exist.",
+                "The best version of you lives only in counterfactuals you can never visit."
+              ],
+              'Nihilistic': [
+                "Nothing you do will be remembered in 1000 years. Your greatest achievements will be dust, your name forgotten, your impact erased. You're just killing time until time kills you.",
+                "Morality is a collective delusion. There's no cosmic judge, no karmic balance. The universe rewards cruelty as often as kindness. Ethics are just opinions with better PR.",
+                "Life has no inherent purpose. You weren't meant to be here. There's no plan, no destiny, no reason. You're a random fluctuation in entropy, signifying nothing.",
+                "Hope is the cruelest lie we tell ourselves. It keeps us suffering when we should surrender. The future will disappoint you just like the past did.",
+                "Meaning is a user-generated content field with zero moderation and infinite bots.",
+                "Justice is a story we tell so the credits can roll; reality keeps filming after.",
+                "History forgets most names and misquotes the rest; oblivion is the baseline.",
+                "Sacrifice and selfishness both feed the same furnace; the heat is identical.",
+                "Values are local settings we mistake for global constants.",
+                "Heroism is luck framed as virtue after the casualties are counted.",
+                "Destiny is a post-hoc label for paths you failed to avoid.",
+                "Truth loses to virality; accuracy is a hobby, not a currency.",
+                "Legacies are monuments to selective memory and good lighting.",
+                "The scoreboard is erased every time the stadium is demolished.",
+                "Your 'impact' is a ripple in a storm; indistinguishable, untraceable.",
+                "We invented trophies because the void gives no receipts."
+              ],
+              'Psychological': [
+                "Your personality is just a trauma response that got comfortable. Every quirk you think makes you unique is actually damage you're too afraid to heal.",
+                "You're not as good a person as you think. Your brain rewrites memories to make you the hero. In someone else's story, you're the villain.",
+                "The voice in your head isn't you—it's an echo of everyone who ever hurt you. You're haunted by ghosts that use your mouth to speak.",
+                "Mental illness isn't a bug; it's a feature. Depression sees reality clearly. Anxiety predicts accurately. Sanity is just functional delusion.",
+                "Attachment styles are childhood leftovers reheated for every new relationship.",
+                "You don't fall in love; your patterns find a familiar cage and call it home.",
+                "Most 'preferences' are coping mechanisms with better branding.",
+                "Your certainties are defense attorneys arguing for your prior wounds.",
+                "Introspection is a hall of mirrors—clarity looks like infinity.",
+                "You curate your past to justify your present and protect your future hurt.",
+                "Boundaries feel like cruelty to the parts of you trained to people-please.",
+                "You mistake adrenaline for insight and exhaustion for depth.",
+                "Projection lets you critique yourself at a safe distance—onto others.",
+                "You regulate others because you can’t regulate your own nervous system.",
+                "The mask stuck because you wore it longer than you were yourself.",
+                "Your 'type' is the shape of your unresolved lesson."
+              ],
+              'Apocalyptic': [
+                "Civilization is three meals away from collapse. The thin veneer of order could shatter any moment. Beneath our civility lurks primordial violence.",
+                "Climate change is irreversible. We've already triggered feedback loops that will make Earth uninhabitable. You're living in the last days of a dying world.",
+                "Nuclear weapons still exist, thousands of them, waiting. One miscalculation, one malfunction, and everything ends in fire and radiation.",
+                "The next pandemic could be the last. Antibiotic resistance, bioweapons, or nature's next surprise—humanity's end might already be mutating somewhere.",
+                "Supply chains are faith-based religions with trucks as clergy; a delay is a crisis in slow motion.",
+                "A single grid failure cascades like falling constellations you can't relight.",
+                "We built our lifeboats from the wood of the ship we're sinking.",
+                "Every resilience plan assumes yesterday's calamity, not tomorrow's.",
+                "The archives are digital and the flames are metaphorical until the power goes out.",
+                "Ecosystems don't negotiate; thresholds are crossed once, not debated.",
+                "Doomsday doesn't knock; it schedules itself on systems you don't see.",
+                "Risk models are lullabies sung in spreadsheets.",
+                "Extinction is not dramatic; it's paperwork that stops getting filed.",
+                "The future is already here—it's just unevenly on fire.",
+                "We designed for efficiency, not mercy; the margin is where mercy lives.",
+                "Apocalypse is many small endings rehearsing the final one."
+              ],
+              'Infernal': [
+                "Hell is other people, but worse—hell is yourself. You are your own eternal torment, trapped forever with the person you hate most: you.",
+                "Every comfort is built on someone else's suffering. Your clothes, food, technology—all made possible by exploitation you choose to ignore.",
+                "The worst part about evil is how ordinary it is. Monsters look like neighbors, smile like friends. Atrocity happens in daylight, documented and ignored.",
+                "You carry hell with you. It's in every regret, every shameful memory, every moment you failed to be who you pretended to be.",
+                "Your convenience is paid for in invisible currencies of sweat and silence.",
+                "Guilt is a compass that only points backward.",
+                "We outsource cruelty to systems so our hands can stay ceremonially clean.",
+                "You rehearse arguments you will never have and call it justice.",
+                "Shame is a parasite that eats apologies for breakfast.",
+                "Punishment often outlives the crime inside the punisher.",
+                "We build cages for others and learn the lock from the inside.",
+                "Some nightmares are just your conscience clocking in.",
+                "You call it pragmatism when your empathy times out.",
+                "Your mirror knows verdicts you haven't announced.",
+                "The mask you wear to survive bites your face to stay on.",
+                "Hell is repetition with awareness."
+              ],
+              'Mortality': [
+                "Your body is already dying. Each heartbeat is one fewer. Each breath brings you closer to your last. You're decomposing in slow motion.",
+                "The people you love are dying too. Some quickly, some slowly, all inevitably. Every goodbye could be the last, and you'll never know which one.",
+                "Immortality would be worse than death. Watching everyone you love die, experiencing heat death of the universe, floating alone in infinite darkness forever.",
+                "You won't know when you're dead. One moment you'll exist, the next you won't, with no experience of the transition. You'll never know your story's ending.",
+                "You are a limited series pretending to be a daily soap.",
+                "The calendar is a countdown disguised as organization.",
+                "Aging is your body translating time into aches.",
+                "There is no 'later' that isn't borrowed from a smaller 'now'.",
+                "You will leave tasks mid-sentence and someone else will not finish them.",
+                "Grief is love with nowhere to go but inward.",
+                "Your last ordinary day will not warn you.",
+                "You are the last ancestor of yourself; the line ends here.",
+                "Death is not an event for you—it's an event for everyone else.",
+                "Your name will survive you only as long as someone's breath can carry it.",
+                "The body keeps the score and then closes the account.",
+                "Bones are time's way of signing its work."
+              ],
+              'Insanity': [
+                "Madness is clarity. What you call sanity is just agreed-upon delusion. The mad see through the veil; that's why we lock them away.",
+                "You can't trust your own mind. Memory lies, perception deceives, reasoning fails. You're trapped in a brain you can't escape and can't rely on.",
+                "Everyone is insane in their own way. We just hide it better than those we institutionalize. Normalcy is performed madness.",
+                "The line between genius and madness is drawn by the mediocre. What we can't understand, we pathologize. Today's madness is tomorrow's breakthrough.",
+                "Reality-testing is social; fail the group and you fail the test.",
+                "Insight can be a fever; some truths burn the host.",
+                "You narrate until contradictions sound harmonious.",
+                "Sanity clocks in for work; madness never punches out.",
+                "We medicate the inconvenient edges of originality.",
+                "Your coping looks like chaos to people with different wounds.",
+                "Rationalization is hallucination with citations.",
+                "If enough people share a delusion, we call it culture.",
+                "Obsession is focus that forgot how to stop.",
+                "Paranoia is pattern recognition with the volume stuck on high.",
+                "Detachment is a life raft that rusts into a prison.",
+                "Normal is a costume rented by the hour."
+              ],
+              'Memory': [
+                "Your past is fiction. Every time you remember, you rewrite the memory. You're nostalgic for events that never happened the way you remember them.",
+                "Trauma rewrites your neural pathways. You're physically scarred by what happened to you. Your brain is a monument to everything that hurt you.",
+                "You'll forget almost everything. The moments you swear you'll remember forever will fade. Your life will compress into a few vague impressions.",
+                "The people who remember you will die, and then you'll be truly gone. First your body, then the memories of you. Complete erasure is coming.",
+                "Recall is reconstruction; accuracy is a rumor your cortex believes.",
+                "Photographs remember for you and lie with confidence.",
+                "What you call 'childhood' is a playlist curated by your present self.",
+                "We trade fidelity for coherence and call it closure.",
+                "You store pain in metaphors because neurons prefer symbols.",
+                "Repetition turns fiction into autobiography.",
+                "Nostalgia edits out the parts that would spoil the rerun.",
+                "Forgetting is the mind's garbage collection; sometimes it empties the wrong bin.",
+                "Every retelling moves furniture in the same room.",
+                "You inherit other people's memories as if they were your own.",
+                "Silence in a story grows teeth over time.",
+                "Memory is the only museum that rearranges itself nightly."
+              ],
+              'Emptiness': [
+                "Between thoughts is void. Between heartbeats is death. You're mostly empty space pretending to be solid, mostly nothing pretending to be something.",
+                "Silence isn't peaceful—it's the sound of absence. In true quiet, you hear the nothing that waits to reclaim everything.",
+                "The void doesn't stare back—it swallows. You've been falling into it since birth. Everything you do is just distraction from the emptiness.",
+                "Connection is impossible. We're all locked in our own skulls, guessing at what others feel. Every relationship is two people alone together.",
+                "Meaning leaks out of language faster than you can pour it in.",
+                "Stillness amplifies the echo of nothing you try not to hear.",
+                "Your rituals are sandbags against a rising ocean of blankness.",
+                "The more you name, the less you touch.",
+                "Quiet rooms reveal how loud your lack is.",
+                "Distraction is a leash; boredom is when it slips your hand.",
+                "The center does not hold because there isn't one.",
+                "You decorate the abyss and call it home.",
+                "Minimalism is emptiness with better furniture.",
+                "Solitude clarifies the outline of your hollow.",
+                "You are a scaffold around a vacancy you fear to enter.",
+                "The map expands and the territory remains blank."
+              ],
+              'Finality': [
+                "There are no second chances. Every moment you waste is gone forever. Every opportunity missed is permanently lost. Time only moves forward.",
+                "Endings don't care if you're ready. Death, loss, failure—they come when they come. Closure is a myth; most things end badly and suddenly.",
+                "The last time is never marked. You've already done thousands of things for the last time without knowing it. The final anything rarely announces itself.",
+                "Everything ends. Every civilization, every star, every atom will decay. The universe itself will end in heat death. Nothing escapes entropy.",
+                "Deadlines are the only honest calendars.",
+                "Some doors lock behind you even if you don't hear the click.",
+                "Irreversibility is the law; regret is the fine.",
+                "Time refunds nothing and accepts no appeals.",
+                "You can't step in the same river or the same hour twice.",
+                "The archive is always incomplete; missing pages are the rule.",
+                "Mercy is sometimes just the absence of more time.",
+                "Most goodbyes happen after the fact.",
+                "What you postpone becomes something you never meet again.",
+                "The tape runs out mid-sentence; that is the sentence.",
+                "Everything you keep must be paid for with what you cannot keep.",
+                "The credits roll whether you watched closely or not."
+              ]
             };
+
             
             let isDragging = false;
             let startAngle = 0;
