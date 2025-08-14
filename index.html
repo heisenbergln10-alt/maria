@@ -3232,7 +3232,7 @@ Answer:`;
             const rec = memLoad().slice(0, 6).map(x => x.tldr).join(" | ") || "—";
             const tone = formal ? "formal, quasi-academic" : "plain, precise";
             return `
-        You are DoubleCrux. Deconstruct the user's CLAIM rigorously.
+        You are DoubleCrux. Deconstruct the user's CLAIM rigorously and use some dark humour if the claim is dark or funny.
         
         Return ONLY valid JSON (no markdown, no prose pre/post). Schema:
         {
