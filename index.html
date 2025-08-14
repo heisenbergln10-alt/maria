@@ -1968,10 +1968,6 @@ JSON array only:`;
                                     try {
                                         const isRelevant = await checkQuestionRelevance(q, item.title, essayPlain.slice(0, 2000));
                                         console.log(`Question relevance check: "${q}" for essay "${item.title}" -> ${isRelevant ? 'RELEVANT' : 'NOT RELEVANT'}`);
-                                        if (!isRelevant) {
-                                            answerEl.textContent = 'Please ask a question directly related to the essay content and themes.';
-                                            return;
-                                        }
                                     } catch (err) {
                                         console.warn('Relevance check failed, proceeding anyway:', err);
                                         // Proceed even if relevance check fails
