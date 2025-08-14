@@ -1493,207 +1493,6 @@
         }
 
         // Movies initializer
-        function initMovies(){
-            const suggestBtn = document.getElementById('movie-suggest');
-            const status = document.getElementById('movie-status');
-            const results = document.getElementById('movie-results');
-
-            suggestBtn.addEventListener('click', async ()=>{
-                status.textContent = '';
-                results.innerHTML = '';
-                const mood = document.getElementById('movie-mood').value;
-                const era = document.getElementById('movie-era').value;
-                const lang = document.getElementById('movie-lang').value;
-                const minRating = document.getElementById('movie-min-rating').value;
-
-                status.textContent = 'Searching for perfect films...';
-                suggestBtn.disabled = true;
-                results.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-secondary)" class="mono">Curating recommendations...</div>';
-
-                const criteria = { mood, era, lang, minRating };
-                const prompt = buildMoviePrompt(criteria);
-
-                let list = null;
-                let apiError = false;
-                
-                try {
-                    status.textContent = 'Consulting AI curator...';
-                    const json = await callOpenAI(prompt);
-                    if (Array.isArray(json)) {
-                        list = json;
-                    } else if (Array.isArray(json?.movies)) {
-                        list = json.movies;
-                    }
-                } catch (e) {
-                    console.warn('callOpenAI failed for movies', e);
-                    apiError = true;
-                    status.textContent = 'Trying alternative approach...';
-                }
-
-                if (!list) {
-                    try {
-                        const raw = await callOpenAIRaw(prompt);
-                        const jsonMatch = raw.match(/\[[\s\S]*\]/);
-                        if (jsonMatch) {
-                            list = JSON.parse(jsonMatch[0]);
-                        }
-                    } catch (e) { 
-                        console.warn('raw parse failed', e); 
-                        apiError = true;
-                    }
-                }
-
-                if (!list || !list.length) {
-                    const fallbackFilms = {
-                        contemplative: [
-                            { title: 'Stalker', year: '1979', reason: 'Tarkovsky\'s philosophical journey into desire and consciousness.' },
-                            { title: 'Mirror', year: '1975', reason: 'A poetic meditation on memory and time.' },
-                            { title: 'Solaris', year: '1972', reason: 'Profound exploration of human nature and understanding.' }
-                        ],
-                        romantic: [
-                            { title: 'In the Mood for Love', year: '2000', reason: 'Wong Kar-wai\'s masterpiece of restrained longing.' },
-                            { title: 'Chungking Express', year: '1994', reason: 'Playful yet deeply romantic urban love stories.' },
-                            { title: 'Before Sunrise', year: '1995', reason: 'Perfect dialogue-driven romance in Vienna.' }
-                        ],
-                        dark: [
-                            { title: 'Persona', year: '1966', reason: 'Bergman\'s psychological masterpiece on identity.' },
-                            { title: 'Mulholland Drive', year: '2001', reason: 'Lynch\'s enigmatic exploration of Hollywood darkness.' },
-                            { title: 'The Piano Teacher', year: '2001', reason: 'Haneke\'s unsettling study of repression and desire.' }
-                        ],
-                        uplifting: [
-                            { title: 'Wings of Desire', year: '1987', reason: 'Wenders\' poetic celebration of human existence.' },
-                            { title: 'The Double Life of Veronique', year: '1991', reason: 'Kieslowski\'s luminous tale of connection and music.' },
-                            { title: 'A Separation', year: '2011', reason: 'Humanistic drama about family and moral complexity.' }
-                        ],
-                        philosophical: [
-                            { title: 'The Tree of Life', year: '2011', reason: 'Malick\'s cosmic meditation on existence and meaning.' },
-                            { title: 'Synecdoche, New York', year: '2008', reason: 'Kaufman\'s profound exploration of art and mortality.' },
-                            { title: 'The Seventh Seal', year: '1957', reason: 'Bergman\'s medieval allegory confronting death and faith.' }
-                        ],
-                        mysterious: [
-                            { title: 'Vertigo', year: '1958', reason: 'Hitchcock\'s psychological thriller about obsession and illusion.' },
-                            { title: 'Last Year at Marienbad', year: '1961', reason: 'Resnais\' enigmatic puzzle of memory and reality.' },
-                            { title: '2001: A Space Odyssey', year: '1968', reason: 'Kubrick\'s mysterious journey through evolution and consciousness.' }
-                        ],
-                        melancholic: [
-                            { title: 'Manchester by the Sea', year: '2016', reason: 'Lonergan\'s tender portrait of grief and healing.' },
-                            { title: 'Tokyo Story', year: '1953', reason: 'Ozu\'s gentle meditation on family and the passage of time.' },
-                            { title: 'Her', year: '2013', reason: 'Jonze\'s bittersweet exploration of love and loneliness.' }
-                        ],
-                        surreal: [
-                            { title: '8½', year: '1963', reason: 'Fellini\'s dreamlike exploration of artistic creation.' },
-                            { title: 'The Holy Mountain', year: '1973', reason: 'Jodorowsky\'s visionary, symbolic journey of enlightenment.' },
-                            { title: 'Eraserhead', year: '1977', reason: 'Lynch\'s nightmarish industrial fever dream.' }
-                        ],
-                        nostalgic: [
-                            { title: 'Cinema Paradiso', year: '1988', reason: 'Tornatore\'s loving tribute to the magic of movies.' },
-                            { title: 'Amour', year: '2012', reason: 'Haneke\'s tender portrayal of enduring love.' },
-                            { title: 'The 400 Blows', year: '1959', reason: 'Truffaut\'s autobiographical coming-of-age masterpiece.' }
-                        ]
-                    };
-                    list = fallbackFilms[mood] || fallbackFilms.contemplative;
-                    if (apiError) {
-                        status.textContent = 'Using curated backup selections...';
-                    }
-                }
-
-                status.textContent = 'Loading movie posters...';
-                results.innerHTML = '';
-                
-                const tmdbKey = getClientKey('TMDB_API_KEY');
-                const displayList = list.slice(0, 6);
-                
-                for (let i = 0; i < displayList.length; i++) {
-                    const item = displayList[i];
-                    const card = document.createElement('div');
-                    card.className = 'movie-card';
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    card.style.transition = 'all 0.3s ease';
-                    
-                    const poster = document.createElement('img');
-                    poster.className = 'movie-poster';
-                    poster.alt = item.title;
-                    poster.style.background = 'linear-gradient(135deg, #c9a961, #8b7355)';
-                    
-                    const titleEl = document.createElement('div'); 
-                    titleEl.className = 'movie-title'; 
-                    titleEl.textContent = `${item.title}${item.year ? ` (${item.year})` : ''}`;
-                    
-                    const reasonEl = document.createElement('div'); 
-                    reasonEl.className = 'movie-reason'; 
-                    reasonEl.textContent = item.reason || '';
-                    
-                    card.appendChild(poster);
-                    card.appendChild(titleEl);
-                    card.appendChild(reasonEl);
-                    results.appendChild(card);
-                    
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, i * 100);
-
-                    if (tmdbKey && item.title) {
-                        try {
-                            const query = `${item.title}${item.year ? ` y:${item.year}` : ''}`;
-                            const encodedQuery = encodeURIComponent(query);
-                            const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(tmdbKey)}&query=${encodedQuery}`);
-                            
-                            if (response.ok) {
-                                const data = await response.json();
-                                const movie = data.results?.[0];
-                                if (movie?.poster_path) {
-                                    poster.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-                                    poster.style.background = '';
-                                } else {
-                                    poster.style.background = 'linear-gradient(135deg, #2c2c2c, #1a1a1a)';
-                                    poster.style.display = 'flex';
-                                    poster.style.alignItems = 'center';
-                                    poster.style.justifyContent = 'center';
-                                    poster.style.color = '#c9a961';
-                                    poster.style.fontSize = '2rem';
-                                    poster.textContent = 'FILM';
-                                }
-                            }
-                        } catch (e) { 
-                            console.warn('TMDB fetch failed for:', item.title, e);
-                            poster.style.background = 'linear-gradient(135deg, #2c2c2c, #1a1a1a)';
-                            poster.style.display = 'flex';
-                            poster.style.alignItems = 'center';
-                            poster.style.justifyContent = 'center';
-                            poster.style.color = '#c9a961';
-                            poster.style.fontSize = '2rem';
-                            poster.textContent = 'FILM';
-                        }
-                    } else {
-                        poster.style.background = 'linear-gradient(135deg, #2c2c2c, #1a1a1a)';
-                        poster.style.display = 'flex';
-                        poster.style.alignItems = 'center';
-                        poster.style.justifyContent = 'center';
-                        poster.style.color = '#c9a961';
-                        poster.style.fontSize = '2rem';
-                        poster.textContent = 'FILM';
-                        
-                        if (!tmdbKey) {
-                            status.textContent = 'Add TMDb API key in Settings for movie posters';
-                        }
-                    }
-                }
-
-                if (tmdbKey) {
-                    status.textContent = 'Films curated successfully!';
-                } else {
-                    status.textContent = 'Films curated! Add TMDb key for posters.';
-                }
-                
-                setTimeout(() => {
-                    status.textContent = '';
-                }, 3000);
-                
-                suggestBtn.disabled = false;
-            });
-        }
 
         function buildMoviePrompt(criteria){
             const langMap = {
@@ -3209,8 +3008,216 @@ Answer:`;
           });
         }
 
+        // Movies functionality - defined after utility functions
+        function initMovies(){
+            const suggestBtn = document.getElementById('movie-suggest');
+            const status = document.getElementById('movie-status');
+            const results = document.getElementById('movie-results');
+
+            suggestBtn.addEventListener('click', async ()=>{
+                status.textContent = '';
+                results.innerHTML = '';
+                const mood = document.getElementById('movie-mood').value;
+                const era = document.getElementById('movie-era').value;
+                const lang = document.getElementById('movie-lang').value;
+                const minRating = document.getElementById('movie-min-rating').value;
+
+                status.textContent = 'Searching for perfect films...';
+                suggestBtn.disabled = true;
+                results.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-secondary)" class="mono">Curating recommendations...</div>';
+
+                const criteria = { mood, era, lang, minRating };
+                const prompt = buildMoviePrompt(criteria);
+
+                let list = null;
+                let apiError = false;
+                
+                try {
+                    status.textContent = 'Consulting AI curator...';
+                    const json = await callOpenAI(prompt);
+                    if (Array.isArray(json)) {
+                        list = json;
+                    } else if (Array.isArray(json?.movies)) {
+                        list = json.movies;
+                    }
+                } catch (e) {
+                    console.warn('callOpenAI failed for movies', e);
+                    apiError = true;
+                    status.textContent = 'Trying alternative approach...';
+                }
+
+                if (!list) {
+                    try {
+                        const raw = await callOpenAIRaw(prompt);
+                        const jsonMatch = raw.match(/\[[\s\S]*\]/);
+                        if (jsonMatch) {
+                            list = JSON.parse(jsonMatch[0]);
+                        }
+                    } catch (e) { 
+                        console.warn('raw parse failed', e); 
+                        apiError = true;
+                    }
+                }
+
+                if (!list || !list.length) {
+                    const fallbackFilms = {
+                        contemplative: [
+                            { title: 'Stalker', year: '1979', reason: 'Tarkovsky\'s philosophical journey into desire and consciousness.' },
+                            { title: 'Mirror', year: '1975', reason: 'A poetic meditation on memory and time.' },
+                            { title: 'Solaris', year: '1972', reason: 'Profound exploration of human nature and understanding.' }
+                        ],
+                        romantic: [
+                            { title: 'In the Mood for Love', year: '2000', reason: 'Wong Kar-wai\'s masterpiece of restrained longing.' },
+                            { title: 'Chungking Express', year: '1994', reason: 'Playful yet deeply romantic urban love stories.' },
+                            { title: 'Before Sunrise', year: '1995', reason: 'Perfect dialogue-driven romance in Vienna.' }
+                        ],
+                        dark: [
+                            { title: 'Persona', year: '1966', reason: 'Bergman\'s psychological masterpiece on identity.' },
+                            { title: 'Mulholland Drive', year: '2001', reason: 'Lynch\'s enigmatic exploration of Hollywood darkness.' },
+                            { title: 'The Piano Teacher', year: '2001', reason: 'Haneke\'s unsettling study of repression and desire.' }
+                        ],
+                        uplifting: [
+                            { title: 'Wings of Desire', year: '1987', reason: 'Wenders\' poetic celebration of human existence.' },
+                            { title: 'The Double Life of Veronique', year: '1991', reason: 'Kieslowski\'s luminous tale of connection and music.' },
+                            { title: 'A Separation', year: '2011', reason: 'Humanistic drama about family and moral complexity.' }
+                        ],
+                        philosophical: [
+                            { title: 'The Tree of Life', year: '2011', reason: 'Malick\'s cosmic meditation on existence and meaning.' },
+                            { title: 'Synecdoche, New York', year: '2008', reason: 'Kaufman\'s profound exploration of art and mortality.' },
+                            { title: 'The Seventh Seal', year: '1957', reason: 'Bergman\'s medieval allegory confronting death and faith.' }
+                        ],
+                        mysterious: [
+                            { title: 'Vertigo', year: '1958', reason: 'Hitchcock\'s psychological thriller about obsession and illusion.' },
+                            { title: 'Last Year at Marienbad', year: '1961', reason: 'Resnais\' enigmatic puzzle of memory and reality.' },
+                            { title: '2001: A Space Odyssey', year: '1968', reason: 'Kubrick\'s mysterious journey through evolution and consciousness.' }
+                        ],
+                        melancholic: [
+                            { title: 'Manchester by the Sea', year: '2016', reason: 'Lonergan\'s tender portrait of grief and healing.' },
+                            { title: 'Tokyo Story', year: '1953', reason: 'Ozu\'s gentle meditation on family and the passage of time.' },
+                            { title: 'Her', year: '2013', reason: 'Jonze\'s bittersweet exploration of love and loneliness.' }
+                        ],
+                        surreal: [
+                            { title: '8½', year: '1963', reason: 'Fellini\'s dreamlike exploration of artistic creation.' },
+                            { title: 'The Holy Mountain', year: '1973', reason: 'Jodorowsky\'s visionary, symbolic journey of enlightenment.' },
+                            { title: 'Eraserhead', year: '1977', reason: 'Lynch\'s nightmarish industrial fever dream.' }
+                        ],
+                        nostalgic: [
+                            { title: 'Cinema Paradiso', year: '1988', reason: 'Tornatore\'s loving tribute to the magic of movies.' },
+                            { title: 'Amour', year: '2012', reason: 'Haneke\'s tender portrayal of enduring love.' },
+                            { title: 'The 400 Blows', year: '1959', reason: 'Truffaut\'s autobiographical coming-of-age masterpiece.' }
+                        ]
+                    };
+                    list = fallbackFilms[mood] || fallbackFilms.contemplative;
+                    if (apiError) {
+                        status.textContent = 'Using curated backup selections...';
+                    }
+                }
+
+                status.textContent = 'Loading movie posters...';
+                results.innerHTML = '';
+                
+                const tmdbKey = getClientKey('TMDB_API_KEY');
+                const displayList = list.slice(0, 6);
+                
+                for (let i = 0; i < displayList.length; i++) {
+                    const item = displayList[i];
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.3s ease';
+                    
+                    const poster = document.createElement('img');
+                    poster.className = 'movie-poster';
+                    poster.alt = item.title;
+                    poster.style.background = 'linear-gradient(135deg, #c9a961, #8b7355)';
+                    
+                    const titleEl = document.createElement('div'); 
+                    titleEl.className = 'movie-title'; 
+                    titleEl.textContent = `${item.title}${item.year ? ` (${item.year})` : ''}`;
+                    
+                    const reasonEl = document.createElement('div'); 
+                    reasonEl.className = 'movie-reason'; 
+                    reasonEl.textContent = item.reason || '';
+                    
+                    card.appendChild(poster);
+                    card.appendChild(titleEl);
+                    card.appendChild(reasonEl);
+                    results.appendChild(card);
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, i * 100);
+
+                    if (tmdbKey && item.title) {
+                        try {
+                            const query = `${item.title}${item.year ? ` y:${item.year}` : ''}`;
+                            const encodedQuery = encodeURIComponent(query);
+                            const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${encodeURIComponent(tmdbKey)}&query=${encodedQuery}`);
+                            
+                            if (response.ok) {
+                                const data = await response.json();
+                                const movie = data.results?.[0];
+                                if (movie?.poster_path) {
+                                    poster.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+                                    poster.style.background = '';
+                                } else {
+                                    poster.style.background = 'linear-gradient(135deg, #2c2c2c, #1a1a1a)';
+                                    poster.style.display = 'flex';
+                                    poster.style.alignItems = 'center';
+                                    poster.style.justifyContent = 'center';
+                                    poster.style.color = '#c9a961';
+                                    poster.style.fontSize = '2rem';
+                                    poster.textContent = 'FILM';
+                                }
+                            }
+                        } catch (e) { 
+                            console.warn('TMDB fetch failed for:', item.title, e);
+                            poster.style.background = 'linear-gradient(135deg, #2c2c2c, #1a1a1a)';
+                            poster.style.display = 'flex';
+                            poster.style.alignItems = 'center';
+                            poster.style.justifyContent = 'center';
+                            poster.style.color = '#c9a961';
+                            poster.style.fontSize = '2rem';
+                            poster.textContent = 'FILM';
+                        }
+                    } else {
+                        poster.style.background = 'linear-gradient(135deg, #2c2c2c, #1a1a1a)';
+                        poster.style.display = 'flex';
+                        poster.style.alignItems = 'center';
+                        poster.style.justifyContent = 'center';
+                        poster.style.color = '#c9a961';
+                        poster.style.fontSize = '2rem';
+                        poster.textContent = 'FILM';
+                        
+                        if (!tmdbKey) {
+                            status.textContent = 'Add TMDb API key in Settings for movie posters';
+                        }
+                    }
+                }
+
+                if (tmdbKey) {
+                    status.textContent = 'Films curated successfully!';
+                } else {
+                    status.textContent = 'Films curated! Add TMDb key for posters.';
+                }
+                
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 3000);
+                
+                suggestBtn.disabled = false;
+            });
+        }
+
         // Initialize movies after all utility functions are defined
         document.addEventListener('DOMContentLoaded', () => {
+            // Set your TMDb API key for movie posters
+            if (!sessionStorage.getItem('TMDB_API_KEY')) {
+                sessionStorage.setItem('TMDB_API_KEY', '4511961cbe3d6281498c1923f1234eac');
+            }
+            
             // Wait a bit to ensure all other initializations are complete
             setTimeout(() => {
                 initMovies();
