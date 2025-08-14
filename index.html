@@ -1377,7 +1377,6 @@
             initFloatingParticles();
             initDoubleCruxStudio();
             initKeySettings();
-            initMovies();
 
         });
 
@@ -3209,6 +3208,14 @@ Answer:`;
             render(result, claim);
           });
         }
+
+        // Initialize movies after all utility functions are defined
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait a bit to ensure all other initializations are complete
+            setTimeout(() => {
+                initMovies();
+            }, 100);
+        });
 
     </script>
 </body>
