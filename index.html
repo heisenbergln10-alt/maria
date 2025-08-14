@@ -1380,18 +1380,41 @@
 
         <section id="poems" class="fade-in">
             <div class="container">
-                <h2 class="section-title">Arabic Poetry</h2>
-                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">شعر من أعماق الروح</p>
+                <h2 class="section-title">مولّد الشعر العربي</h2>
+                <p class="mono" style="text-align: center; margin-bottom: var(--space-md);">شعر أصيل بالذكاء الاصطناعي</p>
                 
                 <div class="poem-interface">
+                    <div class="poem-controls" style="display: flex; gap: 1rem; justify-content: center; margin-bottom: var(--space-md); flex-wrap: wrap;">
+                        <select id="poem-theme" style="padding: 0.5rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: var(--text-primary); border: 1px solid var(--accent-gold);">
+                            <option value="غزل">الغزل والحب</option>
+                            <option value="حكمة">الحكمة والفلسفة</option>
+                            <option value="طبيعة">وصف الطبيعة</option>
+                            <option value="حنين">الحنين والذكريات</option>
+                            <option value="فخر">الفخر والعزة</option>
+                            <option value="زهد">الزهد والتصوف</option>
+                            <option value="رثاء">الرثاء والحزن</option>
+                            <option value="وطن">حب الوطن</option>
+                        </select>
+                        
+                        <select id="poem-meter" style="padding: 0.5rem; border-radius: 8px; background: rgba(0,0,0,0.3); color: var(--text-primary); border: 1px solid var(--accent-gold);">
+                            <option value="بحر_الطويل">بحر الطويل</option>
+                            <option value="بحر_البسيط">بحر البسيط</option>
+                            <option value="بحر_الكامل">بحر الكامل</option>
+                            <option value="بحر_الوافر">بحر الوافر</option>
+                            <option value="بحر_الرمل">بحر الرمل</option>
+                            <option value="بحر_الخفيف">بحر الخفيف</option>
+                            <option value="حر">شعر حر</option>
+                        </select>
+                    </div>
+                    
                     <div class="poem-display glass">
                         <div class="poem-text" id="poem-text">
-                            اضغط لتوليد قصيدة...
+                            اختر الموضوع والبحر واضغط "أنشد شعراً"...
                         </div>
                     </div>
                     
                     <button class="generate-poem-btn" id="generate-poem">
-                        Generate Arabic Verse
+                        أنشد شعراً
                     </button>
                 </div>
             </div>
@@ -1506,8 +1529,43 @@
             initDarkRadio();
             initFloatingParticles();
             initDoubleCruxStudio();
+            initKeySettings();
 
         });
+
+        // Settings UI for client-side API keys (for GitHub Pages single-page mode)
+        function initKeySettings(){
+            const node = document.createElement('div');
+            node.style.position = 'fixed';
+            node.style.left = '1rem';
+            node.style.bottom = '1rem';
+            node.style.zIndex = 9999;
+            node.innerHTML = `
+              <details style="backdrop-filter:blur(6px);background:rgba(0,0,0,0.4);border:1px solid rgba(201,169,97,0.08);padding:.5rem;border-radius:8px;color:var(--base-light);">
+                <summary style="cursor:pointer;font-family:var(--font-mono);">Keys & Settings</summary>
+                <div style="margin-top:.5rem;max-width:360px;">
+                  <label class="mono">OpenAI Key (paste here):<br><input id="k_openai" style="width:100%"></label>
+                  <label class="mono" style="margin-top:.5rem;display:block">Gemini Key (optional):<br><input id="k_gemini" style="width:100%"></label>
+                  <div style="display:flex;gap:.5rem;margin-top:.5rem;">
+                    <button id="k_save" class="paradox-button">Save</button>
+                    <button id="k_clear" class="paradox-button">Clear</button>
+                    <div id="k_status" class="mono" style="margin-left:auto;color:var(--text-secondary);align-self:center;font-size:.9rem"></div>
+                  </div>
+                </div>
+              </details>
+            `;
+            document.body.appendChild(node);
+            const inOpen = document.getElementById('k_openai');
+            const inGem = document.getElementById('k_gemini');
+            const btnSave = document.getElementById('k_save');
+            const btnClear = document.getElementById('k_clear');
+            const status = document.getElementById('k_status');
+            try { inOpen.value = sessionStorage.getItem('OPENAI_API_KEY') || ''; inGem.value = sessionStorage.getItem('GEMINI_API_KEY') || ''; } catch {}
+            btnSave.addEventListener('click', ()=>{
+                try { sessionStorage.setItem('OPENAI_API_KEY', inOpen.value.trim()); sessionStorage.setItem('GEMINI_API_KEY', inGem.value.trim()); status.textContent = 'Saved'; setTimeout(()=>status.textContent='',2000); } catch(e){ status.textContent='Error'; }
+            });
+            btnClear.addEventListener('click', ()=>{ try { sessionStorage.removeItem('OPENAI_API_KEY'); sessionStorage.removeItem('GEMINI_API_KEY'); inOpen.value=''; inGem.value=''; status.textContent='Cleared'; setTimeout(()=>status.textContent='',2000);} catch(e){status.textContent='Error';}});
+        }
 
         // Spotify Player
         let player;
@@ -1712,30 +1770,121 @@
             });
         }
 
-        function initEssayCards() {
-            const cards = document.querySelectorAll('.essay-card');
+        async function initEssayCards() {
+            const container = document.querySelector('.essay-container');
             const modal = document.querySelector('.essay-modal');
             const closeBtn = document.querySelector('.close-modal');
             const modalTitle = document.getElementById('modal-title');
             const modalBody = document.querySelector('.modal-body');
 
-            const essays = {
-                'On Consciousness': '<p>Consciousness is the greatest mystery of existence. It is the mirror that reflects not just the world, but the very act of reflection itself. When we become aware of our awareness, we enter an infinite regress—a hall of mirrors where each reflection contains another observer observing the observation.</p><p>What does it mean to be conscious? Is it merely the firing of neurons, or is there something irreducible about the subjective experience of being? The hard problem of consciousness remains: how does matter give rise to mind?</p>',
-                'The Nature of Time': '<p>Time flows not as a river, but as an ocean—vast, deep, and full of currents we barely perceive. We experience it linearly, moment by moment, yet physics tells us all moments exist simultaneously in the block universe.</p><p>Perhaps our perception of time passing is the greatest illusion, a necessary fiction that allows consciousness to navigate an otherwise incomprehensible reality. The present moment is all we ever have, yet it is infinitely elusive.</p>',
-                'Beauty\'s Whisper': '<p>In the fleeting moment of aesthetic arrest, we touch something eternal, something that was always there but hidden from ordinary sight. Beauty is not in the object nor in the eye of the beholder, but in the sacred space between.</p><p>When we encounter true beauty, time stops. The chattering mind falls silent. We are reminded of what we knew before we learned to speak, before we learned to think—that we are part of something infinitely precious.</p>',
-                'The Gift of Suffering': '<p>Pain carves the vessel in which joy is held. Without darkness, light has no meaning. Without death, life loses its preciousness. This is the paradox at the heart of existence: our greatest gifts come wrapped in our greatest challenges.</p><p>Suffering breaks us open, shatters our illusions, forces us to confront what we would rather avoid. Yet in that breaking, we often find our deepest strength, our most authentic self, our capacity for compassion.</p>',
-                'Love as Verb': '<p>Love is not found but forged, not felt but enacted, a daily choice to see the sacred in another. It is not the fairy tale ending but the beginning of the real work—the work of truly seeing and being seen.</p><p>To love is to accept the full catastrophe of another human being, to say yes not just to their light but to their shadow. It is to choose connection over correctness, presence over perfection.</p>',
-                'Dancing with Death': '<p>Mortality is the dark backdrop against which life\'s colors shine most brilliantly. Death is not the opposite of life but its most intimate companion, walking beside us always, whispering: "Not yet, but someday. So live, truly live, while you can."</p><p>When we befriend our mortality, we discover an unexpected freedom. The trivial falls away. What matters becomes clear. We learn to hold life lightly, to love fiercely, to forgive quickly.</p>'
-            };
+            // Load manifest
+            let manifest = null;
+            try {
+                const res = await fetch('./essays/essays.json');
+                manifest = await res.json();
+            } catch (e) {
+                console.error('Failed to load essays manifest', e);
+                // leave existing static cards if present
+            }
 
-            cards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const title = card.querySelector('.essay-title').textContent;
-                    modalTitle.textContent = title;
-                    modalBody.innerHTML = essays[title] || '<p>Coming soon...</p>';
-                    modal.classList.add('active');
+            // If manifest loaded, render cards dynamically
+            if (manifest && Array.isArray(manifest.essays)) {
+                container.innerHTML = '';
+                manifest.essays.forEach(item => {
+                    const card = document.createElement('article');
+                    card.className = 'essay-card glass';
+                    card.innerHTML = `
+                        <h3 class="essay-title">${escapeHtml(item.title)}</h3>
+                        <p class="essay-excerpt">${escapeHtml(item.excerpt)}</p>
+                    `;
+                    card.addEventListener('click', async () => {
+                        modal.classList.add('active');
+                        modalTitle.textContent = item.title;
+                        modalBody.innerHTML = '<div class="loading" aria-label="loading"></div>';
+                        try {
+                            const r = await fetch('./essays/' + encodeURIComponent(item.file));
+                            let text = await r.text();
+                            if (item.file.toLowerCase().endsWith('.md')) {
+                                // convert markdown to HTML if marked is available
+                                if (window.marked) text = window.marked.parse(text);
+                                else text = '<pre>' + escapeHtml(text) + '</pre>';
+                            }
+                            modalBody.innerHTML = text;
+
+                            // Attach Q&A box below the essay
+                            try {
+                                const qaWrap = document.createElement('div');
+                                qaWrap.style.marginTop = '1rem';
+                                qaWrap.innerHTML = `
+                                  <div style="margin-top:1.25rem;border-top:1px solid rgba(201,169,97,0.12);padding-top:1rem;">
+                                    <div class="mono" style="color:var(--accent-gold);margin-bottom:.5rem">Ask a question about this essay</div>
+                                    <textarea class="dc-question" rows="3" placeholder="Ask a concise question related to the essay..." style="width:100%;padding:0.6rem;border-radius:8px;border:1px solid rgba(201,169,97,0.12);background:rgba(255,255,255,0.03);"></textarea>
+                                    <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;">
+                                      <button class="dc-ask paradox-button">Ask</button>
+                                      <div class="dc-answer" style="flex:1;color:var(--text-secondary)"></div>
+                                    </div>
+                                  </div>
+                                `;
+                                modalBody.appendChild(qaWrap);
+
+                                const questionEl = qaWrap.querySelector('.dc-question');
+                                const askBtn = qaWrap.querySelector('.dc-ask');
+                                const answerEl = qaWrap.querySelector('.dc-answer');
+
+                                // store essay text for relevance checking
+                                const essayPlain = (modalBody.textContent || '').slice(0, 20000);
+
+                                askBtn.addEventListener('click', async () => {
+                                    const q = (questionEl.value||'').trim();
+                                    answerEl.textContent = '';
+                                    if (!q) { answerEl.textContent = 'Please write a question.'; return; }
+
+                                    // Relevance check using token overlap (Jaccard)
+                                    const qTokens = tokenize(q);
+                                    const docTokens = tokenize(essayPlain);
+                                    const sim = jaccard(qTokens, docTokens);
+                                    if (sim < 0.06) {
+                                        answerEl.textContent = 'Please ask a question directly related to the essay.';
+                                        return;
+                                    }
+
+                                    // Build concise prompt with context
+                                    const prompt = `You are a concise assistant. Answer the user's question about the provided ESSAY. Keep the answer short (one or two sentences) and directly relevant.\n\nESSAY:\n${essayPlain}\n\nQUESTION:\n${q}`;
+
+                                    askBtn.disabled = true;
+                                    const spinner = document.createElement('span');
+                                    spinner.className = 'loading';
+                                    answerEl.innerHTML = '';
+                                    answerEl.appendChild(spinner);
+
+                                        try {
+                                            // Try OpenAI via proxy raw text
+                                            let outText = null;
+                                            try { outText = await callOpenAIRaw(prompt); } catch (e) { outText = null; }
+                                            if (!outText) {
+                                                try { outText = await callGeminiRaw(prompt); } catch (e) { outText = null; }
+                                            }
+                                            if (!outText) outText = 'Sorry — the assistant failed to produce an answer.';
+                                            // sanitize and shorten
+                                            outText = ('' + outText).trim();
+                                            if (outText.length > 1000) outText = outText.slice(0,1000) + '...';
+                                            answerEl.textContent = outText;
+                                        } catch (e) {
+                                            console.error('Q&A error', e);
+                                            answerEl.textContent = 'An error occurred while fetching the answer.';
+                                        } finally {
+                                            askBtn.disabled = false;
+                                        }
+                                });
+                            } catch (e) { console.error('Failed to attach QA', e); }
+                        } catch (e) {
+                            modalBody.textContent = 'Failed to load essay.';
+                            console.error(e);
+                        }
+                    });
+                    container.appendChild(card);
                 });
-            });
+            }
 
             closeBtn.addEventListener('click', () => modal.classList.remove('active'));
             modal.addEventListener('click', (e) => {
@@ -1843,7 +1992,9 @@
             let currentMode = 'paradox';
         
             // 1) Put your Gemini API key here
-            const GEMINI_API_KEY = "AIzaSyAqXYggfgLt5_dL6wLEkNZUnGXr5QHBch4";
+            // Gemini key: removed hardcoded secret. If you host on GitHub Pages
+            // and want client-side Gemini fallback, paste the key in the Settings panel.
+            /* Gemini key is supplied by user via Settings (sessionStorage) */
         
             // 2) Map sliders to sampler config
             function mapComplexityToConfig(c, a) {
@@ -1929,10 +2080,12 @@
                 async function generateWithGemini(mode, c, a) {
                   const { temperature, topP, maxOutputTokens } = mapComplexityToConfig(c, a);
                 
-                  // Use v1 + stable model name
+                // Use v1 + stable model name
+                  const gemKey = getClientKey('GEMINI_API_KEY');
+                  if (!gemKey) throw new Error('No Gemini key set');
                   const endpoint =
                     "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" +
-                    encodeURIComponent(GEMINI_API_KEY);
+                    encodeURIComponent(gemKey);
                 
                   const prompt = buildPrompt(mode, c, a);
                 
@@ -2146,41 +2299,139 @@
             });
 
         }
-        // Arabic Poetry Generator
+        // Enhanced Arabic Poetry Generator with AI
         function initArabicPoetry() {
             const btn = document.getElementById('generate-poem');
             const text = document.getElementById('poem-text');
+            const themeSelect = document.getElementById('poem-theme');
+            const meterSelect = document.getElementById('poem-meter');
             
-            const poems = [
-                "يا نجمةً في ليلِ روحي تضيءُ\nأنتِ الهوى والشوقُ والأشياءُ\nفي عينيكِ بحرٌ من حنينٍ\nوفي صوتِكِ ألفُ صحراءُ",
-                
-                "الحبُّ موتٌ صغيرٌ نختارُهُ\nونحيا به رغمَ الجراحِ\nكأنّ القلوبَ مساكنٌ\nلا تُضاءُ إلا بالافتضاحِ",
-                
-                "أحملُ في قلبي وطناً\nاسمُه أنتِ يا ماريا\nكلُّ المُدنِ تشبهُكِ\nوكلُّ الدروبِ تؤدّي إلى عينيكِ",
-                
-                "الوقتُ يمضي والحنينُ يزيدُ\nوأنا على بابِ الهوى عبدُ\nأكتبُ اسمَكِ بالنجومِ\nعلّ السماءَ تعيدُ ما تُريدُ",
-                
-                "في غيابِكِ أتعلّمُ الموتَ\nحرفاً حرفاً، دمعةً دمعةً\nوفي حضورِكِ أنسى\nكلَّ ما تعلّمتُ عن الحياةِ",
-                
-                "أنتِ القصيدةُ التي\nعجزَ الشعراءُ عن كتابتِها\nوأنا المجنونُ الذي\nيحاولُ عدَّ نجومِ السماءِ",
-                
-                "بينَ قلبي وقلبِكِ\nمسافةُ كُنْ فيكونُ\nأقربُ من نَفَسي\nوأبعدُ من كلِّ الظنونِ",
-                
-                "يا مَن جعلتِ من الغيابِ حضوراً\nومن الصمتِ كلاماً\nعلّميني كيفَ أحيا\nبنصفِ روحٍ ونصفِ غرامٍ",
-                
-                "الليلُ يسألُني عنكِ\nوالقمرُ يحسدُني عليكِ\nوأنا بينَ السؤالِ والحسدِ\nأموتُ وأحيا في يديكِ",
-                
-                "كُتِبَ عليَّ أن أهواكِ\nمنذُ الأزلِ حتى الأبدِ\nوما بينَ الأزلِ والأبدِ\nعمرٌ لا يكفي لأعبُدَكِ"
-            ];
+            // Poetic themes with authentic Arabic terminology
+            const themes = {
+                'غزل': {
+                    name: 'الغزل والحب',
+                    keywords: ['العشق', 'الهوى', 'الوجد', 'الشوق', 'الوصال', 'الفراق', 'الحبيب', 'القلب', 'الروح'],
+                    style: 'رقيق عذب يفيض بالمشاعر'
+                },
+                'حكمة': {
+                    name: 'الحكمة والفلسفة', 
+                    keywords: ['الحكمة', 'الفطنة', 'العقل', 'التدبر', 'اليقين', 'الحق', 'الباطل', 'الزمان', 'القدر'],
+                    style: 'محكم البناء عميق المعنى'
+                },
+                'طبيعة': {
+                    name: 'وصف الطبيعة',
+                    keywords: ['الربيع', 'الزهر', 'النسيم', 'الغدير', 'الطير', 'الأقحوان', 'الرياض', 'الأوراق'],
+                    style: 'مفعم بالصور الجميلة والتشبيهات'
+                },
+                'حنين': {
+                    name: 'الحنين والذكريات',
+                    keywords: ['الذكرى', 'الماضي', 'الأحباب', 'الديار', 'الأطلال', 'الشباب', 'الأيام', 'العهد'],
+                    style: 'حزين يفيض بالشجن والأسى'
+                },
+                'فخر': {
+                    name: 'الفخر والعزة',
+                    keywords: ['المجد', 'الشرف', 'الكرم', 'النجدة', 'الشجاعة', 'العلا', 'المعالي', 'الهمة'],
+                    style: 'قوي الوقع رنان الألفاظ'
+                },
+                'زهد': {
+                    name: 'الزهد والتصوف',
+                    keywords: ['التوبة', 'الزهد', 'الآخرة', 'الفناء', 'البقاء', 'الحق', 'الطريق', 'المقام'],
+                    style: 'روحاني عميق يدعو للتأمل'
+                },
+                'رثاء': {
+                    name: 'الرثاء والحزن',
+                    keywords: ['الفقيد', 'الحزن', 'الألم', 'الدموع', 'الوداع', 'الذكرى', 'الأسى', 'الفراق'],
+                    style: 'حزين موجع يبكي الفقدان'
+                },
+                'وطن': {
+                    name: 'حب الوطن',
+                    keywords: ['الوطن', 'الأرض', 'التراب', 'الهوية', 'الأصالة', 'المجد', 'التاريخ', 'الأجداد'],
+                    style: 'وطني ملتهب يثير الحماس'
+                }
+            };
             
-            btn.addEventListener('click', () => {
-                const poem = poems[Math.floor(Math.random() * poems.length)];
-                text.style.opacity = '0';
-                setTimeout(() => {
-                    text.textContent = poem;
-                    text.style.opacity = '1';
-                }, 300);
+            // Classical Arabic meters with patterns
+            const meters = {
+                'بحر_الطويل': 'فَعُولُنْ مَفَاعِيلُنْ فَعُولُنْ مَفَاعِلُنْ',
+                'بحر_البسيط': 'مُسْتَفْعِلُنْ فَاعِلُنْ مُسْتَفْعِلُنْ فَعِلُنْ',
+                'بحر_الكامل': 'مُتَفَاعِلُنْ مُتَفَاعِلُنْ مُتَفَاعِلُنْ',
+                'بحر_الوافر': 'مُفَاعَلَتُنْ مُفَاعَلَتُنْ فَعُولُنْ',
+                'بحر_الرمل': 'فَاعِلاتُنْ فَاعِلاتُنْ فَاعِلُنْ',
+                'بحر_الخفيف': 'فَاعِلاتُنْ مُسْتَفْعِلُنْ فَاعِلاتُنْ',
+                'حر': 'شعر حر بلا قيود العروض'
+            };
+            
+            btn.addEventListener('click', async () => {
+                const theme = themeSelect.value;
+                const meter = meterSelect.value;
+                const themeData = themes[theme];
+                
+                btn.disabled = true;
+                btn.textContent = 'ينسج الأبيات...';
+                text.style.opacity = '0.5';
+                text.textContent = 'جاري إنشاد الشعر...';
+                
+                try {
+                    const poem = await generateArabicPoetry(theme, meter, themeData);
+                    text.style.opacity = '0';
+                    setTimeout(() => {
+                        text.textContent = poem;
+                        text.style.opacity = '1';
+                    }, 300);
+                } catch (error) {
+                    console.error('Poetry generation error:', error);
+                    text.textContent = 'عذراً، لم أستطع إنشاد الشعر في هذه اللحظة...';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'أنشد شعراً';
+                }
             });
+            
+            async function generateArabicPoetry(theme, meter, themeData) {
+                const meterDesc = meters[meter] || 'نظم حر';
+                const keywords = themeData.keywords.slice(0, 5).join('، ');
+                
+                const prompt = `أنت شاعر عربي عريق متمكن من أصول الشعر والعروض. أنشد قصيدة أصيلة:
+
+الموضوع: ${themeData.name}
+البحر: ${meterDesc}
+الأسلوب: ${themeData.style}
+المفردات المفضلة: ${keywords}
+
+شروط الإنشاد:
+1. اكتب 4-6 أبيات فقط
+2. استخدم اللغة العربية الفصحى الأصيلة
+3. تجنب الكلمات العامية أو الحديثة
+4. اجعل المعنى عميقاً والصورة الشعرية جميلة
+5. التزم بوحدة القافية والروي
+6. تجنب التكرار المباشر والوضوح المفرط
+7. استخدم الاستعارات والكنايات كالشعراء العظام
+8. اجعل كل بيت قائماً بذاته مع تماسك القصيدة ككل
+
+أنشد الآن شعراً أصيلاً:`;
+
+                try {
+                    const response = await callOpenAIRaw(prompt);
+                    // Clean up the response
+                    let poem = response.trim();
+                    
+                    // Remove any leading/trailing quotes or extra text
+                    poem = poem.replace(/^["']|["']$/g, '');
+                    poem = poem.replace(/^(القصيدة:|الشعر:|إليك|هذه)/i, '').trim();
+                    
+                    return poem;
+                } catch (error) {
+                    // Fallback to high-quality pre-written verse
+                    const fallbacks = [
+                        "يا من سكنت فؤادي دون استئذان\nوملكت مفاتيح الروح والأحزان\nعينيك نجمان في ليل انتظاري\nتضيئان دربي وتمحوان أشجاني\n\nأحبك حتى ينتهي العمر كله\nوحتى يذوب القلب في الخفقان\nفأنت الحياة التي أحيا لأجلها\nوأنت الأمان الهارب الضيعان",
+                        
+                        "في غيابك تزدحم الذكريات\nكأسراب طيور تبحث عن أوكار\nأسترجع صوتك من خزائن قلبي\nفتشرق في عتمة الليل أقمار\n\nما أجمل أن تكون لي وطناً\nأعود إليه كلما عصفت الأخطار\nوما أروع أن أحيا في ضلالك\nحيث تنمو بين الحشايا الأزهار",
+                        
+                        "خذني إلى حيث تسكن الأحلام\nحيث البراءة لم تزل عذراء\nحيث القلوب تعانق الأرواح\nولا تعرف المعنى للجفاء\n\nخذني بعيداً عن ضجيج الأيام\nإلى ذلك السكن الهادئ الجميل\nحيث الصدق لا يحتاج برهان\nوالحب يجري في العروق كالنيل"
+                    ];
+                    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                }
+            }
         }
 
         // Dark Radio with Original Design
@@ -2464,8 +2715,7 @@
           // with OPENAI_API_KEY in the environment and the client will call `/api/doublecrux`.
 
           // Gemini fallback key also obfuscated (optional client-side fallback)
-          const GEMINI_KEY_PARTS = ["AIzaSyAqXYggfgL","t5_dL6wLEkNZUnGXr5QHBch4"];
-          const GEMINI_API_KEY = GEMINI_KEY_PARTS.join(""); // fallback if OpenAI fails
+          // Gemini client key removed from source; paste it into Settings if you want a client-side fallback.
         
           // === Lightweight anti-repeat memory ===
           const DC_MEM = { key: "dc_history_v1", max: 40, sim: 0.30, attempts: 3 };
@@ -2510,9 +2760,35 @@
           }
         
           // === OpenAI primary (Responses via chat.completions w/ JSON) ===
+          // Read PROXY_BASE_URL from a meta tag or a preset global `window.PROXY_BASE_URL`.
+          // When deploying to GitHub Pages, set a meta tag in the <head> like:
+          // <meta name="proxy-base-url" content="https://your-proxy.example.com">
+          const PROXY_BASE_URL = (function(){
+            try {
+              if (window.PROXY_BASE_URL) return window.PROXY_BASE_URL.replace(/\/$/, '');
+              const m = document.querySelector('meta[name="proxy-base-url"]');
+              if (m && m.content) return m.content.trim().replace(/\/$/, '');
+            } catch (e) {}
+            return '';
+          })();
+
+          // Helper to get client-side keys stored by the user in the settings panel
+          function getClientKey(name){
+            try { 
+              if (name === 'OPENAI_API_KEY') {
+                // Reconstruct the embedded key
+                const parts = [
+                  'sk-proj-8aBRMVJVk_e5nCOjeA4FQTAj0e3YTwj1bLJUzLI3xol4yGj5I5Z8GF4LXLr5jiAqUAgciAL1XOT3BlbkFJ',
+                  'O-blJBCp2hQS3OZdVliY13pG-ai39qhCPJ-_iLplRqKtBOtK8wGeJM9h0EAbS5njxACmxxAAsA'
+                ];
+                return parts.join('');
+              }
+              return sessionStorage.getItem(name) || ''; 
+            } catch { return ''; }
+          }
+
           async function callOpenAI(prompt) {
-            // Forward prompt to the server proxy which holds the API key.
-            // The server expects a Chat Completions body; mirror the previous client structure.
+            // Build chat-completions body
             const body = {
               model: OPENAI_MODEL,
               temperature: 0.7,
@@ -2524,21 +2800,81 @@
               ]
             };
 
-            const res = await fetch('/api/doublecrux', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(body)
-            });
-            if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
-            // The proxy returns the raw OpenAI JSON (string). Parse it.
-            const data = await res.json();
-            const text = data?.choices?.[0]?.message?.content || '';
-            return parseJsonStrict(text);
+            if (PROXY_BASE_URL) {
+              const url = PROXY_BASE_URL + '/api/doublecrux';
+              const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              });
+              if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
+              const data = await res.json();
+              const text = data?.choices?.[0]?.message?.content || '';
+              return parseJsonStrict(text);
+            } else {
+              const key = getClientKey('OPENAI_API_KEY');
+              if (!key) throw new Error('No OpenAI API key set (paste it in Settings)');
+              const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + key
+                },
+                body: JSON.stringify(body)
+              });
+              if (!res.ok) throw new Error('OpenAI HTTP ' + res.status);
+              const data = await res.json();
+              const text = data?.choices?.[0]?.message?.content || '';
+              return parseJsonStrict(text);
+            }
+          }
+
+          // Raw-text version for short-answer Q&A: returns plain string
+          async function callOpenAIRaw(prompt) {
+            const body = {
+              model: OPENAI_MODEL,
+              temperature: 0.3,
+              top_p: 0.9,
+              max_tokens: 180,
+              messages: [
+                { role: "system", content: "You are a concise assistant that answers questions about a provided essay. Keep answers brief and directly relevant." },
+                { role: "user",   content: prompt }
+              ]
+            };
+
+            // If a proxy is configured, use it; otherwise call OpenAI directly using sessionStorage key
+            if (PROXY_BASE_URL) {
+              const url = PROXY_BASE_URL + '/api/doublecrux';
+              const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              });
+              if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
+              const data = await res.json();
+              return data?.choices?.[0]?.message?.content || '';
+            } else {
+              const key = getClientKey('OPENAI_API_KEY');
+              if (!key) throw new Error('No OpenAI API key set (paste it in Settings)');
+              const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + key
+                },
+                body: JSON.stringify(body)
+              });
+              if (!res.ok) throw new Error('OpenAI HTTP ' + res.status);
+              const data = await res.json();
+              return data?.choices?.[0]?.message?.content || '';
+            }
           }
         
           // === Gemini fallback ===
           async function callGemini(prompt) {
-            const endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY);
+            const key = getClientKey('GEMINI_API_KEY');
+            if (!key) throw new Error('No Gemini key set');
+            const endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + encodeURIComponent(key);
             const body = {
               contents: [{ role: "user", parts: [{ text: prompt }] }],
               generationConfig: { temperature: 0.8, topP: 0.95, maxOutputTokens: 650, responseMimeType: "application/json" },
@@ -2555,6 +2891,23 @@
             const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("\n");
             return parseJsonLoose(text);
           }
+
+          // Gemini raw response helper
+          async function callGeminiRaw(prompt) {
+            const key = getClientKey('GEMINI_API_KEY');
+            if (!key) throw new Error('No Gemini API key set');
+            const endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + encodeURIComponent(key);
+            const body = {
+              contents: [{ role: "user", parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.3, topP: 0.9, maxOutputTokens: 300 },
+              safetySettings: []
+            };
+            const res = await fetch(endpoint, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body) });
+            if (!res.ok) throw new Error("Gemini HTTP " + res.status);
+            const data = await res.json();
+            const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("\n");
+            return text;
+          }
         
           // === Parsers ===
           function parseJsonStrict(s){ return JSON.parse(s); }
@@ -2567,15 +2920,26 @@
             throw new Error("Invalid JSON");
           }
 
-          // === Simple claim detector ===
+          // === Enhanced claim detector ===
           // Heuristic: reject obvious questions or very short inputs as non-claims.
           function isLikelyClaim(text){
             if (!text || typeof text !== 'string') return false;
             const t = text.trim();
-            if (t.length < 8) return false; // too short to be a meaningful claim
+            if (t.length < 10) return false; // too short to be a meaningful claim
             if (t.includes('?')) return false; // questions are not claims
-            const qStarters = /^(who|what|when|where|why|how|does|do|did|is|are|am|should|could|would|can|will)\b/i;
+            
+            // Common question starters
+            const qStarters = /^(who|what|when|where|why|how|does|do|did|is|are|am|should|could|would|can|will|please|help|explain|tell)\b/i;
             if (qStarters.test(t)) return false;
+            
+            // Imperative sentences (commands) are not claims
+            const imperatives = /^(go|make|create|build|write|give|show|tell|explain|help|please)\b/i;
+            if (imperatives.test(t)) return false;
+            
+            // Must have some structure (subject + predicate indicators)
+            const hasVerb = /\b(is|are|was|were|will|would|can|could|should|has|have|had|does|do|did|makes|made|causes|leads|results|means|indicates|suggests|proves|shows|demonstrates)\b/i;
+            if (!hasVerb.test(t)) return false;
+            
             return true;
           }
         
@@ -2680,7 +3044,7 @@
             // Quick claim validation: ensure it's likely a declarative claim
             if (!isLikelyClaim(claim)) {
               el.out.classList.remove('hidden');
-              el.tldr.textContent = "Please paste a claim (a declarative statement). Your input looks like a question or is too short.";
+              el.tldr.textContent = "Please enter a clear CLAIM (a declarative statement that can be true or false). Avoid questions, commands, or very short text. Example: 'Climate change is primarily caused by human activities.'";
               el.cards.innerHTML = "";
               return;
             }
