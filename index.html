@@ -2622,6 +2622,140 @@ Answer:`;
             }
         }
 
+        // === Global Utility Functions ===
+        // Config
+        const OPENAI_MODEL = "gpt-4o";
+        
+        // Read PROXY_BASE_URL from a meta tag or a preset global `window.PROXY_BASE_URL`
+        const PROXY_BASE_URL = (function(){
+          try {
+            if (window.PROXY_BASE_URL) return window.PROXY_BASE_URL.replace(/\/$/, '');
+            const m = document.querySelector('meta[name="proxy-base-url"]');
+            if (m && m.content) return m.content.trim().replace(/\/$/, '');
+          } catch (e) {}
+          return '';
+        })();
+
+        // Helper to get client-side keys stored by the user in the settings panel
+        function getClientKey(name){
+          try { 
+            if (name === 'OPENAI_API_KEY') {
+              try { const parts = sessionStorage.getItem('OPENAI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+              return sessionStorage.getItem('OPENAI_API_KEY') || '';
+            }
+            if (name === 'GEMINI_API_KEY') {
+              try { const parts = sessionStorage.getItem('GEMINI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
+              return sessionStorage.getItem('GEMINI_API_KEY') || '';
+            }
+            if (name === 'TMDB_API_KEY') {
+              // Reassemble TMDB key from stored parts in sessionStorage (superficial obfuscation)
+              try {
+                const parts = sessionStorage.getItem('TMDB_KEY_PARTS');
+                if (parts) return JSON.parse(parts).join('');
+              } catch {}
+              return sessionStorage.getItem('TMDB_API_KEY') || '';
+            }
+            return sessionStorage.getItem(name) || ''; 
+          } catch { return ''; }
+        }
+
+        async function callOpenAI(prompt) {
+          // Build chat-completions body
+          const body = {
+            model: OPENAI_MODEL,
+            temperature: 0.7,
+            top_p: 0.95,
+            max_tokens: 700,
+            messages: [
+              { role: "system", content: "You are a helpful assistant that returns valid JSON when requested." },
+              { role: "user", content: prompt }
+            ]
+          };
+
+          if (PROXY_BASE_URL) {
+            const url = PROXY_BASE_URL + '/api/doublecrux';
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+            if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
+            const data = await res.json();
+            const text = data?.choices?.[0]?.message?.content || '';
+            return parseJsonStrict(text);
+          } else {
+            const key = getClientKey('OPENAI_API_KEY');
+            if (!key) throw new Error('No OpenAI API key set (paste it in Settings)');
+            const res = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + key
+              },
+              body: JSON.stringify(body)
+            });
+            if (!res.ok) throw new Error('OpenAI HTTP ' + res.status);
+            const data = await res.json();
+            const text = data?.choices?.[0]?.message?.content || '';
+            return parseJsonStrict(text);
+          }
+        }
+
+        // Raw-text version for short-answer Q&A: returns plain string
+        async function callOpenAIRaw(prompt) {
+          const body = {
+            model: OPENAI_MODEL,
+            temperature: 0.3,
+            top_p: 0.9,
+            max_tokens: 180,
+            messages: [
+              { role: "system", content: "You are a concise assistant that answers questions briefly and directly." },
+              { role: "user", content: prompt }
+            ]
+          };
+
+          // If a proxy is configured, use it; otherwise call OpenAI directly using sessionStorage key
+          if (PROXY_BASE_URL) {
+            const url = PROXY_BASE_URL + '/api/doublecrux';
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+            if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
+            const data = await res.json();
+            return data?.choices?.[0]?.message?.content || '';
+          } else {
+            const key = getClientKey('OPENAI_API_KEY');
+            if (!key) throw new Error('No OpenAI API key set (paste it in Settings)');
+            const res = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + key
+              },
+              body: JSON.stringify(body)
+            });
+            if (!res.ok) throw new Error('OpenAI HTTP ' + res.status);
+            const data = await res.json();
+            return data?.choices?.[0]?.message?.content || '';
+          }
+        }
+
+        // JSON parsing helper
+        function parseJsonStrict(text) {
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            // Try to extract JSON from text if it's wrapped in other content
+            const jsonMatch = text.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              return JSON.parse(jsonMatch[0]);
+            }
+            throw new Error('Invalid JSON: ' + text);
+          }
+        }
+
         function initDoubleCruxStudio() {
           const el = {
             input:  document.getElementById('dc-input'),
@@ -2633,15 +2767,6 @@ Answer:`;
             tldr:   document.getElementById('dc-tldr'),
             cards:  document.getElementById('dc-cards'),
           };
-        
-          // === Config (put your keys — you said that’s fine) ===
-          // Note: keys are split into parts and assembled at runtime to avoid plain-text appearance in the repo.
-          const OPENAI_MODEL     = "gpt-4o"; // or "gpt-4o"
-          // Note: OpenAI key is no longer kept in the browser. Run a local proxy (server.js)
-          // with OPENAI_API_KEY in the environment and the client will call `/api/doublecrux`.
-
-          // Gemini fallback key also obfuscated (optional client-side fallback)
-          // Gemini client key removed from source; paste it into Settings if you want a client-side fallback.
         
           // === Lightweight anti-repeat memory ===
           const DC_MEM = { key: "dc_history_v1", max: 40, sim: 0.30, attempts: 3 };
@@ -2684,126 +2809,9 @@ Answer:`;
         CLAIM: "${claim}"
         `.trim();
           }
-        
-          // === OpenAI primary (Responses via chat.completions w/ JSON) ===
-          // Read PROXY_BASE_URL from a meta tag or a preset global `window.PROXY_BASE_URL`.
-          // When deploying to GitHub Pages, set a meta tag in the <head> like:
-          // <meta name="proxy-base-url" content="https://your-proxy.example.com">
-          const PROXY_BASE_URL = (function(){
-            try {
-              if (window.PROXY_BASE_URL) return window.PROXY_BASE_URL.replace(/\/$/, '');
-              const m = document.querySelector('meta[name="proxy-base-url"]');
-              if (m && m.content) return m.content.trim().replace(/\/$/, '');
-            } catch (e) {}
-            return '';
-          })();
 
-          // Helper to get client-side keys stored by the user in the settings panel
-          function getClientKey(name){
-            try { 
-              if (name === 'OPENAI_API_KEY') {
-                try { const parts = sessionStorage.getItem('OPENAI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
-                return sessionStorage.getItem('OPENAI_API_KEY') || '';
-              }
-              if (name === 'GEMINI_API_KEY') {
-                try { const parts = sessionStorage.getItem('GEMINI_KEY_PARTS'); if (parts) return JSON.parse(parts).join(''); } catch {}
-                return sessionStorage.getItem('GEMINI_API_KEY') || '';
-              }
-              if (name === 'TMDB_API_KEY') {
-                // Reassemble TMDB key from stored parts in sessionStorage (superficial obfuscation)
-                try {
-                  const parts = sessionStorage.getItem('TMDB_KEY_PARTS');
-                  if (parts) return JSON.parse(parts).join('');
-                } catch {}
-                return sessionStorage.getItem('TMDB_API_KEY') || '';
-              }
-              return sessionStorage.getItem(name) || ''; 
-            } catch { return ''; }
-          }
-
-          async function callOpenAI(prompt) {
-            // Build chat-completions body
-            const body = {
-              model: OPENAI_MODEL,
-              temperature: 0.7,
-              top_p: 0.95,
-              max_tokens: 700,
-              messages: [
-                { role: "system", content: "You are DoubleCrux, a disciplined reasoning engine returning strict JSON." },
-                { role: "user",   content: prompt }
-              ]
-            };
-
-            if (PROXY_BASE_URL) {
-              const url = PROXY_BASE_URL + '/api/doublecrux';
-              const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-              });
-              if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
-              const data = await res.json();
-              const text = data?.choices?.[0]?.message?.content || '';
-              return parseJsonStrict(text);
-            } else {
-              const key = getClientKey('OPENAI_API_KEY');
-              if (!key) throw new Error('No OpenAI API key set (paste it in Settings)');
-              const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + key
-                },
-                body: JSON.stringify(body)
-              });
-              if (!res.ok) throw new Error('OpenAI HTTP ' + res.status);
-              const data = await res.json();
-              const text = data?.choices?.[0]?.message?.content || '';
-              return parseJsonStrict(text);
-            }
-          }
-
-          // Raw-text version for short-answer Q&A: returns plain string
-          async function callOpenAIRaw(prompt) {
-            const body = {
-              model: OPENAI_MODEL,
-              temperature: 0.3,
-              top_p: 0.9,
-              max_tokens: 180,
-              messages: [
-                { role: "system", content: "You are a concise assistant that answers questions about a provided essay. Keep answers brief and directly relevant." },
-                { role: "user",   content: prompt }
-              ]
-            };
-
-            // If a proxy is configured, use it; otherwise call OpenAI directly using sessionStorage key
-            if (PROXY_BASE_URL) {
-              const url = PROXY_BASE_URL + '/api/doublecrux';
-              const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-              });
-              if (!res.ok) throw new Error('Proxy HTTP ' + res.status);
-              const data = await res.json();
-              return data?.choices?.[0]?.message?.content || '';
-            } else {
-              const key = getClientKey('OPENAI_API_KEY');
-              if (!key) throw new Error('No OpenAI API key set (paste it in Settings)');
-              const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + key
-                },
-                body: JSON.stringify(body)
-              });
-              if (!res.ok) throw new Error('OpenAI HTTP ' + res.status);
-              const data = await res.json();
-              return data?.choices?.[0]?.message?.content || '';
-            }
-          }
-        
+          // === Use global functions - removed duplicates ===
+          
           // === Gemini fallback ===
           async function callGemini(prompt) {
             const key = getClientKey('GEMINI_API_KEY');
