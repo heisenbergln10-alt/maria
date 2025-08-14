@@ -1660,13 +1660,18 @@
                                     answerEl.textContent = '';
                                     if (!q) { answerEl.textContent = 'Please write a question.'; return; }
 
-                                    // Relevance check using token overlap (Jaccard)
-                                    const qTokens = tokenize(q);
-                                    const docTokens = tokenize(essayPlain);
-                                    const sim = jaccard(qTokens, docTokens);
-                                    if (sim < 0.06) {
-                                        answerEl.textContent = 'Please ask a question directly related to the essay.';
-                                        return;
+                                    // AI-based relevance check using essay title and content
+                                    answerEl.textContent = 'Checking if your question is related to the essay...';
+                                    try {
+                                        const isRelevant = await checkQuestionRelevance(q, item.title, essayPlain.slice(0, 2000));
+                                        console.log(`Question relevance check: "${q}" for essay "${item.title}" -> ${isRelevant ? 'RELEVANT' : 'NOT RELEVANT'}`);
+                                        if (!isRelevant) {
+                                            answerEl.textContent = 'Please ask a question directly related to the essay content and themes.';
+                                            return;
+                                        }
+                                    } catch (err) {
+                                        console.warn('Relevance check failed, proceeding anyway:', err);
+                                        // Proceed even if relevance check fails
                                     }
 
                                     // Build concise prompt with context
@@ -1768,6 +1773,80 @@
           for (const x of A) if (B.has(x)) inter++;
           const union = A.size + B.size - inter;
           return union ? inter / union : 0;
+        }
+
+        // AI-based question relevance checker
+        async function checkQuestionRelevance(question, essayTitle, essayContent) {
+          const prompt = `You are a relevance checker. Determine if the QUESTION is directly related to the ESSAY based on its title and content. 
+
+ESSAY TITLE: "${essayTitle}"
+
+ESSAY CONTENT (excerpt): 
+${essayContent}
+
+QUESTION: "${question}"
+
+Task: Is this question directly related to the essay's topic and content? Answer with only "YES" or "NO".
+
+Guidelines:
+- YES if the question asks about concepts, arguments, or themes discussed in the essay
+- YES if the question relates to the essay's philosophical position or ideas
+- NO if the question is about completely unrelated topics
+- NO if the question is about general knowledge not discussed in this specific essay
+- NO if the question is about the author's personal life (unless discussed in the essay)
+
+Answer:`;
+
+          try {
+            const key = getClientKey('OPENAI_API_KEY');
+            if (!key) {
+              console.warn('No OpenAI key for relevance check, falling back to Gemini');
+              // Fallback to Gemini
+              const gemKey = getClientKey('GEMINI_API_KEY');
+              if (!gemKey) return true; // If no API keys, allow question
+              
+              const body = {
+                contents: [{ role: "user", parts: [{ text: prompt }] }],
+                generationConfig: { temperature: 0.1, maxOutputTokens: 10 }
+              };
+              
+              const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(gemKey)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+              });
+              
+              if (!res.ok) return true; // If API fails, allow question
+              const data = await res.json();
+              const text = (data?.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("").trim().toUpperCase();
+              return text.includes('YES');
+            }
+
+            // Use OpenAI for relevance check
+            const body = {
+              model: "gpt-4o-mini",
+              messages: [{ role: "user", content: prompt }],
+              temperature: 0.1,
+              max_tokens: 10
+            };
+
+            const res = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + key
+              },
+              body: JSON.stringify(body)
+            });
+
+            if (!res.ok) return true; // If API fails, allow question
+            const data = await res.json();
+            const answer = (data?.choices?.[0]?.message?.content || "").trim().toUpperCase();
+            return answer.includes('YES');
+          } catch (err) {
+            console.warn('Relevance check error:', err);
+            return true; // If error, allow question
+          }
         }
         
         function isTooSimilar(candidate, history) {
